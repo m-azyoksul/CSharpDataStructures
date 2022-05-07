@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Qc.Result
 {
@@ -20,7 +21,7 @@ namespace Qc.Result
 
         public static implicit operator Result<TValue, TErrorType>(TValue value) => new()
         {
-            Value = value
+            Value = value,
         };
 
         public static implicit operator Result<TValue, TErrorType>(TErrorType error) => new()
@@ -28,7 +29,7 @@ namespace Qc.Result
             Error = new ResultError<TErrorType>
             {
                 Type = error,
-                Message = error!.ToString() ?? "null"
+                Message = error!.ToString() ?? "null",
             }
         };
 
@@ -37,79 +38,90 @@ namespace Qc.Result
             Error = new ResultError<TErrorType>
             {
                 Type = error.type,
-                Message = error.message
+                Message = error.message,
             }
         };
 
-        public bool IsSuccess => Error is null; // Value's default might not be null. Error's default is definitely null.
+        [MemberNotNullWhen(true, nameof(Value))]
+        [MemberNotNullWhen(false, nameof(Error))]
+        public bool IsSuccess => Error is null;
+
+        [MemberNotNullWhen(false, nameof(Value))]
+        [MemberNotNullWhen(true, nameof(Error))]
         public bool IsNotSuccess => !IsSuccess;
 
         public void Execute(Action<TValue> valueAction, Action<ResultError<TErrorType>> errorFunction)
         {
             if (IsSuccess)
-                valueAction(Value!);
+                valueAction(Value);
             else
-                errorFunction(Error!);
+                errorFunction(Error);
         }
 
         public T Select<T>(Func<TValue, T> valueFunction, Func<ResultError<TErrorType>, T> errorFunction)
         {
             if (IsSuccess)
-                return valueFunction(Value!);
-            return errorFunction(Error!);
+                return valueFunction(Value);
+            return errorFunction(Error);
         }
 
-        public TValue OrDefault(TValue defaultValue) => Select(
-            value => value,
-            _ => defaultValue
-        );
+        /// <summary>
+        /// This method helps quickly convert the result to a <see cref="TValue"/> type object.
+        /// It is effectively the same as `result.Value ?? defaultValue`
+        /// </summary>
+        /// <param name="defaultValue">The value to be returned if the result is not successful</param>
+        /// <returns>A valid value object</returns>
+        public TValue OrDefault(TValue defaultValue) => IsSuccess ? Value : defaultValue;
 
-        public bool TryGetValue(out TValue value)
+        public bool TryGetValue([NotNullWhen(true)] out TValue? value)
         {
             if (IsSuccess)
             {
-                value = Value!;
+                value = Value;
                 return true;
             }
 
-            value = default!;
+            value = default;
             return false;
         }
 
-        public bool TryGetError(out ResultError<TErrorType> error)
+        public bool TryGetError([NotNullWhen(true)] out ResultError<TErrorType>? error)
         {
             if (IsNotSuccess)
             {
-                error = Error!;
+                error = Error;
                 return true;
             }
 
-            error = default!;
+            error = default;
             return false;
         }
 
         public override string ToString()
         {
             if (IsSuccess)
-                return Value!.ToString() ?? "null";
+                return Value.ToString() ?? "null";
 
-            return $"Error type: {Error!.Type}, Message: {Error!.Message}";
+            return $"Error type: {Error.Type}, Message: {Error.Message}";
         }
 
         public bool Equals(Result<TValue, TErrorType>? other)
         {
+            // Check the reference equalities
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            if (IsSuccess && other.IsSuccess) return EqualityComparer<TValue>.Default.Equals(Value!, other.Value!);
+            
+            // If their success states are different
+            if (IsSuccess != other.IsSuccess) return false;
+            
+            // If their success states are the same
+            if (IsSuccess && other.IsSuccess) return EqualityComparer<TValue>.Default.Equals(Value, other.Value);
             return EqualityComparer<TErrorType>.Default.Equals(Error!.Type, other.Error!.Type) && Error!.Message == other.Error!.Message;
         }
 
-        public override bool Equals(object? other) => other?.GetType() == GetType() && Equals((Result<TValue, TErrorType>)other);
-
+        public override bool Equals(object? other) => other?.GetType() == GetType() && Equals((Result<TValue, TErrorType>) other);
         public override int GetHashCode() => HashCode.Combine(Value, Error);
-
         public static bool operator ==(Result<TValue, TErrorType>? a, Result<TValue, TErrorType>? b) => a?.Equals(b) ?? false;
-
         public static bool operator !=(Result<TValue, TErrorType>? a, Result<TValue, TErrorType>? b) => !a?.Equals(b) ?? true;
     }
 
@@ -138,7 +150,7 @@ namespace Qc.Result
             }
         };
 
-        public override bool Equals(object? other) => other?.GetType() == GetType() && Equals((Result<TValue>)other);
+        public override bool Equals(object? other) => other?.GetType() == GetType() && Equals((Result<TValue>) other);
 
         public override int GetHashCode() => HashCode.Combine(Value, Error);
 
