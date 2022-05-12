@@ -1,0 +1,14 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bc3f3133_002D52d4_002D49c5_002D8238_002Df434807841ee/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Test1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.Algorithms.Graph.TarjanSccHelperTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.DirectedGraphTests.DirectedGraph_ShortestPath_FindsShortestPath&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.DirectedGraphTests.DirectedGraph_ShortestPath_Directed5x5Matrix_NoPath&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.DirectedGraphTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.UndirectedGraphShortestPathTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.DirectedGraphShortestPathTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphIsTreeTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphShortestPathTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Heapify/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

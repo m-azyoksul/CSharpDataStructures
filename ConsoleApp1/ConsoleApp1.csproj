@@ -9,6 +9,11 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Qc.Result\Qc.Result.csproj" />
+      <ProjectReference Include="..\AlgorithmHelpers\AlgorithmHelpers.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
     </ItemGroup>
 
 </Project>
