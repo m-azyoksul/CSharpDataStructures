@@ -6,6 +6,8 @@ namespace AlgorithmHelpers.DataStructures;
 
 public class UndirectedGraph<TVertexData> : Graph<TVertexData>
 {
+    #region Constructors
+    
     public UndirectedGraph() : base()
     {
     }
@@ -41,6 +43,9 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
         }
     }
 
+    #endregion
+
+    #region Elementary operations
 
     public override void AddEdge(int v1, int v2)
     {
@@ -89,7 +94,8 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
     {
         return EdgeList.Contains((v1, v2)) || EdgeList.Contains((v2, v1));
     }
-
+    
+    #endregion
 
     /// <summary>
     /// Time complexity: O(V)
@@ -120,7 +126,7 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
             var v = queue.Dequeue();
 
             // Enqueue neighbors
-            foreach (var neighbor in GetNeighbors(v))
+            foreach (var neighbor in AllNeighbours(v))
             {
                 // If the neighbor is visited before and is not the predecessor, the graph is not a tree
                 if (predecessor.ContainsKey(neighbor))
@@ -280,11 +286,8 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
             {
                 var v = queue.Dequeue();
 
-                foreach (var neighbor in GetNeighbors(v))
+                foreach (var neighbor in UnvisitedNeighbours(v, components))
                 {
-                    if (components.ContainsKey(neighbor))
-                        continue;
-
                     queue.Enqueue(neighbor);
                     components[v] = componentIndex;
                 }
@@ -314,11 +317,8 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
             {
                 var v = queue.Dequeue();
 
-                foreach (var neighbor in GetNeighbors(v))
+                foreach (var neighbor in UnvisitedNeighbours(v, visited))
                 {
-                    if (visited.Contains(neighbor))
-                        continue;
-
                     queue.Enqueue(neighbor);
                     visited.Add(v);
                 }

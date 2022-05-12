@@ -186,7 +186,7 @@ public class GraphTraverseTests
 
         // Assert
         var traversedIndices = traverseList.Select(v => v.Key).ToArray();
-        Assert.Equal(new[] {0, 4, 8, 12, 13, 14, 15, 9, 10, 11, 5, 6, 7, 1, 2, 3}, traversedIndices);
+        Assert.Equal(new[] {0, 1, 2, 3, 7, 11, 15, 6, 10, 14, 5, 9, 13, 4, 8, 12}, traversedIndices);
     }
 
     [Fact]
@@ -200,7 +200,7 @@ public class GraphTraverseTests
 
         // Assert
         var traversedIndices = traverseList.Select(v => v.Key).ToArray();
-        Assert.Equal(new[] {6, 10, 14, 15, 11, 7}, traversedIndices);
+        Assert.Equal(new[] {6, 7, 11, 15, 10, 14}, traversedIndices);
     }
 
     [Fact]
@@ -214,7 +214,7 @@ public class GraphTraverseTests
 
         // Assert
         var traversedIndices = traverseList.Select(v => v.Key).ToArray();
-        Assert.Equal(new[] {0, 2, 6, 5, 12, 11, 1, 4, 10, 9, 3, 8, 7}, traversedIndices);
+        Assert.Equal(new[] {0, 1, 3, 7, 8, 4, 9, 10, 2, 5, 11, 12, 6}, traversedIndices);
     }
 
     [Fact]
@@ -228,7 +228,7 @@ public class GraphTraverseTests
 
         // Assert
         var traversedIndices = traverseList.Select(v => v.Key).ToArray();
-        Assert.Equal(new[] {4, 10, 9}, traversedIndices);
+        Assert.Equal(new[] {4, 9, 10}, traversedIndices);
     }
 
     [Fact]
@@ -242,7 +242,7 @@ public class GraphTraverseTests
 
         // Assert
         var traversedIndices = traverseList.Select(v => v.Key).ToArray();
-        Assert.Equal(new[] {2, 5, 3, 6, 4, 1, 0}, traversedIndices);
+        Assert.Equal(new[] {2, 5, 0, 1, 3, 6, 4}, traversedIndices);
     }
 
     [Fact]
@@ -256,7 +256,92 @@ public class GraphTraverseTests
 
         // Assert
         var traversedIndices = traverseList.Select(v => v.Key).ToArray();
-        Assert.Equal(new[] {5, 3, 6, 4, 1, 2, 0}, traversedIndices);
+        Assert.Equal(new[] {5, 0, 1, 3, 6, 4, 2}, traversedIndices);
+    }
+
+
+    [Fact]
+    public void Directed_PrintDfsIterative_5x5Matrix_From0()
+    {
+        // Arrange
+        var graph = GraphsToTest.Directed5By5Matrix();
+
+        // Act
+        var traverseList = graph.TraverseDfsIterative(0);
+
+        // Assert
+        var traversedIndices = traverseList.Select(v => v.Key).ToArray();
+        Assert.Equal(new[] {0, 1, 2, 3, 7, 11, 15, 6, 10, 14, 5, 9, 13, 4, 8, 12}, traversedIndices);
+    }
+
+    [Fact]
+    public void Directed_PrintDfsIterative_5x5Matrix_From6()
+    {
+        // Arrange
+        var graph = GraphsToTest.Directed5By5Matrix();
+
+        // Act
+        var traverseList = graph.TraverseDfsIterative(6);
+
+        // Assert
+        var traversedIndices = traverseList.Select(v => v.Key).ToArray();
+        Assert.Equal(new[] {6, 7, 11, 15, 10, 14}, traversedIndices);
+    }
+
+    [Fact]
+    public void Directed_PrintDfsIterative_BalancedTree_From0()
+    {
+        // Arrange
+        var graph = GraphsToTest.DirectedBalancedTree();
+
+        // Act
+        var traverseList = graph.TraverseDfsIterative(0);
+
+        // Assert
+        var traversedIndices = traverseList.Select(v => v.Key).ToArray();
+        Assert.Equal(new[] {0, 1, 3, 7, 8, 4, 9, 10, 2, 5, 11, 12, 6}, traversedIndices);
+    }
+
+    [Fact]
+    public void Directed_PrintDfsIterative_BalancedTree_From4()
+    {
+        // Arrange
+        var graph = GraphsToTest.DirectedBalancedTree();
+
+        // Act
+        var traverseList = graph.TraverseDfsIterative(4);
+
+        // Assert
+        var traversedIndices = traverseList.Select(v => v.Key).ToArray();
+        Assert.Equal(new[] {4, 9, 10}, traversedIndices);
+    }
+
+    [Fact]
+    public void Directed_PrintDfsIterative_Collar_From2()
+    {
+        // Arrange
+        var graph = GraphsToTest.DirectedCollar();
+
+        // Act
+        var traverseList = graph.TraverseDfsIterative(2);
+
+        // Assert
+        var traversedIndices = traverseList.Select(v => v.Key).ToArray();
+        Assert.Equal(new[] {2, 5, 0, 1, 3, 6, 4}, traversedIndices);
+    }
+
+    [Fact]
+    public void Directed_PrintDfsIterative_Collar_From5()
+    {
+        // Arrange
+        var graph = GraphsToTest.DirectedCollar();
+
+        // Act
+        var traverseList = graph.TraverseDfsIterative(5);
+
+        // Assert
+        var traversedIndices = traverseList.Select(v => v.Key).ToArray();
+        Assert.Equal(new[] {5, 0, 1, 3, 6, 4, 2}, traversedIndices);
     }
 
 
@@ -271,7 +356,7 @@ public class GraphTraverseTests
 
         // Assert
         var traversedIndices = traverseList.Select(v => v.Key).ToArray();
-        Assert.Equal(new[] {0, 4, 8, 12, 13, 9, 5, 1, 2, 6, 10, 14, 15, 11, 7, 3}, traversedIndices);
+        Assert.Equal(new[] {0, 1, 2, 3, 7, 6, 5, 4, 8, 9, 10, 11, 15, 14, 13, 12}, traversedIndices);
     }
 
     [Fact]
@@ -285,7 +370,7 @@ public class GraphTraverseTests
 
         // Assert
         var traversedIndices = traverseList.Select(v => v.Key).ToArray();
-        Assert.Equal(new[] {6, 10, 14, 15, 11, 7, 3, 2, 1, 5, 9, 13, 12, 8, 4, 0}, traversedIndices);
+        Assert.Equal(new[] {6, 5, 4, 0, 1, 2, 3, 7, 11, 10, 9, 8, 12, 13, 14, 15}, traversedIndices);
     }
 
     [Fact]
@@ -299,7 +384,7 @@ public class GraphTraverseTests
 
         // Assert
         var traversedIndices = traverseList.Select(v => v.Key).ToArray();
-        Assert.Equal(new[] {0, 2, 6, 5, 12, 11, 1, 4, 10, 9, 3, 8, 7}, traversedIndices);
+        Assert.Equal(new[] {0, 1, 3, 7, 8, 4, 9, 10, 2, 5, 11, 12, 6}, traversedIndices);
     }
 
     [Fact]
@@ -313,7 +398,7 @@ public class GraphTraverseTests
 
         // Assert
         var traversedIndices = traverseList.Select(v => v.Key).ToArray();
-        Assert.Equal(new[] {4, 10, 9, 1, 3, 8, 7, 0, 2, 6, 5, 12, 11}, traversedIndices);
+        Assert.Equal(new[] {4, 1, 0, 2, 5, 11, 12, 6, 3, 7, 8, 9, 10}, traversedIndices);
     }
 
     [Fact]
@@ -327,7 +412,7 @@ public class GraphTraverseTests
 
         // Assert
         var traversedIndices = traverseList.Select(v => v.Key).ToArray();
-        Assert.Equal(new[] {2, 5, 3, 6, 4, 1, 0}, traversedIndices);
+        Assert.Equal(new[] {2, 0, 1, 3, 6, 4, 5}, traversedIndices);
     }
 
     [Fact]
@@ -341,6 +426,91 @@ public class GraphTraverseTests
 
         // Assert
         var traversedIndices = traverseList.Select(v => v.Key).ToArray();
-        Assert.Equal(new[] {5, 3, 6, 4, 1, 0, 2}, traversedIndices);
+        Assert.Equal(new[] {5, 2, 0, 1, 3, 6, 4}, traversedIndices);
+    }
+
+
+    [Fact]
+    public void Undirected_PrintDfsIterative_5x5Matrix_From0()
+    {
+        // Arrange
+        var graph = GraphsToTest.Undirected5By5Matrix();
+
+        // Act
+        var traverseList = graph.TraverseDfsIterative(0);
+
+        // Assert
+        var traversedIndices = traverseList.Select(v => v.Key).ToArray();
+        Assert.Equal(new[] {0, 1, 2, 3, 7, 6, 5, 4, 8, 9, 10, 11, 15, 14, 13, 12}, traversedIndices);
+    }
+
+    [Fact]
+    public void Undirected_PrintDfsIterative_5x5Matrix_From6()
+    {
+        // Arrange
+        var graph = GraphsToTest.Undirected5By5Matrix();
+
+        // Act
+        var traverseList = graph.TraverseDfsIterative(6);
+
+        // Assert
+        var traversedIndices = traverseList.Select(v => v.Key).ToArray();
+        Assert.Equal(new[] {6, 5, 4, 0, 1, 2, 3, 7, 11, 10, 9, 8, 12, 13, 14, 15}, traversedIndices);
+    }
+
+    [Fact]
+    public void Undirected_PrintDfsIterative_BalancedTree_From0()
+    {
+        // Arrange
+        var graph = GraphsToTest.UndirectedBalancedTree();
+
+        // Act
+        var traverseList = graph.TraverseDfsIterative(0);
+
+        // Assert
+        var traversedIndices = traverseList.Select(v => v.Key).ToArray();
+        Assert.Equal(new[] {0, 1, 3, 7, 8, 4, 9, 10, 2, 5, 11, 12, 6}, traversedIndices);
+    }
+
+    [Fact]
+    public void Undirected_PrintDfsIterative_BalancedTree_From4()
+    {
+        // Arrange
+        var graph = GraphsToTest.UndirectedBalancedTree();
+
+        // Act
+        var traverseList = graph.TraverseDfsIterative(4);
+
+        // Assert
+        var traversedIndices = traverseList.Select(v => v.Key).ToArray();
+        Assert.Equal(new[] {4, 1, 0, 2, 5, 11, 12, 6, 3, 7, 8, 9, 10}, traversedIndices);
+    }
+
+    [Fact]
+    public void Undirected_PrintDfsIterative_Collar_From2()
+    {
+        // Arrange
+        var graph = GraphsToTest.UndirectedCollar();
+
+        // Act
+        var traverseList = graph.TraverseDfsIterative(2);
+
+        // Assert
+        var traversedIndices = traverseList.Select(v => v.Key).ToArray();
+        Assert.Equal(new[] {2, 0, 1, 3, 6, 4, 5}, traversedIndices);
+    }
+
+    [Fact]
+    public void Undirected_PrintDfsIterative_Collar_From5()
+    {
+        // Arrange
+        var graph = GraphsToTest.UndirectedCollar();
+
+        // Act
+        var traverseList = graph.TraverseDfsIterative(5);
+
+        // Assert
+        var traversedIndices = traverseList.Select(v => v.Key).ToArray();
+        Assert.Equal(new[] {5, 2, 0, 1, 3, 6, 4}, traversedIndices);
     }
 }

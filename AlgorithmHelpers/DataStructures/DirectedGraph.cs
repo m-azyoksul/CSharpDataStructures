@@ -7,6 +7,8 @@ namespace AlgorithmHelpers.DataStructures;
 
 public class DirectedGraph<TVertexData> : Graph<TVertexData>
 {
+    #region Constructors
+    
     public DirectedGraph() : base()
     {
     }
@@ -38,6 +40,9 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
         }
     }
 
+    #endregion
+
+    #region Elementary Operations
 
     public override void AddEdge(int v1, int v2)
     {
@@ -72,7 +77,8 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
     {
         return EdgeList.Contains((v1, v2));
     }
-
+    
+    #endregion
 
     /// <summary>
     /// Time complexity: O(E)
@@ -107,14 +113,14 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
     {
         if (VertexCount() <= 1)
             return true;
-        
+
         // Find the root vertex
         var incomingEdges = VertexList.Keys.ToHashSet();
 
         foreach (var vertex in VertexList)
         foreach (var neighbour in vertex.Value.Neighbours)
             incomingEdges.Remove(neighbour);
-        
+
         // If there is more than one root vertex, it is not a tree
         if (incomingEdges.Count != 1)
             return false;
@@ -129,7 +135,7 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
             var v = queue.Dequeue();
 
             // Enqueue neighbours
-            foreach (var neighbour in VertexList[v].Neighbours)
+            foreach (var neighbour in AllNeighbours(v))
             {
                 if (visited.Contains(neighbour))
                     return false;
@@ -141,7 +147,7 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
 
         return true;
     }
-    
+
     public override List<(int V1, int V2)> Bridges()
     {
         // TODO: Academic paper for the algorithm: https://stackoverflow.com/a/17107586/7279624
