@@ -141,6 +141,12 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
 
         return true;
     }
+    
+    public override List<(int V1, int V2)> Bridges()
+    {
+        // TODO: Academic paper for the algorithm: https://stackoverflow.com/a/17107586/7279624
+        throw new NotImplementedException();
+    }
 
     /// <returns>(The number of sccs, for each vertex (id of vertex, index of scc))</returns>
     public (int, (int id, int sccIndex)[]) StronglyConnectedComponents()

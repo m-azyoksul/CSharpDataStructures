@@ -54,7 +54,8 @@ public abstract class Graph<TData>
         EdgeList = new List<(int, int)>();
     }
 
-
+    #region Elementary 
+    
     public abstract void AddEdge(int v1, int v2);
 
     public void AddEdge((int v1, int v2) edge)
@@ -109,8 +110,9 @@ public abstract class Graph<TData>
         VertexList.Clear();
         EdgeList.Clear();
     }
-
-
+    
+    #endregion
+    
     public int VertexCount()
     {
         return VertexList.Count;
@@ -139,6 +141,64 @@ public abstract class Graph<TData>
         return VertexList.Count == 0;
     }
 
+    protected int NonKeyValue()
+    {
+        var nonKeyValue = int.MinValue;
+        while (VertexList.ContainsKey(nonKeyValue))
+            nonKeyValue++;
+        return nonKeyValue;
+    }
+
+
+    public Dictionary<int, TData?> TraverseBfs(int v)
+    {
+        if (!VertexList.ContainsKey(v))
+            throw new ArgumentException("The vertex does not exist");
+
+        var visited = new Dictionary<int, TData?> {{v, VertexList[v].Data}};
+        var queue = new Queue<int> {v};
+
+        while (queue.Count > 0)
+        {
+            var current = queue.Dequeue();
+
+            foreach (var neighbour in VertexList[current].Neighbours)
+            {
+                if (visited.ContainsKey(neighbour))
+                    continue;
+
+                queue.Enqueue(neighbour);
+                visited[neighbour] = VertexList[neighbour].Data;
+            }
+        }
+
+        return visited;
+    }
+
+    public Dictionary<int, TData?> TraverseDfs(int v)
+    {
+        if (!VertexList.ContainsKey(v))
+            throw new ArgumentException("The vertex does not exist");
+
+        var visited = new Dictionary<int, TData?> {{v, VertexList[v].Data}};
+        var stack = new Stack<int> {v};
+
+        while (stack.Count > 0)
+        {
+            var current = stack.Pop();
+            visited[current] = VertexList[current].Data;
+
+            foreach (var neighbour in VertexList[current].Neighbours)
+            {
+                if (visited.ContainsKey(neighbour))
+                    continue;
+
+                stack.Push(neighbour);
+            }
+        }
+
+        return visited;
+    }
 
     public bool IsSimple()
     {
@@ -156,6 +216,10 @@ public abstract class Graph<TData>
     }
 
     public abstract bool IsEulerian();
+
+    public abstract bool IsTree();
+    
+    public abstract List<(int V1, int V2)> Bridges();
 
     public bool IsConnected()
     {
@@ -179,16 +243,10 @@ public abstract class Graph<TData>
                 queue.Enqueue(neighbor);
                 visited.Add(v);
             }
-
-            // If all vertices are visited, the graph is connected
-            if (visited.Count == VertexCount())
-                return true;
         }
 
-        return false;
+        return visited.Count == VertexCount();
     }
-
-    public abstract bool IsTree();
 
     public bool IsTherePath(int fromVertex, int toVertex)
     {
@@ -374,4 +432,6 @@ public abstract class Graph<TData>
             .Where(v => Excentricity(v) == radius)
             .ToArray();
     }
+    
+    
 }

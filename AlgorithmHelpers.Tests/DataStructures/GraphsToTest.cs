@@ -57,12 +57,11 @@ public class GraphsToTest
             (1, 6),
             (2, 5),
             (3, 6),
-            (5, 2),
             (5, 0),
             (5, 2),
             (5, 3),
             (6, 1),
-            (6, 4)
+            (6, 4),
         };
 
         return new DirectedGraph<string>(edges);
@@ -120,12 +119,11 @@ public class GraphsToTest
             (1, 6),
             (2, 5),
             (3, 6),
-            (5, 2),
             (5, 0),
             (5, 2),
             (5, 3),
             (6, 1),
-            (6, 4)
+            (6, 4),
         };
 
         return new UndirectedGraph<string>(edges);

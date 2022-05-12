@@ -108,7 +108,7 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
     {
         if (VertexCount() <= 1)
             return true;
-        
+
         var firstVertex = VertexList.First().Key;
 
         var predecessor = new Dictionary<int, int> {{firstVertex, -1}};
@@ -136,5 +136,197 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
         }
 
         return VertexCount() == predecessor.Count;
+    }
+
+    /// <summary>
+    /// Finds all bridges (critical edges) in the graph.
+    /// Uses recursive DFS to find bridges.
+    ///
+    /// Time complexity: O(V + E)
+    /// Space complexity: O(V)
+    /// </summary>
+    /// <returns></returns>
+    public override List<(int V1, int V2)> Bridges()
+    {
+        var bridges = new List<(int V1, int V2)>();
+
+        var visited = new HashSet<int>();
+        var low = new Dictionary<int, int>();
+        var timeOfVisit = new Dictionary<int, int>();
+        var time = 0;
+
+        foreach (var vertex in VertexList)
+        {
+            if (visited.Contains(vertex.Key))
+                continue;
+
+            BridgesDfs(vertex.Key, visited, low, timeOfVisit, bridges, ref time);
+        }
+
+        return bridges;
+    }
+
+    private void BridgesDfs(int v, HashSet<int> visited, Dictionary<int, int> low, Dictionary<int, int> timeOfVisit, List<(int V1, int V2)> bridges, ref int time, int parent = -1)
+    {
+        visited.Add(v);
+        low[v] = timeOfVisit[v] = time;
+        time++;
+
+        foreach (int to in VertexList[v].Neighbours)
+        {
+            if (to == parent)
+                continue;
+
+            if (visited.Contains(to))
+                low[v] = Math.Min(low[v], timeOfVisit[to]);
+            else
+            {
+                BridgesDfs(to, visited, low, timeOfVisit, bridges, ref time, v);
+                if (low[to] > timeOfVisit[v])
+                    bridges.Add((v, to));
+                low[v] = Math.Min(low[v], low[to]);
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Finds all bridges (critical edges) in the graph.
+    /// Uses iterative dfs using stack frame to avoid recursion.
+    /// Implementation is based on the following SO answer: https://stackoverflow.com/a/61645529/7279624
+    ///
+    /// Time complexity: O(V + E)
+    /// Space complexity: O(V)
+    /// </summary>
+    public List<(int V1, int V2)> BridgesIterative()
+    {
+        var bridges = new List<(int V1, int V2)>();
+
+        var visited = new HashSet<int>();
+        var low = new Dictionary<int, int>();
+        var timeOfVisit = new Dictionary<int, int>();
+        var time = 0;
+
+        foreach (var vertex in VertexList.Keys)
+        {
+            if (visited.Contains(vertex))
+                continue;
+
+            var stack = new Stack<(int vertex, int parent, int visitedNCount)> {(vertex, NonKeyValue(), 0)};
+
+            while (stack.Count > 0)
+            {
+                var current = stack.Pop();
+
+                // If the vertex is being visited for the first time, set the appropriate values
+                if (current.visitedNCount == 0)
+                {
+                    visited.Add(current.vertex);
+                    low[current.vertex] = timeOfVisit[current.vertex] = time;
+                    time++;
+                }
+
+                // If a neighbours was visited, check if it is a bridge and update the low value
+                else if (current.visitedNCount > 0)
+                {
+                    int neighbour = VertexList[current.vertex].Neighbours[current.visitedNCount - 1];
+                    if (neighbour != current.parent)
+                    {
+                        if (low[neighbour] > timeOfVisit[current.vertex])
+                            bridges.Add((current.vertex, neighbour));
+
+                        low[current.vertex] = Math.Min(low[current.vertex], low[neighbour]);
+                    }
+                }
+
+                // Push next unvisited neighbour to the stack
+                if (current.visitedNCount < VertexList[current.vertex].Neighbours.Count)
+                {
+                    // Push the current vertex back to the stack
+                    stack.Push((current.vertex, current.parent, current.visitedNCount + 1));
+
+                    // If the neighbour is the parent, skip it
+                    int neighbour = VertexList[current.vertex].Neighbours[current.visitedNCount];
+                    if (neighbour == current.parent)
+                        continue;
+
+                    // If the neighbour is already visited, set the low value
+                    if (visited.Contains(neighbour))
+                        low[current.vertex] = Math.Min(low[current.vertex], timeOfVisit[neighbour]);
+
+                    // If the neighbour is not visited, push it to the stack
+                    else
+                        stack.Push((neighbour, current.vertex, 0));
+                }
+            }
+        }
+
+        return bridges;
+    }
+
+    public (int, Dictionary<int, int>) ConnectedComponents()
+    {
+        var components = new Dictionary<int, int>();
+        var componentIndex = 0;
+
+        foreach (var vertex in VertexList.Keys)
+        {
+            if (components.ContainsKey(vertex))
+                continue;
+
+            var queue = new Queue<int>();
+            queue.Enqueue(vertex);
+
+            while (queue.Count > 0)
+            {
+                var v = queue.Dequeue();
+
+                foreach (var neighbor in GetNeighbors(v))
+                {
+                    if (components.ContainsKey(neighbor))
+                        continue;
+
+                    queue.Enqueue(neighbor);
+                    components[v] = componentIndex;
+                }
+            }
+
+            componentIndex++;
+        }
+
+        return (componentIndex, components);
+    }
+
+    public List<int[]> ConnectedComponentList()
+    {
+        var components = new List<int[]>();
+
+        foreach (var vertex in VertexList.Keys)
+        {
+            var visited = new HashSet<int>();
+
+            if (visited.Contains(vertex))
+                continue;
+
+            var queue = new Queue<int>();
+            queue.Enqueue(vertex);
+
+            while (queue.Count > 0)
+            {
+                var v = queue.Dequeue();
+
+                foreach (var neighbor in GetNeighbors(v))
+                {
+                    if (visited.Contains(neighbor))
+                        continue;
+
+                    queue.Enqueue(neighbor);
+                    visited.Add(v);
+                }
+            }
+
+            components.Add(visited.ToArray());
+        }
+
+        return components;
     }
 }
