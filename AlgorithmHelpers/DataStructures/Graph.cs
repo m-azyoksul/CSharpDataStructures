@@ -7,18 +7,18 @@ namespace AlgorithmHelpers.DataStructures;
 public class Vertex<T>
 {
     public T? Data;
-    public List<int> Neighbours;
+    public List<int> Neighbors;
 
-    public Vertex(T? data, List<int> neighbours)
+    public Vertex(T? data, List<int> neighbors)
     {
         Data = data;
-        Neighbours = neighbours;
+        Neighbors = neighbors;
     }
 
     public Vertex(T? data)
     {
         Data = data;
-        Neighbours = new List<int>();
+        Neighbors = new List<int>();
     }
 
     public static Vertex<T> Empty() => new(default, new List<int>());
@@ -26,33 +26,33 @@ public class Vertex<T>
 
 public abstract class Graph<TData>
 {
-    public Dictionary<int, Vertex<TData>> VertexList { get; }
-    public List<(int V1, int V2)> EdgeList { get; }
+    public Dictionary<int, Vertex<TData>> Vertices { get; }
+    public List<(int V1, int V2)> Edges { get; }
 
     #region Constructors
 
     protected Graph()
     {
-        VertexList = new Dictionary<int, Vertex<TData>>();
-        EdgeList = new List<(int, int)>();
+        Vertices = new Dictionary<int, Vertex<TData>>();
+        Edges = new List<(int, int)>();
     }
 
-    protected Graph(List<(int, int)> edgeList)
+    protected Graph(List<(int, int)> edges)
     {
-        VertexList = new Dictionary<int, Vertex<TData>>();
-        EdgeList = edgeList;
+        Vertices = new Dictionary<int, Vertex<TData>>();
+        Edges = edges;
     }
 
-    protected Graph(Dictionary<int, Vertex<TData>> vertexList)
+    protected Graph(Dictionary<int, Vertex<TData>> vertices)
     {
         // Make sure the Neighbours lists only contain values that exist in the vertex list
-        foreach (var vertex in vertexList)
-        foreach (var neighbour in vertex.Value.Neighbours)
-            if (!vertexList.ContainsKey(neighbour))
+        foreach (var vertex in vertices)
+        foreach (var neighbour in vertex.Value.Neighbors)
+            if (!vertices.ContainsKey(neighbour))
                 throw new ArgumentException("The edge list contains a vertex that is not in the vertex list");
 
-        VertexList = vertexList;
-        EdgeList = new List<(int, int)>();
+        Vertices = vertices;
+        Edges = new List<(int, int)>();
     }
 
     #endregion
@@ -88,10 +88,10 @@ public abstract class Graph<TData>
 
     public void AddVertex(int v)
     {
-        if (VertexList.ContainsKey(v))
+        if (Vertices.ContainsKey(v))
             throw new ArgumentException("The vertex already exists");
 
-        VertexList.Add(v, Vertex<TData>.Empty());
+        Vertices.Add(v, Vertex<TData>.Empty());
     }
 
     public abstract void RemoveVertex(int v);
@@ -105,73 +105,104 @@ public abstract class Graph<TData>
 
     public bool ContainsVertex(int v)
     {
-        return VertexList.ContainsKey(v);
+        return Vertices.ContainsKey(v);
     }
 
     public void Clear()
     {
-        VertexList.Clear();
-        EdgeList.Clear();
+        Vertices.Clear();
+        Edges.Clear();
     }
 
     public int VertexCount()
     {
-        return VertexList.Count;
+        return Vertices.Count;
     }
 
     public int EdgeCount()
     {
-        return EdgeList.Count;
+        return Edges.Count;
     }
 
     public List<int> AllNeighbours(int v)
     {
-        if (!VertexList.ContainsKey(v))
+        if (!Vertices.ContainsKey(v))
             throw new ArgumentException("The vertex does not exist");
 
-        return VertexList[v].Neighbours;
+        return Vertices[v].Neighbors;
     }
 
     public List<int> GetVertices()
     {
-        return VertexList.Keys.ToList();
+        return Vertices.Keys.ToList();
     }
 
     public bool IsEmpty()
     {
-        return VertexList.Count == 0;
+        return Vertices.Count == 0;
     }
 
     #endregion
 
-    #region Sementatic Operations
+    #region Sementic Operations
+
+    /// <summary>
+    /// Finds all the vertices that are connected to the given vertex
+    ///
+    /// Time Complexity: O(V + E)
+    /// Space Complexity: O(V)
+    /// </summary>
+    protected List<int> AllBackwardsNeighbours(int v)
+    {
+        // Find all vertices that have a directed edge towards v using VertexList
+        return (
+            from vertex in Vertices
+            where vertex.Value.Neighbors.Contains(v)
+            select vertex.Key
+        ).ToList();
+    }
 
     protected int NonKeyValue()
     {
         var nonKeyValue = int.MinValue;
-        while (VertexList.ContainsKey(nonKeyValue))
+        while (Vertices.ContainsKey(nonKeyValue))
             nonKeyValue++;
         return nonKeyValue;
     }
 
     protected IEnumerable<int> UnvisitedNeighbours(int vertex, HashSet<int> visitedSet)
     {
-        return VertexList[vertex].Neighbours.Where(neighbour => !visitedSet.Contains(neighbour));
+        return Vertices[vertex].Neighbors.Where(neighbour => !visitedSet.Contains(neighbour));
     }
 
     protected IEnumerable<int> UnvisitedNeighbours<T>(int vertex, Dictionary<int, T> visitedDict)
     {
-        return VertexList[vertex].Neighbours.Where(neighbour => !visitedDict.ContainsKey(neighbour));
+        return Vertices[vertex].Neighbors.Where(neighbour => !visitedDict.ContainsKey(neighbour));
+    }
+
+    protected int NeighborCount(int v)
+    {
+        return Vertices[v].Neighbors.Count;
     }
 
     #endregion
 
-    public Dictionary<int, TData?> TraverseBfs(int v)
+    #region Traversal Operations
+
+    /// <summary>
+    /// Iterative breath first search that traverses all vertices reachable from v.
+    ///
+    /// Time Complexity: O(V + E)
+    /// Space Complexity: O(V)
+    /// </summary>
+    /// <param name="v">Start vertex</param>
+    /// <returns>All visited vertices</returns>
+    public List<int> BfsTraversal(int v)
     {
-        if (!VertexList.ContainsKey(v))
+        if (!Vertices.ContainsKey(v))
             throw new ArgumentException("The vertex does not exist");
 
-        var visited = new Dictionary<int, TData?> {{v, VertexList[v].Data}};
+        var visited = new HashSet<int> {v};
         var queue = new Queue<int> {v};
 
         while (queue.Count > 0)
@@ -180,63 +211,247 @@ public abstract class Graph<TData>
 
             foreach (var neighbour in UnvisitedNeighbours(current, visited))
             {
+                visited.Add(neighbour);
                 queue.Enqueue(neighbour);
-                visited[neighbour] = VertexList[neighbour].Data;
             }
         }
 
-        return visited;
+        return visited.ToList();
     }
 
-    public Dictionary<int, TData?> TraverseDfs(int v)
+    /// <summary>
+    /// Recursive depth first search that traverses all vertices reachable from v.
+    ///
+    /// Time Complexity: O(V + E)
+    /// Space Complexity: O(V)
+    /// </summary>
+    /// <param name="v">Start vertex</param>
+    /// <returns>All visited vertices</returns>
+    public List<int> DfsTraversal(int v)
     {
-        if (!VertexList.ContainsKey(v))
+        if (!Vertices.ContainsKey(v))
             throw new ArgumentException("The vertex does not exist");
 
-        var visited = new Dictionary<int, TData?> {{v, VertexList[v].Data}};
-        TraverseDfs(v, visited);
-        return visited;
+        var visited = new HashSet<int> {v};
+        DfsTraversal(v, visited);
+        return visited.ToList();
     }
 
-    private void TraverseDfs(int v, Dictionary<int, TData?> visited)
+    /// <summary>
+    /// Recursive call for recursive depth first search that traverses all vertices reachable from v.
+    /// </summary>
+    private void DfsTraversal(int v, HashSet<int> visited)
     {
         foreach (var neighbour in UnvisitedNeighbours(v, visited))
         {
-            visited[neighbour] = VertexList[neighbour].Data;
-            TraverseDfs(neighbour, visited);
+            visited.Add(neighbour);
+            DfsTraversal(neighbour, visited);
         }
     }
 
-    public Dictionary<int, TData?> TraverseDfsIterative(int v)
+    /// <summary>
+    /// Iterative depth first search that traverses all vertices reachable from v.
+    ///
+    /// Time Complexity: O(V + E)
+    /// Space Complexity: O(V)
+    /// </summary>
+    /// <param name="v">Start vertex</param>
+    /// <returns>All visited vertices</returns>
+    public List<int> DfsTraversalIterative(int v)
     {
-        if (!VertexList.ContainsKey(v))
+        if (!Vertices.ContainsKey(v))
             throw new ArgumentException("The vertex does not exist");
 
-        var visited = new Dictionary<int, TData?> {{v, VertexList[v].Data}};
+        var visited = new HashSet<int> {v};
         var stack = new Stack<int> {v};
 
         while (stack.Count > 0)
         {
             var current = stack.Pop();
-            visited[current] = VertexList[current].Data;
+            visited.Add(current);
 
-            UnvisitedNeighbours(current, visited).ToList().ForEachReversed(neighbour =>
-            {
-                stack.Push(neighbour);
-            });
+            UnvisitedNeighbours(current, visited).ToList().ForEachReversed(neighbour => { stack.Push(neighbour); });
         }
 
-        return visited;
+        return visited.ToList();
     }
+
+    /// <summary>
+    /// Iterative breath first search that traverses all vertices and all edges reachable from v.
+    ///
+    /// Time Complexity: O(V + E)
+    /// Space Complexity: O(V + E)
+    /// </summary>
+    /// <param name="v">Start vertex</param>
+    /// <returns>All visited vertices and edges</returns>
+    public List<(int From, int To, bool Forwards)> BfsFullTraversal(int v)
+    {
+        if (!Vertices.ContainsKey(v))
+            throw new ArgumentException("The vertex does not exist");
+
+        var edgeList = new List<(int From, int To, bool Forwards)>();
+
+        var visited = new HashSet<int> {v};
+        var queue = new Queue<(int V, int P)> {(v, v)};
+        var backtrackStack = new Stack<(int V, int P)>();
+
+        while (queue.Count > 0)
+        {
+            var cur = queue.Dequeue();
+
+            foreach (var neighbour in AllNeighbours(cur.V))
+            {
+                if (visited.Contains(neighbour))
+                {
+                    edgeList.Add((cur.V, neighbour, true));
+                    edgeList.Add((neighbour, cur.V, false));
+                    continue;
+                }
+
+                edgeList.Add((cur.V, neighbour, true));
+                visited.Add(neighbour);
+                queue.Enqueue((neighbour, cur.V));
+            }
+
+            backtrackStack.Push(cur);
+        }
+
+        while (backtrackStack.Count > 1)
+        {
+            var cur = backtrackStack.Pop();
+            edgeList.Add((cur.V, cur.P, false));
+        }
+
+        return edgeList;
+    }
+
+    /// <summary>
+    /// Recursive depth first search that traverses all vertices and all edges reachable from v.
+    ///
+    /// Time Complexity: O(V + E)
+    /// Space Complexity: O(V + E)
+    /// </summary>
+    /// <param name="v">Start vertex</param>
+    /// <returns>All visited vertices and edges</returns>
+    public List<(int From, int To, bool Forward)> DfsFullTraversal(int v)
+    {
+        if (!Vertices.ContainsKey(v))
+            throw new ArgumentException("The vertex does not exist");
+
+        var edgeList = new List<(int, int, bool)>();
+
+        var visited = new HashSet<int> {v};
+        DfsFullTraversal(v, visited, edgeList, v);
+        return edgeList;
+    }
+
+    /// <summary>
+    /// Recursive call for recursive depth first search that traverses all vertices and all edges reachable from v.
+    /// </summary>
+    private void DfsFullTraversal(int v, HashSet<int> visited, List<(int, int, bool)> edgeList, int parent)
+    {
+        foreach (var neighbour in AllNeighbours(v))
+        {
+            if (neighbour == parent)
+                continue;
+
+            edgeList.Add((v, neighbour, true));
+
+            if (visited.Contains(neighbour))
+            {
+                // Navigate and back
+                edgeList.Add((neighbour, v, false));
+                continue;
+            }
+
+            // Navigate
+            visited.Add(neighbour);
+            DfsFullTraversal(neighbour, visited, edgeList, v);
+
+            // Backtrack
+            edgeList.Add((neighbour, v, false));
+        }
+    }
+
+    /// <summary>
+    /// Iterative depth first search that traverses all vertices and all edges reachable from v.
+    /// Uses a stack frame data structure to store vertex data in stack.
+    ///
+    /// Time Complexity: O(V + E)
+    /// Space Complexity: O(V + E)
+    /// </summary>
+    /// <param name="v">Start vertex</param>
+    /// <returns>All visited vertices and edges</returns>
+    public List<(int From, int To, bool Forward)> DfsFullTraversalIterative(int v)
+    {
+        if (!Vertices.ContainsKey(v))
+            throw new ArgumentException("The vertex does not exist");
+
+        var edgeList = new List<(int, int, bool)>();
+
+        var visited = new HashSet<int>();
+        var stack = new Stack<(int V, int P, int I)> {(v, v, 0)};
+
+        while (stack.Count > 0)
+        {
+            var cur = stack.Pop();
+
+            if (cur.I == 0)
+            {
+                // Init
+                visited.Add(cur.V);
+            }
+            else if (cur.I < NeighborCount(cur.V))
+            {
+                // Backtrack
+            }
+
+            if (cur.I >= NeighborCount(cur.V) ||
+                cur.I + 1 == NeighborCount(cur.V) &&
+                cur.P == Vertices[cur.V].Neighbors[cur.I])
+            {
+                // Leave
+                edgeList.Add((cur.V, cur.P, false));
+                continue;
+            }
+
+            var neighbor = Vertices[cur.V].Neighbors[cur.I];
+            if (neighbor == cur.P)
+                neighbor = Vertices[cur.V].Neighbors[cur.I + 1];
+
+            // Push back
+            stack.Push((cur.V, cur.P, cur.I + 1));
+            edgeList.Add((cur.V, neighbor, true));
+
+            if (visited.Contains(neighbor))
+            {
+                // Navigate and back
+                edgeList.Add((neighbor, cur.V, false));
+            }
+            else
+            {
+                // Navigate
+                stack.Push((neighbor, cur.V, 0));
+            }
+        }
+
+        edgeList.RemoveAt(edgeList.Count - 1);
+
+        return edgeList;
+    }
+
+    // TODO: Implement traversals without starting vertex
+
+    #endregion
 
     public bool IsSimple()
     {
-        foreach (var vertex in VertexList)
+        foreach (var vertex in Vertices)
         {
-            if (vertex.Value.Neighbours.Contains(vertex.Key))
+            if (vertex.Value.Neighbors.Contains(vertex.Key))
                 return false;
 
-            if (vertex.Value.Neighbours.HasDuplicate())
+            if (vertex.Value.Neighbors.HasDuplicate())
                 return false;
         }
 
@@ -247,40 +462,17 @@ public abstract class Graph<TData>
 
     public abstract bool IsTree();
 
+    public abstract bool IsConnected();
+
     public abstract List<(int V1, int V2)> Bridges();
-
-    public bool IsConnected()
-    {
-        if (VertexCount() <= 1)
-            return true;
-
-        var visited = new HashSet<int>();
-        var queue = new Queue<int>();
-        queue.Enqueue(VertexList.Keys.First());
-
-        while (queue.Count > 0)
-        {
-            var v = queue.Dequeue();
-
-            // Enqueue neighbors
-            foreach (var neighbor in UnvisitedNeighbours(v, visited))
-            {
-                queue.Enqueue(neighbor);
-                visited.Add(v);
-            }
-        }
-
-        return visited.Count == VertexCount();
-    }
 
     public bool IsTherePath(int fromVertex, int toVertex)
     {
-        if (!VertexList.ContainsKey(fromVertex) || !VertexList.ContainsKey(toVertex))
+        if (!Vertices.ContainsKey(fromVertex) || !Vertices.ContainsKey(toVertex))
             throw new ArgumentException("The vertex does not exist");
 
         var visited = new HashSet<int>();
-        var queue = new Queue<int>();
-        queue.Enqueue(fromVertex);
+        var queue = new Queue<int> {fromVertex};
 
         while (queue.Count > 0)
         {
@@ -302,12 +494,11 @@ public abstract class Graph<TData>
 
     public List<int>? ShortestPath(int fromVertex, int toVertex)
     {
-        if (!VertexList.ContainsKey(fromVertex) || !VertexList.ContainsKey(toVertex))
+        if (!Vertices.ContainsKey(fromVertex) || !Vertices.ContainsKey(toVertex))
             throw new ArgumentException("The vertex does not exist");
 
         var predecessor = new Dictionary<int, int> {{fromVertex, -1}};
-        var queue = new Queue<int>();
-        queue.Enqueue(fromVertex);
+        var queue = new Queue<int> {fromVertex};
 
         while (queue.Count > 0)
         {
@@ -338,15 +529,11 @@ public abstract class Graph<TData>
     /// <returns>The shortest loop, null if there are no loops</returns>
     public List<int>? ShortestLoop()
     {
-        var firstVertex = VertexList.Keys.First();
+        var firstVertex = Vertices.Keys.First();
 
         var visited = new HashSet<int>();
-        var queue = new Queue<int>();
-        queue.Enqueue(firstVertex);
-        var predecessor = new Dictionary<int, int>
-        {
-            {firstVertex, -1},
-        };
+        var queue = new Queue<int> {firstVertex};
+        var predecessor = new Dictionary<int, int> {{firstVertex, -1}};
 
         while (queue.Count > 0)
         {
@@ -383,12 +570,11 @@ public abstract class Graph<TData>
 
     public int Excentricity(int vertex)
     {
-        if (!VertexList.ContainsKey(vertex))
+        if (!Vertices.ContainsKey(vertex))
             throw new ArgumentException("The vertex does not exist");
 
         var visited = new HashSet<int>();
-        var queue = new Queue<int>();
-        queue.Enqueue(vertex);
+        var queue = new Queue<int> {vertex};
         var distance = new Dictionary<int, int>
         {
             {vertex, 0},
@@ -414,18 +600,18 @@ public abstract class Graph<TData>
     // TODO: Maybe improvable
     public int Radius()
     {
-        return VertexList.Keys.Min(Excentricity);
+        return Vertices.Keys.Min(Excentricity);
     }
 
     // TODO: Maybe improvable
     public int Diameter()
     {
-        return VertexList.Keys.Max(Excentricity);
+        return Vertices.Keys.Max(Excentricity);
     }
 
     public bool IsCentralVertex(int vertex)
     {
-        if (!VertexList.ContainsKey(vertex))
+        if (!Vertices.ContainsKey(vertex))
             throw new ArgumentException("The vertex does not exist");
 
         return Excentricity(vertex) == Radius();
@@ -433,7 +619,7 @@ public abstract class Graph<TData>
 
     public bool IsBorderVertex(int vertex)
     {
-        if (!VertexList.ContainsKey(vertex))
+        if (!Vertices.ContainsKey(vertex))
             throw new ArgumentException("The vertex does not exist");
 
         return Excentricity(vertex) == Diameter();
@@ -444,7 +630,7 @@ public abstract class Graph<TData>
     {
         var radius = Radius();
 
-        return VertexList.Keys
+        return Vertices.Keys
             .Where(v => Excentricity(v) == radius)
             .ToArray();
     }

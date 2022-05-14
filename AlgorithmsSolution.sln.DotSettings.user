@@ -1,36 +1,12 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4591068c_002D869f_002D490e_002Db390_002D05baef32cce3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Undirected_PrintDfsIterative_Collar_From2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphTraverseTests&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
+	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">C:\Users\mazyo\AppData\Local\JetBrains\Rider2022.1\resharper-host\temp\Rider\vAny\CoverageData\_AlgorithmsSolution.-1184307805\Snapshot\snapshot.utdcvr</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=a2ccee02_002D3e5b_002D4da3_002D9dfa_002Da3142e00936e/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Solution /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bc3f3133_002D52d4_002D49c5_002D8238_002Df434807841ee/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Test1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.Algorithms.Graph.TarjanSccHelperTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.DirectedGraphTests.DirectedGraph_ShortestPath_FindsShortestPath&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.DirectedGraphTests.DirectedGraph_ShortestPath_Directed5x5Matrix_NoPath&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.DirectedGraphTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.UndirectedGraphShortestPathTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.DirectedGraphShortestPathTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphIsTreeTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphShortestPathTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphPrintTests.Directed_PrintBfs_Directed5x5Matrix&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphPrintTests.Directed_PrintBfs_Directed5x5Matrix_From6&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphPrintTests.Directed_PrintBfs_BalancedTree_From15&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphPrintTests.Directed_PrintBfs_BalancedTree_From4&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphPrintTests.Directed_PrintBfs_Collar_From2&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphPrintTests.Directed_PrintBfs_Collar_From5&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphPrintTests.Undirected_PrintBfs_5x5Matrix&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphPrintTests.Undirected_PrintBfs_5x5Matrix_From6&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphPrintTests.Undirected_PrintBfs_BalancedTree_From15&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphPrintTests.Undirected_PrintBfs_BalancedTree_From4&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphPrintTests.Undirected_PrintBfs_Collar_From2&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphPrintTests.Undirected_PrintBfs_Collar_From5&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphPrintTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphBridgesTests.Undirected_Bridges_5x5Matrix&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphBridgesTests.Undirected_Bridges_BalancedTree&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphBridgesTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::6573EC70-0FFE-4CB8-A271-945748542A6D::net6.0::AlgorithmHelpers.Tests.DataStructures.GraphTraverseTests&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
+	
+	
+	
+	
+	
+	
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Heapify/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

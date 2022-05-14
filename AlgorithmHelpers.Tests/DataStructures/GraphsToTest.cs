@@ -67,6 +67,76 @@ public class GraphsToTest
         return new DirectedGraph<string>(edges);
     }
 
+    public static DirectedGraph<string> DirectedConnected531()
+    {
+        var edges = new List<(int, int)>();
+
+        // Complete 5
+        for (int i = 0; i <= 3; i++)
+        {
+            for (int j = i + 1; j <= 4; j++)
+            {
+                edges.Add((i, j));
+                edges.Add((j, i));
+            }
+        }
+
+        // Complete 3
+        edges.Add((5, 6));
+        edges.Add((6, 5));
+        edges.Add((6, 7));
+        edges.Add((7, 6));
+        edges.Add((7, 5));
+        edges.Add((5, 7));
+
+        var graph = new DirectedGraph<string>(edges);
+        graph.AddVertex(8);
+
+        return graph;
+    }
+
+    public static DirectedGraph<string> DirectedCycle10000()
+    {
+        var edges = new List<(int, int)>();
+
+        for (int i = 0; i < 9999; i++)
+            edges.Add((i, i + 1));
+        edges.Add((9999, 0));
+
+        return new DirectedGraph<string>(edges);
+    }
+
+    public static DirectedGraph<string> DirectedWindow()
+    {
+        var edges = new List<(int, int)>
+        {
+            (0, 0),
+            (0, 1),
+            (0, 1),
+            (0, 3),
+            (0, 5),
+            (2, 2),
+            (2, 3),
+            (2, 3),
+            (2, 5),
+            (4, 4),
+            (4, 5),
+            (4, 5),
+        };
+
+        return new DirectedGraph<string>(edges);
+    }
+
+    public static DirectedGraph<string> DirectedStar()
+    {
+        var edges = new List<(int, int)>();
+
+        for (int i = 0; i <= 5; i++)
+            edges.Add((0, i));
+
+        return new DirectedGraph<string>(edges);
+    }
+
     public static UndirectedGraph<string> Undirected5By5Matrix()
     {
         var edges = new List<(int, int)>();
@@ -125,6 +195,72 @@ public class GraphsToTest
             (6, 1),
             (6, 4),
         };
+
+        return new UndirectedGraph<string>(edges);
+    }
+
+    public static UndirectedGraph<string> UndirectedConnected531()
+    {
+        var edges = new List<(int, int)>();
+
+        // Complete 5
+        for (int i = 0; i <= 3; i++)
+        {
+            for (int j = i + 1; j <= 4; j++)
+            {
+                edges.Add((i, j));
+            }
+        }
+
+        // Complete 3
+        edges.Add((5, 6));
+        edges.Add((6, 7));
+        edges.Add((7, 5));
+
+        var graph = new UndirectedGraph<string>(edges);
+        graph.AddVertex(8);
+
+        return graph;
+    }
+
+    public static UndirectedGraph<string> UndirectedCycle10000()
+    {
+        var edges = new List<(int, int)>();
+
+        for (int i = 0; i < 9999; i++)
+            edges.Add((i, i + 1));
+        edges.Add((9999, 0));
+
+        return new UndirectedGraph<string>(edges);
+    }
+
+    public static UndirectedGraph<string> UndirectedWindow()
+    {
+        var edges = new List<(int, int)>
+        {
+            (0, 0),
+            (0, 1),
+            (0, 1),
+            (0, 3),
+            (0, 5),
+            (2, 2),
+            (2, 3),
+            (2, 3),
+            (2, 5),
+            (4, 4),
+            (4, 5),
+            (4, 5),
+        };
+
+        return new UndirectedGraph<string>(edges);
+    }
+
+    public static UndirectedGraph<string> UndirectedStar()
+    {
+        var edges = new List<(int, int)>();
+
+        for (int i = 0; i <= 5; i++)
+            edges.Add((0, i));
 
         return new UndirectedGraph<string>(edges);
     }
