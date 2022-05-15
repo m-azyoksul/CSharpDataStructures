@@ -35,9 +35,9 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
         // This graph also allows for self-loops and multiple edges between two vertices
         foreach (var vertex in vertices)
         {
-            foreach (var neighbour in vertex.Value.Connections)
+            foreach (var connection in vertex.Value.Connections)
             {
-                if (!vertices[neighbour].Connections.Contains(vertex.Key))
+                if (!vertices[connection.To].Connections.Contains(vertex.Key))
                     throw new ArgumentException("Graph is not undirected");
             }
         }
@@ -58,6 +58,17 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
         Vertices[v2].Connections.Add(v1);
     }
 
+    public override void AddEdge(int v1, int v2, int weight)
+    {
+        if (!Vertices.ContainsKey(v1))
+            Vertices.Add(v1, Vertex<TVertexData>.Empty());
+        if (!Vertices.ContainsKey(v2))
+            Vertices.Add(v2, Vertex<TVertexData>.Empty());
+
+        Vertices[v1].Connections.Add(new Connection(v2, weight));
+        Vertices[v2].Connections.Add(new Connection(v1, weight));
+    }
+
     public override void RemoveEdge(int v1, int v2)
     {
         if (!Vertices.ContainsKey(v1) || !Vertices.ContainsKey(v2))
@@ -74,8 +85,8 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
         if (!Vertices.ContainsKey(v))
             throw new ArgumentException("The vertex does not exist");
 
-        foreach (var vertex in Vertices[v].Connections)
-            Vertices[vertex].Connections.RemoveAll(neighbor => neighbor == v);
+        foreach (var connection in Vertices[v].Connections)
+            Vertices[connection.To].Connections.RemoveAll(c => c.To == v);
 
         Vertices.Remove(v);
     }
@@ -120,23 +131,23 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
         {
             var cur = queue.Dequeue();
 
-            foreach (var neighbour in AllConnections(cur.V))
+            foreach (var connection in AllConnections(cur.V))
             {
                 // If the edge was visited
-                if (visitedEdges.Contains((neighbour, cur.V, true)))
+                if (visitedEdges.Contains((connection.To, cur.V, true)))
                     continue;
 
                 // If the vertex was visited
-                if (visitedVertices.Contains(neighbour))
+                if (visitedVertices.Contains(connection.To))
                 {
-                    visitedEdges.Add((cur.V, neighbour, true));
-                    visitedEdges.Add((neighbour, cur.V, false));
+                    visitedEdges.Add((cur.V, connection.To, true));
+                    visitedEdges.Add((connection.To, cur.V, false));
                     continue;
                 }
 
-                visitedEdges.Add((cur.V, neighbour, true));
-                visitedVertices.Add(neighbour);
-                queue.Enqueue((neighbour, cur.V));
+                visitedEdges.Add((cur.V, connection.To, true));
+                visitedVertices.Add(connection.To);
+                queue.Enqueue((connection.To, cur.V));
             }
 
             backtrackStack.Push(cur);
@@ -176,26 +187,26 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
     /// </summary>
     private void DfsEdgeTraversal(int v, HashSet<int> visited, HashSet<(int From, int To, bool Forwards)> edgeList)
     {
-        foreach (var neighbour in AllConnections(v))
+        foreach (var connection in AllConnections(v))
         {
-            if (edgeList.Contains((neighbour, v, true)))
+            if (edgeList.Contains((connection.To, v, true)))
                 continue;
 
-            edgeList.Add((v, neighbour, true));
+            edgeList.Add((v, connection.To, true));
 
-            if (visited.Contains(neighbour))
+            if (visited.Contains(connection.To))
             {
                 // Navigate and back
-                edgeList.Add((neighbour, v, false));
+                edgeList.Add((connection.To, v, false));
                 continue;
             }
 
             // Navigate
-            visited.Add(neighbour);
-            DfsEdgeTraversal(neighbour, visited, edgeList);
+            visited.Add(connection.To);
+            DfsEdgeTraversal(connection.To, visited, edgeList);
 
             // Backtrack
-            edgeList.Add((neighbour, v, false));
+            edgeList.Add((connection.To, v, false));
         }
     }
 
@@ -235,35 +246,35 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
             // If all edges have been visited
             if (cur.I >= ConnectionCount(cur.V) ||
                 cur.I + 1 == ConnectionCount(cur.V) &&
-                visitedEdges.Contains((Vertices[cur.V].Connections[cur.I], cur.V, true)))
+                visitedEdges.Contains((Vertices[cur.V].Connections[cur.I].To, cur.V, true)))
             {
                 // Leave
                 visitedEdges.Add((cur.V, cur.P, false));
                 continue;
             }
 
-            var neighbor = Vertices[cur.V].Connections[cur.I];
-            if (neighbor == cur.P)
-                neighbor = Vertices[cur.V].Connections[cur.I + 1];
+            var connection = Vertices[cur.V].Connections[cur.I];
+            if (connection.To == cur.P)
+                connection = Vertices[cur.V].Connections[cur.I + 1];
 
             // Push back
             stack.Push((cur.V, cur.P, cur.I + 1));
 
             // If the edge was visited
-            if (visitedEdges.Contains((neighbor, cur.V, true)))
+            if (visitedEdges.Contains((connection.To, cur.V, true)))
                 continue;
 
-            visitedEdges.Add((cur.V, neighbor, true));
+            visitedEdges.Add((cur.V, connection.To, true));
 
-            if (visitedVertices.Contains(neighbor))
+            if (visitedVertices.Contains(connection.To))
             {
                 // Navigate and back
-                visitedEdges.Add((neighbor, cur.V, false));
+                visitedEdges.Add((connection.To, cur.V, false));
             }
             else
             {
                 // Navigate
-                stack.Push((neighbor, cur.V, 0));
+                stack.Push((connection.To, cur.V, 0));
             }
         }
 
@@ -307,8 +318,8 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
             // Enqueue neighbors
             foreach (var neighbor in UnvisitedConnections(v, visited))
             {
-                queue.Enqueue(neighbor);
-                visited.Add(neighbor);
+                queue.Enqueue(neighbor.To);
+                visited.Add(neighbor.To);
             }
         }
 
@@ -337,15 +348,15 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
             foreach (var neighbor in AllConnections(v))
             {
                 // If the neighbor is visited before and is not the predecessor, the graph is not a tree
-                if (predecessor.ContainsKey(neighbor))
+                if (predecessor.ContainsKey(neighbor.To))
                 {
-                    if (predecessor[v] != neighbor)
+                    if (predecessor[v] != neighbor.To)
                         return false;
                     continue;
                 }
 
-                queue.Enqueue(neighbor);
-                predecessor[neighbor] = v;
+                queue.Enqueue(neighbor.To);
+                predecessor[neighbor.To] = v;
             }
         }
 
@@ -369,18 +380,18 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
         var timeOfVisit = new Dictionary<int, int>();
         var time = 0;
 
-        foreach (var vertex in Vertices)
+        foreach (var vertex in UnvisitedVertices(visited))
         {
-            if (visited.Contains(vertex.Key))
+            if (visited.Contains(vertex))
                 continue;
 
-            BridgesDfs(vertex.Key, visited, low, timeOfVisit, bridges, ref time);
+            BridgesDfs(vertex, visited, low, timeOfVisit, bridges, ref time, -1);
         }
 
         return bridges;
     }
 
-    private void BridgesDfs(int v, HashSet<int> visited, Dictionary<int, int> low, Dictionary<int, int> timeOfVisit, List<(int V1, int V2)> bridges, ref int time, int parent = -1)
+    private void BridgesDfs(int v, HashSet<int> visited, Dictionary<int, int> low, Dictionary<int, int> timeOfVisit, List<(int V1, int V2)> bridges, ref int time, int parent)
     {
         visited.Add(v);
         low[v] = timeOfVisit[v] = time;
@@ -388,17 +399,17 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
 
         foreach (var to in Vertices[v].Connections)
         {
-            if (to == parent)
+            if (to.To == parent)
                 continue;
 
-            if (visited.Contains(to))
-                low[v] = Math.Min(low[v], timeOfVisit[to]);
+            if (visited.Contains(to.To))
+                low[v] = Math.Min(low[v], timeOfVisit[to.To]);
             else
             {
-                BridgesDfs(to, visited, low, timeOfVisit, bridges, ref time, v);
-                if (low[to] > timeOfVisit[v])
-                    bridges.Add((v, to));
-                low[v] = Math.Min(low[v], low[to]);
+                BridgesDfs(to.To, visited, low, timeOfVisit, bridges, ref time, v);
+                if (low[to.To] > timeOfVisit[v])
+                    bridges.Add((v, to.To));
+                low[v] = Math.Min(low[v], low[to.To]);
             }
         }
     }
@@ -442,13 +453,13 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
                 // If a neighbours was visited, check if it is a bridge and update the low value
                 else
                 {
-                    var neighbour = Vertices[current.vertex].Connections[current.visitedNCount - 1];
-                    if (neighbour != current.parent)
+                    var connection = Vertices[current.vertex].Connections[current.visitedNCount - 1];
+                    if (connection.To != current.parent)
                     {
-                        if (low[neighbour] > timeOfVisit[current.vertex])
-                            bridges.Add((current.vertex, neighbour));
+                        if (low[connection.To] > timeOfVisit[current.vertex])
+                            bridges.Add((current.vertex, connection.To));
 
-                        low[current.vertex] = Math.Min(low[current.vertex], low[neighbour]);
+                        low[current.vertex] = Math.Min(low[current.vertex], low[connection.To]);
                     }
                 }
 
@@ -459,17 +470,17 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
                     stack.Push((current.vertex, current.parent, current.visitedNCount + 1));
 
                     // If the neighbour is the parent, skip it
-                    var neighbour = Vertices[current.vertex].Connections[current.visitedNCount];
-                    if (neighbour == current.parent)
+                    var connection = Vertices[current.vertex].Connections[current.visitedNCount];
+                    if (connection.To == current.parent)
                         continue;
 
                     // If the neighbour is already visited, set the low value
-                    if (visited.Contains(neighbour))
-                        low[current.vertex] = Math.Min(low[current.vertex], timeOfVisit[neighbour]);
+                    if (visited.Contains(connection.To))
+                        low[current.vertex] = Math.Min(low[current.vertex], timeOfVisit[connection.To]);
 
                     // If the neighbour is not visited, push it to the stack
                     else
-                        stack.Push((neighbour, current.vertex, 0));
+                        stack.Push((connection.To, current.vertex, 0));
                 }
             }
         }
@@ -477,7 +488,7 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
         return bridges;
     }
 
-    public (int, Dictionary<int, int>) ConnectedComponentMap()
+    public (int, Dictionary<int, int>) SccMap()
     {
         var components = new Dictionary<int, int>();
         var componentIndex = 0;
@@ -493,9 +504,9 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
             {
                 var v = queue.Dequeue();
 
-                foreach (var neighbor in UnvisitedConnections(v, components))
+                foreach (var connection in UnvisitedConnections(v, components))
                 {
-                    queue.Enqueue(neighbor);
+                    queue.Enqueue(connection.To);
                     components[v] = componentIndex;
                 }
             }
@@ -506,7 +517,7 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
         return (componentIndex, components);
     }
 
-    public List<List<int>> ConnectedComponentList()
+    public List<List<int>> SccList()
     {
         var components = new List<List<int>>();
 
@@ -523,9 +534,9 @@ public class UndirectedGraph<TVertexData> : Graph<TVertexData>
             {
                 var v = queue.Dequeue();
 
-                foreach (var neighbor in UnvisitedConnections(v, visited))
+                foreach (var connection in UnvisitedConnections(v, visited))
                 {
-                    queue.Enqueue(neighbor);
+                    queue.Enqueue(connection.To);
                     visited.Add(v);
                 }
             }

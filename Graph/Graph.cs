@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AlgorithmHelpers.DataStructures;
 
 namespace Graph;
 
@@ -25,7 +26,7 @@ public abstract class Graph<TData>
         // Make sure the connections lists only contain values that exist in the vertex list
         foreach (var vertex in vertices)
         foreach (var connection in vertex.Value.Connections)
-            if (!vertices.ContainsKey(connection))
+            if (!vertices.ContainsKey(connection.To))
                 throw new ArgumentException("The edge list contains a vertex that is not in the vertex list");
 
         Vertices = vertices;
@@ -47,6 +48,8 @@ public abstract class Graph<TData>
         foreach (var edge in edges)
             AddEdge(edge.v1, edge.v2);
     }
+
+    public abstract void AddEdge(int v1, int v2, int weight);
 
     public abstract void RemoveEdge(int v1, int v2);
 
@@ -96,7 +99,7 @@ public abstract class Graph<TData>
 
     public abstract int EdgeCount();
 
-    protected List<int> AllConnections(int v)
+    protected List<Connection> AllConnections(int v)
     {
         if (!Vertices.ContainsKey(v))
             throw new ArgumentException("The vertex does not exist");
@@ -142,14 +145,24 @@ public abstract class Graph<TData>
         return nonKeyValue;
     }
 
-    protected IEnumerable<int> UnvisitedConnections(int vertex, HashSet<int> visitedSet)
+    protected IEnumerable<Connection> UnvisitedConnections(int vertex, HashSet<int> visitedSet)
     {
-        return Vertices[vertex].Connections.Where(connection => !visitedSet.Contains(connection));
+        return Vertices[vertex].Connections.Where(connection => !visitedSet.Contains(connection.To));
     }
 
-    protected IEnumerable<int> UnvisitedConnections<T>(int vertex, Dictionary<int, T> visitedDict)
+    protected IEnumerable<Connection> UnvisitedConnections<T>(int vertex, Dictionary<int, T> visitedDict)
     {
-        return Vertices[vertex].Connections.Where(connection => !visitedDict.ContainsKey(connection));
+        return Vertices[vertex].Connections.Where(connection => !visitedDict.ContainsKey(connection.To));
+    }
+
+    protected IEnumerable<int> UnvisitedVertices(HashSet<int> visitedSet)
+    {
+        return Vertices.Keys.Where(v => !visitedSet.Contains(v));
+    }
+
+    protected IEnumerable<int> UnvisitedVertices<T>(Dictionary<int, T> visitedDict)
+    {
+        return Vertices.Keys.Where(v => !visitedDict.ContainsKey(v));
     }
 
     protected int ConnectionCount(int v)
@@ -183,8 +196,8 @@ public abstract class Graph<TData>
 
             foreach (var connection in UnvisitedConnections(current, visited))
             {
-                visited.Add(connection);
-                queue.Enqueue(connection);
+                visited.Add(connection.To);
+                queue.Enqueue(connection.To);
             }
         }
 
@@ -216,8 +229,8 @@ public abstract class Graph<TData>
     {
         foreach (var connection in UnvisitedConnections(v, visited))
         {
-            visited.Add(connection);
-            DfsTraversal(connection, visited);
+            visited.Add(connection.To);
+            DfsTraversal(connection.To, visited);
         }
     }
 
@@ -242,7 +255,7 @@ public abstract class Graph<TData>
             var current = stack.Pop();
             visited.Add(current);
 
-            UnvisitedConnections(current, visited).ToList().ForEachReversed(connection => { stack.Push(connection); });
+            UnvisitedConnections(current, visited).ToList().ForEachReversed(connection => { stack.Push(connection.To); });
         }
 
         return visited.ToList();
@@ -322,7 +335,7 @@ public abstract class Graph<TData>
             // Enqueue connections
             foreach (var connection in UnvisitedConnections(v, visited))
             {
-                queue.Enqueue(connection);
+                queue.Enqueue(connection.To);
                 visited.Add(v);
             }
         }
@@ -345,7 +358,7 @@ public abstract class Graph<TData>
             if (v == toVertex)
             {
                 var path = new List<int>();
-                for (int current = toVertex; current != -1; current = predecessor[current])
+                for (var current = toVertex; current != -1; current = predecessor[current])
                     path.Add(current);
 
                 path.Reverse();
@@ -355,8 +368,8 @@ public abstract class Graph<TData>
             // Enqueue connections
             foreach (var connection in UnvisitedConnections(v, predecessor))
             {
-                queue.Enqueue(connection);
-                predecessor.Add(connection, v);
+                queue.Enqueue(connection.To);
+                predecessor.Add(connection.To, v);
             }
         }
 
@@ -382,18 +395,18 @@ public abstract class Graph<TData>
             // Enqueue connections
             foreach (var connection in AllConnections(v))
             {
-                if (visited.Contains(connection))
+                if (visited.Contains(connection.To))
                 {
                     // Loop found
-                    var loop = new List<int> {connection};
-                    for (int current = v; current != connection; current = predecessor[current])
+                    var loop = new List<int> {connection.To};
+                    for (int current = v; current != connection.To; current = predecessor[current])
                         loop.Add(current);
 
                     return loop;
                 }
 
-                queue.Enqueue(connection);
-                predecessor.Add(connection, v);
+                queue.Enqueue(connection.To);
+                predecessor.Add(connection.To, v);
             }
         }
 
@@ -427,8 +440,8 @@ public abstract class Graph<TData>
             // Enqueue connections
             foreach (var connection in UnvisitedConnections(v, visited))
             {
-                queue.Enqueue(connection);
-                distance.Add(connection, distance[v] + 1);
+                queue.Enqueue(connection.To);
+                distance.Add(connection.To, distance[v] + 1);
             }
         }
 
@@ -471,5 +484,104 @@ public abstract class Graph<TData>
         return Vertices.Keys
             .Where(v => Excentricity(v) == radius)
             .ToArray();
+    }
+
+    /// <summary>
+    /// Implementation of the Dijkstra search algorithm.
+    /// Finds the shortest path from the source to all of the connected vertices.
+    ///
+    /// Time complexity: O(E * logE)
+    /// </summary>
+    /// <param name="v1">Start vertex</param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
+    public Dictionary<int, int> Dijkstra(int v1)
+    {
+        if (!Vertices.ContainsKey(v1))
+            throw new ArgumentException("The vertex does not exist");
+
+        var distance = new Dictionary<int, int> {{v1, 0}};
+        var distanceFound = new HashSet<int> {v1};
+        var candidates = new MinHeap<int, int> {(v1, 0)};
+
+        while (candidates.Count > 0)
+        {
+            // Find candidate with smallest distance
+            var minCandidate = candidates.Pop();
+            distanceFound.Add(minCandidate.Key);
+
+            foreach (var connection in UnvisitedConnections(minCandidate.Key, distanceFound))
+            {
+                var newDistance = distance[minCandidate.Key] + connection.Weight;
+
+                if (distance.ContainsKey(connection.To))
+                {
+                    if (distance[connection.To] <= newDistance)
+                        continue;
+
+                    distance[connection.To] = newDistance;
+                    candidates.Update(connection.To, newDistance);
+                }
+                else
+                {
+                    distance.Add(connection.To, newDistance);
+                    candidates.Add((connection.To, newDistance));
+                }
+            }
+        }
+
+        return distance;
+    }
+
+    public (int, List<int>) Dijkstra(int v1, int v2)
+    {
+        if (!Vertices.ContainsKey(v1) || !Vertices.ContainsKey(v2))
+            throw new ArgumentException("The vertex does not exist");
+
+        var distance = new Dictionary<int, int> {{v1, 0}};
+        var distanceFound = new HashSet<int> {v1};
+        var candidates = new MinHeap<int, int> {(v1, 0)};
+        var predecessor = new Dictionary<int, int> {{v1, v1}};
+
+        while (candidates.Count > 0)
+        {
+            // Find candidate with smallest distance
+            var minCandidate = candidates.Pop();
+            distanceFound.Add(minCandidate.Key);
+
+            // Check if we found the target
+            if (distanceFound.Contains(v2))
+            {
+                var path = new List<int>();
+                for (var current = v2; current != v1; current = predecessor[current])
+                    path.Add(current);
+                path.Add(v1);
+                path.Reverse();
+
+                return (distance[v2], path);
+            }
+
+            foreach (var connection in UnvisitedConnections(minCandidate.Key, distanceFound))
+            {
+                var newDistance = distance[minCandidate.Key] + connection.Weight;
+
+                if (distance.ContainsKey(connection.To))
+                {
+                    if (distance[connection.To] <= newDistance)
+                        continue;
+
+                    distance[connection.To] = newDistance;
+                    predecessor[connection.To] = minCandidate.Key;
+                }
+                else
+                {
+                    distance.Add(connection.To, newDistance);
+                    predecessor.Add(connection.To, minCandidate.Key);
+                    candidates.Add((connection.To, newDistance));
+                }
+            }
+        }
+
+        return (-1, new List<int>());
     }
 }

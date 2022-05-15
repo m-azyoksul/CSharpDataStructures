@@ -45,6 +45,16 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
         Vertices[v1].Connections.Add(v2);
     }
 
+    public override void AddEdge(int v1, int v2, int weight)
+    {
+        if (!Vertices.ContainsKey(v1))
+            Vertices.Add(v1, Vertex<TVertexData>.Empty());
+        if (!Vertices.ContainsKey(v2))
+            Vertices.Add(v2, Vertex<TVertexData>.Empty());
+
+        Vertices[v1].Connections.Add(new Connection(v2, weight));
+    }
+
     public override void RemoveEdge(int v1, int v2)
     {
         if (!Vertices.ContainsKey(v1) || !Vertices.ContainsKey(v2))
@@ -105,16 +115,16 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
 
             foreach (var connection in AllConnections(cur.V))
             {
-                if (visited.Contains(connection))
+                if (visited.Contains(connection.To))
                 {
-                    edgeList.Add((cur.V, connection, true));
-                    edgeList.Add((connection, cur.V, false));
+                    edgeList.Add((cur.V, connection.To, true));
+                    edgeList.Add((connection.To, cur.V, false));
                     continue;
                 }
 
-                edgeList.Add((cur.V, connection, true));
-                visited.Add(connection);
-                queue.Enqueue((connection, cur.V));
+                edgeList.Add((cur.V, connection.To, true));
+                visited.Add(connection.To);
+                queue.Enqueue((connection.To, cur.V));
             }
 
             backtrackStack.Push(cur);
@@ -156,21 +166,21 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
     {
         foreach (var connection in AllConnections(v))
         {
-            edgeList.Add((v, connection, true));
+            edgeList.Add((v, connection.To, true));
 
-            if (visited.Contains(connection))
+            if (visited.Contains(connection.To))
             {
                 // Navigate and back
-                edgeList.Add((connection, v, false));
+                edgeList.Add((connection.To, v, false));
                 continue;
             }
 
             // Navigate
-            visited.Add(connection);
-            DfsEdgeTraversal(connection, visited, edgeList, v);
+            visited.Add(connection.To);
+            DfsEdgeTraversal(connection.To, visited, edgeList, v);
 
             // Backtrack
-            edgeList.Add((connection, v, false));
+            edgeList.Add((connection.To, v, false));
         }
     }
 
@@ -219,17 +229,17 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
 
             // Push back
             stack.Push((cur.V, cur.P, cur.I + 1));
-            edgeList.Add((cur.V, connection, true));
+            edgeList.Add((cur.V, connection.To, true));
 
-            if (visited.Contains(connection))
+            if (visited.Contains(connection.To))
             {
                 // Navigate and back
-                edgeList.Add((connection, cur.V, false));
+                edgeList.Add((connection.To, cur.V, false));
             }
             else
             {
                 // Navigate
-                stack.Push((connection, cur.V, 0));
+                stack.Push((connection.To, cur.V, 0));
             }
         }
 
@@ -255,10 +265,10 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
         {
             foreach (var connection in vertex.Value.Connections)
             {
-                if (degree.ContainsKey(connection))
-                    degree[connection]++;
+                if (degree.ContainsKey(connection.To))
+                    degree[connection.To]++;
                 else
-                    degree.Add(connection, 1);
+                    degree.Add(connection.To, 1);
             }
         }
 
@@ -282,7 +292,7 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
         var undirectedGraph = new UndirectedGraph<TVertexData>(undirectedVertexDict);
         foreach (var vertex in Vertices)
         foreach (var connection in vertex.Value.Connections)
-            undirectedGraph.AddEdge(vertex.Key, connection);
+            undirectedGraph.AddEdge(vertex.Key, connection.To);
 
         return undirectedGraph.IsConnected();
     }
@@ -311,8 +321,8 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
 
             foreach (var connection in UnvisitedConnections(current, successors))
             {
-                queue.Enqueue(connection);
-                successors.Add(connection);
+                queue.Enqueue(connection.To);
+                successors.Add(connection.To);
             }
         }
 
@@ -351,7 +361,7 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
 
         foreach (var vertex in Vertices)
         foreach (var connection in vertex.Value.Connections)
-            incomingEdges.Remove(connection);
+            incomingEdges.Remove(connection.To);
 
         // If there is more than one root vertex, it is not a tree
         if (incomingEdges.Count != 1)
@@ -368,11 +378,11 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
             // Enqueue connections
             foreach (var connection in AllConnections(v))
             {
-                if (visited.Contains(connection))
+                if (visited.Contains(connection.To))
                     return false;
 
-                queue.Enqueue(connection);
-                visited.Add(connection);
+                queue.Enqueue(connection.To);
+                visited.Add(connection.To);
             }
         }
 
@@ -428,15 +438,15 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
         inStack[v] = true;
         stack.Push(v);
 
-        foreach (int nextV in Vertices[v].Connections)
+        foreach (var connection in AllConnections(v))
         {
             // If node has not been visited yet, visit it
-            if (id[nextV] == -1) // Unvisited
-                SccDfs(nextV, id, lowLink, sccDict, inStack, stack, ref newId, ref sccCount);
+            if (id[connection.To] == -1) // Unvisited
+                SccDfs(connection.To, id, lowLink, sccDict, inStack, stack, ref newId, ref sccCount);
 
             // If node is in stack, update lowest reachable value
-            if (inStack[nextV])
-                lowLink[v] = Math.Min(lowLink[v], lowLink[nextV]);
+            if (inStack[connection.To])
+                lowLink[v] = Math.Min(lowLink[v], lowLink[connection.To]);
         }
 
         // If lowest reachable value has not changed we're at the root node

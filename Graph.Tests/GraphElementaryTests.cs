@@ -19,7 +19,7 @@ public class GraphElementaryTests
         // Assert
         graph.Vertices.Count.Should().Be(2);
         graph.Vertices[0].Connections.Count.Should().Be(1);
-        graph.Vertices[0].Connections[0].Should().Be(1);
+        graph.Vertices[0].Connections[0].To.Should().Be(1);
         graph.Vertices[1].Connections.Count.Should().Be(0);
     }
 
@@ -35,9 +35,9 @@ public class GraphElementaryTests
         // Assert
         graph.Vertices.Count.Should().Be(2);
         graph.Vertices[0].Connections.Count.Should().Be(1);
-        graph.Vertices[0].Connections[0].Should().Be(1);
+        graph.Vertices[0].Connections[0].To.Should().Be(1);
         graph.Vertices[1].Connections.Count.Should().Be(1);
-        graph.Vertices[1].Connections[0].Should().Be(0);
+        graph.Vertices[1].Connections[0].To.Should().Be(0);
     }
 
     [Fact]
@@ -52,7 +52,7 @@ public class GraphElementaryTests
         // Assert
         graph.Vertices.Count.Should().Be(2);
         graph.Vertices[0].Connections.Count.Should().Be(1);
-        graph.Vertices[0].Connections[0].Should().Be(1);
+        graph.Vertices[0].Connections[0].To.Should().Be(1);
         graph.Vertices[1].Connections.Count.Should().Be(0);
     }
 
@@ -68,9 +68,9 @@ public class GraphElementaryTests
         // Assert
         graph.Vertices.Count.Should().Be(2);
         graph.Vertices[0].Connections.Count.Should().Be(1);
-        graph.Vertices[0].Connections[0].Should().Be(1);
+        graph.Vertices[0].Connections[0].To.Should().Be(1);
         graph.Vertices[1].Connections.Count.Should().Be(1);
-        graph.Vertices[1].Connections[0].Should().Be(0);
+        graph.Vertices[1].Connections[0].To.Should().Be(0);
     }
 
     [Fact]
@@ -85,9 +85,9 @@ public class GraphElementaryTests
         // Assert
         graph.Vertices.Count.Should().Be(3);
         graph.Vertices[0].Connections.Count.Should().Be(1);
-        graph.Vertices[0].Connections[0].Should().Be(1);
+        graph.Vertices[0].Connections[0].To.Should().Be(1);
         graph.Vertices[1].Connections.Count.Should().Be(1);
-        graph.Vertices[1].Connections[0].Should().Be(2);
+        graph.Vertices[1].Connections[0].To.Should().Be(2);
         graph.Vertices[2].Connections.Count.Should().Be(0);
     }
 
@@ -103,12 +103,12 @@ public class GraphElementaryTests
         // Assert
         graph.Vertices.Count.Should().Be(3);
         graph.Vertices[0].Connections.Count.Should().Be(1);
-        graph.Vertices[0].Connections[0].Should().Be(1);
+        graph.Vertices[0].Connections[0].To.Should().Be(1);
         graph.Vertices[1].Connections.Count.Should().Be(2);
-        graph.Vertices[1].Connections[0].Should().Be(0);
-        graph.Vertices[1].Connections[1].Should().Be(2);
+        graph.Vertices[1].Connections[0].To.Should().Be(0);
+        graph.Vertices[1].Connections[1].To.Should().Be(2);
         graph.Vertices[2].Connections.Count.Should().Be(1);
-        graph.Vertices[2].Connections[0].Should().Be(1);
+        graph.Vertices[2].Connections[0].To.Should().Be(1);
     }
 
     [Fact]
