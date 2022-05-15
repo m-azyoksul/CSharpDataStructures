@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace AlgorithmHelpers.Tests.DataStructures;
+namespace Graph.Tests;
 
 public class GraphShortestPathTests
 {
@@ -159,7 +159,7 @@ public class GraphShortestPathTests
         // Assert
         Assert.Null(shortestPath);
     }
-    
+
     [Fact]
     public void UnDirected_ShortestPath_Directed5x5Matrix_Success()
     {

@@ -1,7 +1,6 @@
-﻿using AlgorithmHelpers.DataStructures;
-using Xunit;
+﻿using Xunit;
 
-namespace AlgorithmHelpers.Tests.DataStructures;
+namespace Graph.Tests;
 
 public class GraphIsSimpleTests
 {
@@ -219,7 +218,7 @@ public class GraphIsSimpleTests
         // Assert
         Assert.True(result);
     }
-    
+
 
     [Fact]
     public void Undirected_IsSimple_EmptyGraph_ReturnsTrue()
@@ -409,7 +408,7 @@ public class GraphIsSimpleTests
         // Assert
         Assert.False(result);
     }
-    
+
     [Fact]
     public void Undirected_IsSimple_Star_ReturnsTrue()
     {

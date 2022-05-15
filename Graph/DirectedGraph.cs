@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AlgorithmHelpers.DataStructures;
+namespace Graph;
 
 public class DirectedGraph<TVertexData> : Graph<TVertexData>
 {
@@ -12,31 +12,23 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
     {
     }
 
-    public DirectedGraph(List<(int, int)> edges) : base(edges)
+    public DirectedGraph(List<(int From, int To)> edges) : base(edges)
     {
         // Find all vertices
         foreach (var edge in edges)
         {
-            if (!Vertices.ContainsKey(edge.Item1))
-                Vertices.Add(edge.Item1, Vertex<TVertexData>.Empty());
+            if (!Vertices.ContainsKey(edge.From))
+                Vertices.Add(edge.From, Vertex<TVertexData>.Empty());
 
-            if (!Vertices.ContainsKey(edge.Item2))
-                Vertices.Add(edge.Item2, Vertex<TVertexData>.Empty());
+            if (!Vertices.ContainsKey(edge.To))
+                Vertices.Add(edge.To, Vertex<TVertexData>.Empty());
 
-            Vertices[edge.Item1].Neighbors.Add(edge.Item2);
+            Vertices[edge.From].Connections.Add(edge.To);
         }
     }
 
     public DirectedGraph(Dictionary<int, Vertex<TVertexData>> vertices) : base(vertices)
     {
-        // Find all edges
-        foreach (var vertex in vertices)
-        {
-            foreach (var neighbor in vertex.Value.Neighbors)
-            {
-                Edges.Add((vertex.Key, neighbor));
-            }
-        }
     }
 
     #endregion
@@ -45,22 +37,22 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
 
     public override void AddEdge(int v1, int v2)
     {
-        if (!Vertices.ContainsKey(v1) && !Vertices.ContainsKey(v2))
-            throw new ArgumentException("The vertex does not exist");
+        if (!Vertices.ContainsKey(v1))
+            Vertices.Add(v1, Vertex<TVertexData>.Empty());
+        if (!Vertices.ContainsKey(v2))
+            Vertices.Add(v2, Vertex<TVertexData>.Empty());
 
-        Edges.Add((v1, v2));
-        Vertices[v1].Neighbors.Add(v2);
+        Vertices[v1].Connections.Add(v2);
     }
 
     public override void RemoveEdge(int v1, int v2)
     {
-        if (!Vertices.ContainsKey(v1) && !Vertices.ContainsKey(v2))
+        if (!Vertices.ContainsKey(v1) || !Vertices.ContainsKey(v2))
             throw new ArgumentException("The vertex does not exist");
-        if (!Edges.Contains((v1, v2)))
+        if (!Vertices[v1].Connections.Contains(v2))
             throw new ArgumentException("The edge does not exist");
 
-        Edges.Remove((v1, v2));
-        Vertices[v1].Neighbors.Remove(v2);
+        Vertices[v1].Connections.Remove(v2);
     }
 
     public override void RemoveVertex(int v)
@@ -69,12 +61,19 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
             throw new ArgumentException("The vertex does not exist");
 
         Vertices.Remove(v);
-        Edges.RemoveAll(edge => edge.Item1 == v || edge.Item2 == v);
     }
 
-    public override bool ContainsEdge(int v1, int v2)
+    protected override bool HasEdge(int v1, int v2)
     {
-        return Edges.Contains((v1, v2));
+        if (!Vertices.ContainsKey(v1) || !Vertices.ContainsKey(v2))
+            throw new ArgumentException("The vertex does not exist");
+
+        return Vertices[v1].Connections.Contains(v2);
+    }
+
+    public override int EdgeCount()
+    {
+        return Vertices.SelectMany(v => v.Value.Connections).Count();
     }
 
     #endregion
@@ -104,18 +103,18 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
         {
             var cur = queue.Dequeue();
 
-            foreach (var neighbour in AllNeighbours(cur.V))
+            foreach (var connection in AllConnections(cur.V))
             {
-                if (visited.Contains(neighbour))
+                if (visited.Contains(connection))
                 {
-                    edgeList.Add((cur.V, neighbour, true));
-                    edgeList.Add((neighbour, cur.V, false));
+                    edgeList.Add((cur.V, connection, true));
+                    edgeList.Add((connection, cur.V, false));
                     continue;
                 }
 
-                edgeList.Add((cur.V, neighbour, true));
-                visited.Add(neighbour);
-                queue.Enqueue((neighbour, cur.V));
+                edgeList.Add((cur.V, connection, true));
+                visited.Add(connection);
+                queue.Enqueue((connection, cur.V));
             }
 
             backtrackStack.Push(cur);
@@ -149,29 +148,29 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
         DfsEdgeTraversal(v, visited, edgeList, v);
         return edgeList;
     }
-    
+
     /// <summary>
     /// Recursive call for recursive depth first search that traverses all vertices and all edges reachable from v.
     /// </summary>
     private void DfsEdgeTraversal(int v, HashSet<int> visited, List<(int, int, bool)> edgeList, int parent)
     {
-        foreach (var neighbour in AllNeighbours(v))
+        foreach (var connection in AllConnections(v))
         {
-            edgeList.Add((v, neighbour, true));
+            edgeList.Add((v, connection, true));
 
-            if (visited.Contains(neighbour))
+            if (visited.Contains(connection))
             {
                 // Navigate and back
-                edgeList.Add((neighbour, v, false));
+                edgeList.Add((connection, v, false));
                 continue;
             }
 
             // Navigate
-            visited.Add(neighbour);
-            DfsEdgeTraversal(neighbour, visited, edgeList, v);
+            visited.Add(connection);
+            DfsEdgeTraversal(connection, visited, edgeList, v);
 
             // Backtrack
-            edgeList.Add((neighbour, v, false));
+            edgeList.Add((connection, v, false));
         }
     }
 
@@ -203,34 +202,34 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
                 // Init
                 visited.Add(cur.V);
             }
-            else if (cur.I < NeighborCount(cur.V))
+            else if (cur.I < ConnectionCount(cur.V))
             {
                 // Backtrack
             }
 
             // If all edges have been visited
-            if (cur.I >= NeighborCount(cur.V))
+            if (cur.I >= ConnectionCount(cur.V))
             {
                 // Leave
                 edgeList.Add((cur.V, cur.P, false));
                 continue;
             }
 
-            var neighbor = Vertices[cur.V].Neighbors[cur.I];
+            var connection = Vertices[cur.V].Connections[cur.I];
 
             // Push back
             stack.Push((cur.V, cur.P, cur.I + 1));
-            edgeList.Add((cur.V, neighbor, true));
+            edgeList.Add((cur.V, connection, true));
 
-            if (visited.Contains(neighbor))
+            if (visited.Contains(connection))
             {
                 // Navigate and back
-                edgeList.Add((neighbor, cur.V, false));
+                edgeList.Add((connection, cur.V, false));
             }
             else
             {
                 // Navigate
-                stack.Push((neighbor, cur.V, 0));
+                stack.Push((connection, cur.V, 0));
             }
         }
 
@@ -254,16 +253,16 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
 
         foreach (var vertex in Vertices)
         {
-            foreach (var neighbour in vertex.Value.Neighbors)
+            foreach (var connection in vertex.Value.Connections)
             {
-                if (degree.ContainsKey(neighbour))
-                    degree[neighbour]++;
+                if (degree.ContainsKey(connection))
+                    degree[connection]++;
                 else
-                    degree.Add(neighbour, 1);
+                    degree.Add(connection, 1);
             }
         }
 
-        return degree.Values.All(v => v == Vertices[v].Neighbors.Count);
+        return degree.Values.All(v => v == Vertices[v].Connections.Count);
     }
 
     /// <summary>
@@ -281,8 +280,9 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
         );
 
         var undirectedGraph = new UndirectedGraph<TVertexData>(undirectedVertexDict);
-        foreach (var edge in Edges)
-            undirectedGraph.AddEdge(edge.Item1, edge.Item2);
+        foreach (var vertex in Vertices)
+        foreach (var connection in vertex.Value.Connections)
+            undirectedGraph.AddEdge(vertex.Key, connection);
 
         return undirectedGraph.IsConnected();
     }
@@ -309,10 +309,10 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
         {
             var current = queue.Dequeue();
 
-            foreach (var neighbour in UnvisitedNeighbours(current, successors))
+            foreach (var connection in UnvisitedConnections(current, successors))
             {
-                queue.Enqueue(neighbour);
-                successors.Add(neighbour);
+                queue.Enqueue(connection);
+                successors.Add(connection);
             }
         }
 
@@ -323,13 +323,13 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
         {
             var current = queue.Dequeue();
 
-            foreach (var neighbour in AllBackwardsNeighbours(current))
+            foreach (var connection in AllBackwardsConnections(current))
             {
-                if (predecessors.Contains(neighbour))
+                if (predecessors.Contains(connection))
                     continue;
 
-                queue.Enqueue(neighbour);
-                predecessors.Add(neighbour);
+                queue.Enqueue(connection);
+                predecessors.Add(connection);
             }
         }
 
@@ -350,8 +350,8 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
         var incomingEdges = Vertices.Keys.ToHashSet();
 
         foreach (var vertex in Vertices)
-        foreach (var neighbour in vertex.Value.Neighbors)
-            incomingEdges.Remove(neighbour);
+        foreach (var connection in vertex.Value.Connections)
+            incomingEdges.Remove(connection);
 
         // If there is more than one root vertex, it is not a tree
         if (incomingEdges.Count != 1)
@@ -365,14 +365,14 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
         {
             var v = queue.Dequeue();
 
-            // Enqueue neighbours
-            foreach (var neighbour in AllNeighbours(v))
+            // Enqueue connections
+            foreach (var connection in AllConnections(v))
             {
-                if (visited.Contains(neighbour))
+                if (visited.Contains(connection))
                     return false;
 
-                queue.Enqueue(neighbour);
-                visited.Add(neighbour);
+                queue.Enqueue(connection);
+                visited.Add(connection);
             }
         }
 
@@ -428,7 +428,7 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
         inStack[v] = true;
         stack.Push(v);
 
-        foreach (int nextV in Vertices[v].Neighbors)
+        foreach (int nextV in Vertices[v].Connections)
         {
             // If node has not been visited yet, visit it
             if (id[nextV] == -1) // Unvisited

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using AlgorithmHelpers.DataStructures;
 
-namespace AlgorithmHelpers.Tests.DataStructures;
+namespace Graph.Tests;
 
 public class GraphsToTest
 {
@@ -47,18 +46,29 @@ public class GraphsToTest
 
     public static DirectedGraph<string> DirectedCollar()
     {
-        var vertices = new Dictionary<int, Vertex<string>>
+        var graph = new DirectedGraph<string>();
+        // Add 7 nodes
+        for (int i = 0; i < 7; i++)
+            graph.AddVertex(i);
+
+        var edges = new List<(int From, int To)>
         {
-            {0, new Vertex<string>(null, new List<int> {1, 2, 3})},
-            {1, new Vertex<string>(null, new List<int> {3, 4, 6})},
-            {2, new Vertex<string>(null, new List<int> {5})},
-            {3, new Vertex<string>(null, new List<int> {6})},
-            {4, new Vertex<string>(null, new List<int> {})},
-            {5, new Vertex<string>(null, new List<int> {0, 2, 3})},
-            {6, new Vertex<string>(null, new List<int> {1, 4})},
+            (0, 1),
+            (0, 2),
+            (0, 3),
+            (1, 3),
+            (1, 4),
+            (1, 6),
+            (2, 5),
+            (3, 6),
+            (5, 0),
+            (5, 2),
+            (5, 3),
+            (6, 1),
+            (6, 4),
         };
 
-        return new DirectedGraph<string>(vertices);
+        return new DirectedGraph<string>(edges);
     }
 
     public static DirectedGraph<string> DirectedConnected531()

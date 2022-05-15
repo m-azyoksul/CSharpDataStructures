@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Xunit;
 
-namespace AlgorithmHelpers.Tests.DataStructures;
+namespace Graph.Tests;
 
 public class GraphBridgesTests
 {

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using AlgorithmHelpers.Algorithms.Sorting;
-using Common;
 using Xunit;
 
 namespace AlgorithmHelpers.Tests.Algorithms.Sorting;

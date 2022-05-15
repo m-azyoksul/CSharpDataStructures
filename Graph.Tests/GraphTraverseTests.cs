@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using AlgorithmHelpers.DataStructures;
-using BenchmarkDotNet.Toolchains;
 using FluentAssertions;
 using Xunit;
 
-namespace AlgorithmHelpers.Tests.DataStructures;
+namespace Graph.Tests;
 
 public class GraphTraverseTests
 {

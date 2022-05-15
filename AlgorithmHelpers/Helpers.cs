@@ -1,4 +1,7 @@
-﻿namespace Common;
+﻿using System;
+using System.Collections.Generic;
+
+namespace AlgorithmHelpers;
 
 public static class Helpers
 {
@@ -51,7 +54,7 @@ public static class Helpers
                 return false;
         return true;
     }
-    
+
     public static int FirstUnsortedIndex(this int[] array)
     {
         for (var i = 1; i < array.Length; i++)

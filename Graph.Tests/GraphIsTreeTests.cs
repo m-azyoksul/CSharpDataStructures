@@ -1,7 +1,6 @@
-﻿using AlgorithmHelpers.DataStructures;
-using Xunit;
+﻿using Xunit;
 
-namespace AlgorithmHelpers.Tests.DataStructures;
+namespace Graph.Tests;
 
 public class GraphIsTreeTests
 {

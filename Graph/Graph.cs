@@ -2,57 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AlgorithmHelpers.DataStructures;
-
-public class Vertex<T>
-{
-    public T? Data;
-    public List<int> Neighbors;
-
-    public Vertex(T? data, List<int> neighbors)
-    {
-        Data = data;
-        Neighbors = neighbors;
-    }
-
-    public Vertex(T? data)
-    {
-        Data = data;
-        Neighbors = new List<int>();
-    }
-
-    public static Vertex<T> Empty() => new(default, new List<int>());
-}
+namespace Graph;
 
 public abstract class Graph<TData>
 {
     public Dictionary<int, Vertex<TData>> Vertices { get; }
-    public List<(int V1, int V2)> Edges { get; }
 
     #region Constructors
 
     protected Graph()
     {
         Vertices = new Dictionary<int, Vertex<TData>>();
-        Edges = new List<(int, int)>();
     }
 
     protected Graph(List<(int, int)> edges)
     {
         Vertices = new Dictionary<int, Vertex<TData>>();
-        Edges = edges;
     }
 
     protected Graph(Dictionary<int, Vertex<TData>> vertices)
     {
-        // Make sure the Neighbours lists only contain values that exist in the vertex list
+        // Make sure the connections lists only contain values that exist in the vertex list
         foreach (var vertex in vertices)
-        foreach (var neighbour in vertex.Value.Neighbors)
-            if (!vertices.ContainsKey(neighbour))
+        foreach (var connection in vertex.Value.Connections)
+            if (!vertices.ContainsKey(connection))
                 throw new ArgumentException("The edge list contains a vertex that is not in the vertex list");
 
         Vertices = vertices;
-        Edges = new List<(int, int)>();
     }
 
     #endregion
@@ -96,11 +72,11 @@ public abstract class Graph<TData>
 
     public abstract void RemoveVertex(int v);
 
-    public abstract bool ContainsEdge(int v1, int v2);
+    protected abstract bool HasEdge(int v1, int v2);
 
-    public bool ContainsEdge((int v1, int v2) edge)
+    public bool VerticesConnected((int v1, int v2) edge)
     {
-        return ContainsEdge(edge.v1, edge.v2);
+        return HasEdge(edge.v1, edge.v2);
     }
 
     public bool ContainsVertex(int v)
@@ -111,25 +87,21 @@ public abstract class Graph<TData>
     public void Clear()
     {
         Vertices.Clear();
-        Edges.Clear();
     }
 
-    public int VertexCount()
+    protected int VertexCount()
     {
         return Vertices.Count;
     }
 
-    public int EdgeCount()
-    {
-        return Edges.Count;
-    }
+    public abstract int EdgeCount();
 
-    public List<int> AllNeighbours(int v)
+    protected List<int> AllConnections(int v)
     {
         if (!Vertices.ContainsKey(v))
             throw new ArgumentException("The vertex does not exist");
 
-        return Vertices[v].Neighbors;
+        return Vertices[v].Connections;
     }
 
     public List<int> GetVertices()
@@ -152,12 +124,12 @@ public abstract class Graph<TData>
     /// Time Complexity: O(V + E)
     /// Space Complexity: O(V)
     /// </summary>
-    protected List<int> AllBackwardsNeighbours(int v)
+    protected List<int> AllBackwardsConnections(int v)
     {
         // Find all vertices that have a directed edge towards v using VertexList
         return (
             from vertex in Vertices
-            where vertex.Value.Neighbors.Contains(v)
+            where vertex.Value.Connections.Contains(v)
             select vertex.Key
         ).ToList();
     }
@@ -170,19 +142,19 @@ public abstract class Graph<TData>
         return nonKeyValue;
     }
 
-    protected IEnumerable<int> UnvisitedNeighbours(int vertex, HashSet<int> visitedSet)
+    protected IEnumerable<int> UnvisitedConnections(int vertex, HashSet<int> visitedSet)
     {
-        return Vertices[vertex].Neighbors.Where(neighbour => !visitedSet.Contains(neighbour));
+        return Vertices[vertex].Connections.Where(connection => !visitedSet.Contains(connection));
     }
 
-    protected IEnumerable<int> UnvisitedNeighbours<T>(int vertex, Dictionary<int, T> visitedDict)
+    protected IEnumerable<int> UnvisitedConnections<T>(int vertex, Dictionary<int, T> visitedDict)
     {
-        return Vertices[vertex].Neighbors.Where(neighbour => !visitedDict.ContainsKey(neighbour));
+        return Vertices[vertex].Connections.Where(connection => !visitedDict.ContainsKey(connection));
     }
 
-    protected int NeighborCount(int v)
+    protected int ConnectionCount(int v)
     {
-        return Vertices[v].Neighbors.Count;
+        return Vertices[v].Connections.Count;
     }
 
     #endregion
@@ -209,10 +181,10 @@ public abstract class Graph<TData>
         {
             var current = queue.Dequeue();
 
-            foreach (var neighbour in UnvisitedNeighbours(current, visited))
+            foreach (var connection in UnvisitedConnections(current, visited))
             {
-                visited.Add(neighbour);
-                queue.Enqueue(neighbour);
+                visited.Add(connection);
+                queue.Enqueue(connection);
             }
         }
 
@@ -242,10 +214,10 @@ public abstract class Graph<TData>
     /// </summary>
     private void DfsTraversal(int v, HashSet<int> visited)
     {
-        foreach (var neighbour in UnvisitedNeighbours(v, visited))
+        foreach (var connection in UnvisitedConnections(v, visited))
         {
-            visited.Add(neighbour);
-            DfsTraversal(neighbour, visited);
+            visited.Add(connection);
+            DfsTraversal(connection, visited);
         }
     }
 
@@ -270,7 +242,7 @@ public abstract class Graph<TData>
             var current = stack.Pop();
             visited.Add(current);
 
-            UnvisitedNeighbours(current, visited).ToList().ForEachReversed(neighbour => { stack.Push(neighbour); });
+            UnvisitedConnections(current, visited).ToList().ForEachReversed(connection => { stack.Push(connection); });
         }
 
         return visited.ToList();
@@ -314,11 +286,11 @@ public abstract class Graph<TData>
     public bool IsSimple()
     {
         // Duplicate edges
-        if (Vertices.Any(v => v.Value.Neighbors.HasDuplicate()))
+        if (Vertices.Any(v => v.Value.Connections.HasDuplicate()))
             return false;
-        
+
         // Self-loops
-        if (Vertices.Any(v => v.Value.Neighbors.Contains(v.Key)))
+        if (Vertices.Any(v => v.Value.Connections.Contains(v.Key)))
             return false;
 
         return true;
@@ -347,10 +319,10 @@ public abstract class Graph<TData>
             if (v == toVertex)
                 return true;
 
-            // Enqueue neighbors
-            foreach (var neighbor in UnvisitedNeighbours(v, visited))
+            // Enqueue connections
+            foreach (var connection in UnvisitedConnections(v, visited))
             {
-                queue.Enqueue(neighbor);
+                queue.Enqueue(connection);
                 visited.Add(v);
             }
         }
@@ -380,11 +352,11 @@ public abstract class Graph<TData>
                 return path;
             }
 
-            // Enqueue neighbors
-            foreach (var neighbor in UnvisitedNeighbours(v, predecessor))
+            // Enqueue connections
+            foreach (var connection in UnvisitedConnections(v, predecessor))
             {
-                queue.Enqueue(neighbor);
-                predecessor.Add(neighbor, v);
+                queue.Enqueue(connection);
+                predecessor.Add(connection, v);
             }
         }
 
@@ -407,21 +379,21 @@ public abstract class Graph<TData>
 
             visited.Add(v);
 
-            // Enqueue neighbors
-            foreach (var neighbor in AllNeighbours(v))
+            // Enqueue connections
+            foreach (var connection in AllConnections(v))
             {
-                if (visited.Contains(neighbor))
+                if (visited.Contains(connection))
                 {
                     // Loop found
-                    var loop = new List<int> {neighbor};
-                    for (int current = v; current != neighbor; current = predecessor[current])
+                    var loop = new List<int> {connection};
+                    for (int current = v; current != connection; current = predecessor[current])
                         loop.Add(current);
 
                     return loop;
                 }
 
-                queue.Enqueue(neighbor);
-                predecessor.Add(neighbor, v);
+                queue.Enqueue(connection);
+                predecessor.Add(connection, v);
             }
         }
 
@@ -452,11 +424,11 @@ public abstract class Graph<TData>
 
             visited.Add(v);
 
-            // Enqueue neighbors
-            foreach (var neighbor in UnvisitedNeighbours(v, visited))
+            // Enqueue connections
+            foreach (var connection in UnvisitedConnections(v, visited))
             {
-                queue.Enqueue(neighbor);
-                distance.Add(neighbor, distance[v] + 1);
+                queue.Enqueue(connection);
+                distance.Add(connection, distance[v] + 1);
             }
         }
 
