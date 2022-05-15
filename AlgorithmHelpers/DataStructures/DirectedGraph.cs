@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AlgorithmHelpers.Algorithms.Graph;
 
 namespace AlgorithmHelpers.DataStructures;
 
@@ -9,7 +8,7 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
 {
     #region Constructors
 
-    public DirectedGraph() : base()
+    public DirectedGraph()
     {
     }
 
@@ -76,6 +75,168 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
     public override bool ContainsEdge(int v1, int v2)
     {
         return Edges.Contains((v1, v2));
+    }
+
+    #endregion
+
+    #region Traversal
+
+    /// <summary>
+    /// Iterative breath first search that traverses all vertices and all edges reachable from v.
+    ///
+    /// Time Complexity: O(E)
+    /// Space Complexity: O(E)
+    /// </summary>
+    /// <param name="v">Start vertex</param>
+    /// <returns>All visited vertices and edges</returns>
+    public override List<(int From, int To, bool Forwards)> BfsEdgeTraversal(int v)
+    {
+        if (!Vertices.ContainsKey(v))
+            throw new ArgumentException("The vertex does not exist");
+
+        var edgeList = new List<(int From, int To, bool Forwards)>();
+
+        var visited = new HashSet<int> {v};
+        var queue = new Queue<(int V, int P)> {(v, v)};
+        var backtrackStack = new Stack<(int V, int P)>();
+
+        while (queue.Count > 0)
+        {
+            var cur = queue.Dequeue();
+
+            foreach (var neighbour in AllNeighbours(cur.V))
+            {
+                if (visited.Contains(neighbour))
+                {
+                    edgeList.Add((cur.V, neighbour, true));
+                    edgeList.Add((neighbour, cur.V, false));
+                    continue;
+                }
+
+                edgeList.Add((cur.V, neighbour, true));
+                visited.Add(neighbour);
+                queue.Enqueue((neighbour, cur.V));
+            }
+
+            backtrackStack.Push(cur);
+        }
+
+        while (backtrackStack.Count > 1)
+        {
+            var cur = backtrackStack.Pop();
+            edgeList.Add((cur.V, cur.P, false));
+        }
+
+        return edgeList;
+    }
+
+    /// <summary>
+    /// Recursive depth first search that traverses all vertices and all edges reachable from v.
+    ///
+    /// Time Complexity: O(E)
+    /// Space Complexity: O(E)
+    /// </summary>
+    /// <param name="v">Start vertex</param>
+    /// <returns>All visited vertices and edges</returns>
+    public override List<(int From, int To, bool Forward)> DfsEdgeTraversal(int v)
+    {
+        if (!Vertices.ContainsKey(v))
+            throw new ArgumentException("The vertex does not exist");
+
+        var edgeList = new List<(int, int, bool)>();
+
+        var visited = new HashSet<int> {v};
+        DfsEdgeTraversal(v, visited, edgeList, v);
+        return edgeList;
+    }
+    
+    /// <summary>
+    /// Recursive call for recursive depth first search that traverses all vertices and all edges reachable from v.
+    /// </summary>
+    private void DfsEdgeTraversal(int v, HashSet<int> visited, List<(int, int, bool)> edgeList, int parent)
+    {
+        foreach (var neighbour in AllNeighbours(v))
+        {
+            edgeList.Add((v, neighbour, true));
+
+            if (visited.Contains(neighbour))
+            {
+                // Navigate and back
+                edgeList.Add((neighbour, v, false));
+                continue;
+            }
+
+            // Navigate
+            visited.Add(neighbour);
+            DfsEdgeTraversal(neighbour, visited, edgeList, v);
+
+            // Backtrack
+            edgeList.Add((neighbour, v, false));
+        }
+    }
+
+    /// <summary>
+    /// Iterative depth first search that traverses all vertices and all edges reachable from v.
+    /// Uses a stack frame data structure to store vertex data in stack.
+    ///
+    /// Time Complexity: O(E)
+    /// Space Complexity: O(E)
+    /// </summary>
+    /// <param name="v">Start vertex</param>
+    /// <returns>All visited vertices and edges</returns>
+    public override List<(int From, int To, bool Forward)> DfsEdgeTraversalIterative(int v)
+    {
+        if (!Vertices.ContainsKey(v))
+            throw new ArgumentException("The vertex does not exist");
+
+        var edgeList = new List<(int From, int To, bool Forward)>();
+
+        var visited = new HashSet<int>();
+        var stack = new Stack<(int V, int P, int I)> {(v, v, 0)};
+
+        while (stack.Count > 0)
+        {
+            var cur = stack.Pop();
+
+            if (cur.I == 0)
+            {
+                // Init
+                visited.Add(cur.V);
+            }
+            else if (cur.I < NeighborCount(cur.V))
+            {
+                // Backtrack
+            }
+
+            // If all edges have been visited
+            if (cur.I >= NeighborCount(cur.V))
+            {
+                // Leave
+                edgeList.Add((cur.V, cur.P, false));
+                continue;
+            }
+
+            var neighbor = Vertices[cur.V].Neighbors[cur.I];
+
+            // Push back
+            stack.Push((cur.V, cur.P, cur.I + 1));
+            edgeList.Add((cur.V, neighbor, true));
+
+            if (visited.Contains(neighbor))
+            {
+                // Navigate and back
+                edgeList.Add((neighbor, cur.V, false));
+            }
+            else
+            {
+                // Navigate
+                stack.Push((neighbor, cur.V, 0));
+            }
+        }
+
+        edgeList.RemoveAt(edgeList.Count - 1);
+
+        return edgeList;
     }
 
     #endregion
@@ -231,13 +392,13 @@ public class DirectedGraph<TVertexData> : Graph<TVertexData>
     /// Time complexity: O(V + E)
     /// Space complexity: O(V)
     /// </summary>
-    /// <returns>(The number of sccs, for each vertex (id of vertex, index of scc))</returns>
+    /// <returns>(The number of strongly connected components, for each vertex (id of vertex, index of scc))</returns>
     public (int SccCount, Dictionary<int, int> SccDictionary) TarjanSccMap()
     {
-        var id = Vertices.ToDictionary(v => v.Key, v => -1);
-        var lowLink = Vertices.ToDictionary(v => v.Key, v => 0);
-        var sccDict = Vertices.ToDictionary(v => v.Key, v => 0);
-        var inStack = Vertices.ToDictionary(v => v.Key, v => false);
+        var id = Vertices.ToDictionary(v => v.Key, _ => -1);
+        var lowLink = Vertices.ToDictionary(v => v.Key, _ => 0);
+        var sccDict = Vertices.ToDictionary(v => v.Key, _ => 0);
+        var inStack = Vertices.ToDictionary(v => v.Key, _ => false);
         var stack = new Stack<int>();
         int newId = 0;
         int sccCount = 0;

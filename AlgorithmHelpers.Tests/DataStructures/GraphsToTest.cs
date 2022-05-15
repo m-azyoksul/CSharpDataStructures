@@ -47,24 +47,18 @@ public class GraphsToTest
 
     public static DirectedGraph<string> DirectedCollar()
     {
-        var edges = new List<(int, int)>
+        var vertices = new Dictionary<int, Vertex<string>>
         {
-            (0, 1),
-            (0, 2),
-            (0, 3),
-            (1, 3),
-            (1, 4),
-            (1, 6),
-            (2, 5),
-            (3, 6),
-            (5, 0),
-            (5, 2),
-            (5, 3),
-            (6, 1),
-            (6, 4),
+            {0, new Vertex<string>(null, new List<int> {1, 2, 3})},
+            {1, new Vertex<string>(null, new List<int> {3, 4, 6})},
+            {2, new Vertex<string>(null, new List<int> {5})},
+            {3, new Vertex<string>(null, new List<int> {6})},
+            {4, new Vertex<string>(null, new List<int> {})},
+            {5, new Vertex<string>(null, new List<int> {0, 2, 3})},
+            {6, new Vertex<string>(null, new List<int> {1, 4})},
         };
 
-        return new DirectedGraph<string>(edges);
+        return new DirectedGraph<string>(vertices);
     }
 
     public static DirectedGraph<string> DirectedConnected531()
@@ -131,8 +125,18 @@ public class GraphsToTest
     {
         var edges = new List<(int, int)>();
 
-        for (int i = 0; i <= 5; i++)
+        for (int i = 1; i <= 5; i++)
             edges.Add((0, i));
+
+        return new DirectedGraph<string>(edges);
+    }
+
+    public static DirectedGraph<string> DirectedInboundStar()
+    {
+        var edges = new List<(int, int)>();
+
+        for (int i = 1; i <= 5; i++)
+            edges.Add((i, 0));
 
         return new DirectedGraph<string>(edges);
     }
@@ -259,7 +263,7 @@ public class GraphsToTest
     {
         var edges = new List<(int, int)>();
 
-        for (int i = 0; i <= 5; i++)
+        for (int i = 1; i <= 5; i++)
             edges.Add((0, i));
 
         return new UndirectedGraph<string>(edges);

@@ -192,7 +192,7 @@ public abstract class Graph<TData>
     /// <summary>
     /// Iterative breath first search that traverses all vertices reachable from v.
     ///
-    /// Time Complexity: O(V + E)
+    /// Time Complexity: O(E)
     /// Space Complexity: O(V)
     /// </summary>
     /// <param name="v">Start vertex</param>
@@ -222,7 +222,7 @@ public abstract class Graph<TData>
     /// <summary>
     /// Recursive depth first search that traverses all vertices reachable from v.
     ///
-    /// Time Complexity: O(V + E)
+    /// Time Complexity: O(E)
     /// Space Complexity: O(V)
     /// </summary>
     /// <param name="v">Start vertex</param>
@@ -252,7 +252,7 @@ public abstract class Graph<TData>
     /// <summary>
     /// Iterative depth first search that traverses all vertices reachable from v.
     ///
-    /// Time Complexity: O(V + E)
+    /// Time Complexity: O(E)
     /// Space Complexity: O(V)
     /// </summary>
     /// <param name="v">Start vertex</param>
@@ -279,166 +279,33 @@ public abstract class Graph<TData>
     /// <summary>
     /// Iterative breath first search that traverses all vertices and all edges reachable from v.
     ///
-    /// Time Complexity: O(V + E)
-    /// Space Complexity: O(V + E)
+    /// Time Complexity: O(E)
+    /// Space Complexity: O(E)
     /// </summary>
     /// <param name="v">Start vertex</param>
     /// <returns>All visited vertices and edges</returns>
-    public List<(int From, int To, bool Forwards)> BfsFullTraversal(int v)
-    {
-        if (!Vertices.ContainsKey(v))
-            throw new ArgumentException("The vertex does not exist");
-
-        var edgeList = new List<(int From, int To, bool Forwards)>();
-
-        var visited = new HashSet<int> {v};
-        var queue = new Queue<(int V, int P)> {(v, v)};
-        var backtrackStack = new Stack<(int V, int P)>();
-
-        while (queue.Count > 0)
-        {
-            var cur = queue.Dequeue();
-
-            foreach (var neighbour in AllNeighbours(cur.V))
-            {
-                if (visited.Contains(neighbour))
-                {
-                    edgeList.Add((cur.V, neighbour, true));
-                    edgeList.Add((neighbour, cur.V, false));
-                    continue;
-                }
-
-                edgeList.Add((cur.V, neighbour, true));
-                visited.Add(neighbour);
-                queue.Enqueue((neighbour, cur.V));
-            }
-
-            backtrackStack.Push(cur);
-        }
-
-        while (backtrackStack.Count > 1)
-        {
-            var cur = backtrackStack.Pop();
-            edgeList.Add((cur.V, cur.P, false));
-        }
-
-        return edgeList;
-    }
+    public abstract List<(int From, int To, bool Forwards)> BfsEdgeTraversal(int v);
 
     /// <summary>
     /// Recursive depth first search that traverses all vertices and all edges reachable from v.
     ///
-    /// Time Complexity: O(V + E)
-    /// Space Complexity: O(V + E)
+    /// Time Complexity: O(E)
+    /// Space Complexity: O(E)
     /// </summary>
     /// <param name="v">Start vertex</param>
     /// <returns>All visited vertices and edges</returns>
-    public List<(int From, int To, bool Forward)> DfsFullTraversal(int v)
-    {
-        if (!Vertices.ContainsKey(v))
-            throw new ArgumentException("The vertex does not exist");
-
-        var edgeList = new List<(int, int, bool)>();
-
-        var visited = new HashSet<int> {v};
-        DfsFullTraversal(v, visited, edgeList, v);
-        return edgeList;
-    }
-
-    /// <summary>
-    /// Recursive call for recursive depth first search that traverses all vertices and all edges reachable from v.
-    /// </summary>
-    private void DfsFullTraversal(int v, HashSet<int> visited, List<(int, int, bool)> edgeList, int parent)
-    {
-        foreach (var neighbour in AllNeighbours(v))
-        {
-            if (neighbour == parent)
-                continue;
-
-            edgeList.Add((v, neighbour, true));
-
-            if (visited.Contains(neighbour))
-            {
-                // Navigate and back
-                edgeList.Add((neighbour, v, false));
-                continue;
-            }
-
-            // Navigate
-            visited.Add(neighbour);
-            DfsFullTraversal(neighbour, visited, edgeList, v);
-
-            // Backtrack
-            edgeList.Add((neighbour, v, false));
-        }
-    }
+    public abstract List<(int From, int To, bool Forward)> DfsEdgeTraversal(int v);
 
     /// <summary>
     /// Iterative depth first search that traverses all vertices and all edges reachable from v.
     /// Uses a stack frame data structure to store vertex data in stack.
     ///
-    /// Time Complexity: O(V + E)
-    /// Space Complexity: O(V + E)
+    /// Time Complexity: O(E)
+    /// Space Complexity: O(E)
     /// </summary>
     /// <param name="v">Start vertex</param>
     /// <returns>All visited vertices and edges</returns>
-    public List<(int From, int To, bool Forward)> DfsFullTraversalIterative(int v)
-    {
-        if (!Vertices.ContainsKey(v))
-            throw new ArgumentException("The vertex does not exist");
-
-        var edgeList = new List<(int, int, bool)>();
-
-        var visited = new HashSet<int>();
-        var stack = new Stack<(int V, int P, int I)> {(v, v, 0)};
-
-        while (stack.Count > 0)
-        {
-            var cur = stack.Pop();
-
-            if (cur.I == 0)
-            {
-                // Init
-                visited.Add(cur.V);
-            }
-            else if (cur.I < NeighborCount(cur.V))
-            {
-                // Backtrack
-            }
-
-            if (cur.I >= NeighborCount(cur.V) ||
-                cur.I + 1 == NeighborCount(cur.V) &&
-                cur.P == Vertices[cur.V].Neighbors[cur.I])
-            {
-                // Leave
-                edgeList.Add((cur.V, cur.P, false));
-                continue;
-            }
-
-            var neighbor = Vertices[cur.V].Neighbors[cur.I];
-            if (neighbor == cur.P)
-                neighbor = Vertices[cur.V].Neighbors[cur.I + 1];
-
-            // Push back
-            stack.Push((cur.V, cur.P, cur.I + 1));
-            edgeList.Add((cur.V, neighbor, true));
-
-            if (visited.Contains(neighbor))
-            {
-                // Navigate and back
-                edgeList.Add((neighbor, cur.V, false));
-            }
-            else
-            {
-                // Navigate
-                stack.Push((neighbor, cur.V, 0));
-            }
-        }
-
-        edgeList.RemoveAt(edgeList.Count - 1);
-
-        return edgeList;
-    }
+    public abstract List<(int From, int To, bool Forward)> DfsEdgeTraversalIterative(int v);
 
     // TODO: Implement traversals without starting vertex
 
@@ -446,14 +313,13 @@ public abstract class Graph<TData>
 
     public bool IsSimple()
     {
-        foreach (var vertex in Vertices)
-        {
-            if (vertex.Value.Neighbors.Contains(vertex.Key))
-                return false;
-
-            if (vertex.Value.Neighbors.HasDuplicate())
-                return false;
-        }
+        // Duplicate edges
+        if (Vertices.Any(v => v.Value.Neighbors.HasDuplicate()))
+            return false;
+        
+        // Self-loops
+        if (Vertices.Any(v => v.Value.Neighbors.Contains(v.Key)))
+            return false;
 
         return true;
     }
