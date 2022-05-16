@@ -31,7 +31,7 @@ public class GraphDijkstraTests
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 1, 1);
-        var expectedDistances = new Dictionary<int, int>
+        var expectedDistances = new Dictionary<int, double>
         {
             {1, 0},
             {2, 1},
@@ -70,7 +70,7 @@ public class GraphDijkstraTests
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 3);
         graph.AddEdge(3, 1, 1);
-        var expectedDistances = new Dictionary<int, int>
+        var expectedDistances = new Dictionary<int, double>
         {
             {1, 0},
             {2, 1},
@@ -111,7 +111,7 @@ public class GraphDijkstraTests
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 4, 1);
         graph.AddEdge(4, 1, 1);
-        var expectedDistances = new Dictionary<int, int>
+        var expectedDistances = new Dictionary<int, double>
         {
             {1, 0},
             {2, 1},
@@ -153,7 +153,7 @@ public class GraphDijkstraTests
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 1, 1);
         graph.AddVertex(4);
-        var expectedDistances = new Dictionary<int, int>
+        var expectedDistances = new Dictionary<int, double>
         {
             {1, 0},
             {2, 1},
@@ -195,7 +195,7 @@ public class GraphDijkstraTests
         graph.AddEdge(2, 3, -5);
         graph.AddEdge(3, 4, 2);
         graph.AddEdge(4, 1, 2);
-        var expectedDistances = new Dictionary<int, int>
+        var expectedDistances = new Dictionary<int, double>
         {
             {1, 0},
             {2, 1},
@@ -250,7 +250,7 @@ public class GraphDijkstraTests
         graph.AddEdge(0, 3, 16);
         graph.AddEdge(0, 4, 8);
         graph.AddEdge(0, 5, 6);
-        var expectedDistances = new Dictionary<int, int>
+        var expectedDistances = new Dictionary<int, double>
         {
             {1, 0},
             {2, 10},
@@ -285,7 +285,7 @@ public class GraphDijkstraTests
     {
         // Arrange
         var graph = GraphsToTest.Directed5By5Matrix();
-        var expectedDistances = new Dictionary<int, int>
+        var expectedDistances = new Dictionary<int, double>
         {
             {0, 0},
             {1, 1},
@@ -331,7 +331,7 @@ public class GraphDijkstraTests
     {
         // Arrange
         var graph = GraphsToTest.DirectedBalancedTree();
-        var expectedDistances = new Dictionary<int, int>
+        var expectedDistances = new Dictionary<int, double>
         {
             {0, 0},
             {1, 1},
@@ -381,7 +381,7 @@ public class GraphDijkstraTests
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 1, 1);
-        var expectedDistances = new Dictionary<int, int>
+        var expectedDistances = new Dictionary<int, double>
         {
             {1, 0},
             {2, 1},
@@ -420,7 +420,7 @@ public class GraphDijkstraTests
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 1, 3);
-        var expectedDistances = new Dictionary<int, int>
+        var expectedDistances = new Dictionary<int, double>
         {
             {1, 0},
             {2, 1},
@@ -461,7 +461,7 @@ public class GraphDijkstraTests
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 4, 1);
         graph.AddEdge(4, 1, 1);
-        var expectedDistances = new Dictionary<int, int>
+        var expectedDistances = new Dictionary<int, double>
         {
             {1, 0},
             {2, 1},
@@ -503,7 +503,7 @@ public class GraphDijkstraTests
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 1, 1);
         graph.AddVertex(4);
-        var expectedDistances = new Dictionary<int, int>
+        var expectedDistances = new Dictionary<int, double>
         {
             {1, 0},
             {2, 1},
@@ -545,7 +545,7 @@ public class GraphDijkstraTests
         graph.AddEdge(2, 3, -5);
         graph.AddEdge(3, 4, 2);
         graph.AddEdge(4, 1, 2);
-        var expectedDistances = new Dictionary<int, int>
+        var expectedDistances = new Dictionary<int, double>
         {
             {1, 0},
             {2, 1},
@@ -600,7 +600,7 @@ public class GraphDijkstraTests
         graph.AddEdge(0, 3, 16);
         graph.AddEdge(0, 4, 8);
         graph.AddEdge(0, 5, 6);
-        var expectedDistances = new Dictionary<int, int>
+        var expectedDistances = new Dictionary<int, double>
         {
             {0, 1},
             {1, 0},
@@ -637,7 +637,7 @@ public class GraphDijkstraTests
     {
         // Arrange
         var graph = GraphsToTest.Undirected5By5Matrix();
-        var expectedDistances = new Dictionary<int, int>
+        var expectedDistances = new Dictionary<int, double>
         {
             {0, 0},
             {1, 1},
@@ -683,7 +683,7 @@ public class GraphDijkstraTests
     {
         // Arrange
         var graph = GraphsToTest.UndirectedBalancedTree();
-        var expectedDistances = new Dictionary<int, int>
+        var expectedDistances = new Dictionary<int, double>
         {
             {0, 0},
             {1, 1},

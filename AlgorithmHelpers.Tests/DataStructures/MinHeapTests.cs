@@ -30,8 +30,7 @@ public class MinHeapTests
         item3.Key.Should().Be(3);
         item3.Value.Should().Be(3);
     }
-
-
+    
     [Fact]
     public void Add_Pop_Many()
     {

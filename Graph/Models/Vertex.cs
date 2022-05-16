@@ -19,5 +19,11 @@ public struct Vertex<T>
         Connections = new List<Connection>();
     }
 
+    public Vertex(List<Connection> connections)
+    {
+        Data = default;
+        Connections = connections;
+    }
+
     public static Vertex<T> Empty() => new(default, new List<Connection>());
 }

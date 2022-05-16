@@ -24,6 +24,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\AlgorithmHelpers\AlgorithmHelpers.csproj" />
+      <ProjectReference Include="..\GraphQuiz1\GraphQuiz1.csproj" />
     </ItemGroup>
 
 </Project>
