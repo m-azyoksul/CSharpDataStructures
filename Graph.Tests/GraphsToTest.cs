@@ -151,6 +151,22 @@ public class GraphsToTest
         return new DirectedGraph<string>(edges);
     }
 
+    public static DirectedGraph<string> DirectedDoubleTick()
+    {
+        var edges = new List<(int, int)>
+        {
+            (0, 1),
+            (1, 2),
+            (0, 3),
+            (4, 5),
+            (5, 6),
+            (4, 7),
+        };
+
+        return new DirectedGraph<string>(edges);
+    }
+
+
     public static UndirectedGraph<string> Undirected5By5Matrix()
     {
         var edges = new List<(int, int)>();
@@ -277,5 +293,20 @@ public class GraphsToTest
             edges.Add((0, i));
 
         return new UndirectedGraph<string>(edges);
+    }
+
+    public static DirectedGraph<string> UndirectedDoubleTick()
+    {
+        var edges = new List<(int, int)>
+        {
+            (0, 1),
+            (1, 2),
+            (0, 3),
+            (4, 5),
+            (5, 6),
+            (4, 7),
+        };
+
+        return new DirectedGraph<string>(edges);
     }
 }

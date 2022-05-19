@@ -32,7 +32,7 @@ public abstract partial class Graph<TData>
                 return true;
 
             // Enqueue connections
-            foreach (var connection in UnvisitedConnections(v, visited))
+            foreach (var connection in UnaccountedConnections(v, visited))
             {
                 queue.Enqueue(connection.To);
                 visited.Add(v);
@@ -74,7 +74,7 @@ public abstract partial class Graph<TData>
             }
 
             // Enqueue connections
-            foreach (var connection in UnvisitedConnections(v, predecessor))
+            foreach (var connection in UnaccountedConnections(v, predecessor))
             {
                 queue.Enqueue(connection.To);
                 predecessor.Add(connection.To, v);
@@ -97,8 +97,7 @@ public abstract partial class Graph<TData>
     /// <returns>Shortest distance to each connected vertex</returns>
     public Dictionary<int, double> Dijkstra(int v1)
     {
-        if (!Vertices.ContainsKey(v1))
-            throw new ArgumentException("The vertex does not exist");
+        CheckVertex(v1);
 
         var distance = new Dictionary<int, double>();
         var candidates = new MinHeap<int, double> {{v1, 0}};
@@ -108,7 +107,7 @@ public abstract partial class Graph<TData>
             var minCandidate = candidates.Pop();
             distance.Add(minCandidate.Key, minCandidate.Value);
 
-            foreach (var connection in UnvisitedConnections(minCandidate.Key, distance))
+            foreach (var connection in UnaccountedConnections(minCandidate.Key, distance))
             {
                 var newDistance = minCandidate.Value + connection.Weight;
 
@@ -139,8 +138,7 @@ public abstract partial class Graph<TData>
     /// <returns>Shortest distance and path to the destination</returns>
     public (double, List<int>) Dijkstra(int v1, int v2)
     {
-        if (!Vertices.ContainsKey(v1) || !Vertices.ContainsKey(v2))
-            throw new ArgumentException("The vertex does not exist");
+        CheckVertices(v1, v2);
 
         var distanceFound = new HashSet<int> {v1};
         var candidates = new MinHeap<int, double> {(v1, 0)};
@@ -163,7 +161,7 @@ public abstract partial class Graph<TData>
                 return (minCandidate.Value, path);
             }
 
-            foreach (var connection in UnvisitedConnections(minCandidate.Key, distanceFound))
+            foreach (var connection in UnaccountedConnections(minCandidate.Key, distanceFound))
             {
                 var newDistance = minCandidate.Value + connection.Weight;
 
@@ -200,8 +198,7 @@ public abstract partial class Graph<TData>
     /// <returns>Shortest distance to each connected vertex</returns>
     public Dictionary<int, double> BellmanFord(int v)
     {
-        if (!Vertices.ContainsKey(v))
-            throw new ArgumentException("The vertex does not exist");
+        CheckVertex(v);
 
         var distance = new Dictionary<int, double> {{v, 0}};
 
@@ -252,8 +249,7 @@ public abstract partial class Graph<TData>
     /// <returns>Shortest distance and path to the destination</returns>
     public (double, List<int>) BellmanFord(int v1, int v2)
     {
-        if (!Vertices.ContainsKey(v1) || !Vertices.ContainsKey(v2))
-            throw new ArgumentException("The vertex does not exist");
+        CheckVertices(v1, v2);
 
         var distance = new Dictionary<int, double> {{v1, 0}};
         var predecessor = new Dictionary<int, int> {{v1, v1}};
@@ -314,8 +310,7 @@ public abstract partial class Graph<TData>
     /// <returns>Shortest distance and path to the destination</returns>
     public (double, List<int>) AStar(int v1, int v2, Func<int, int, int> estimator)
     {
-        if (!Vertices.ContainsKey(v1) || !Vertices.ContainsKey(v2))
-            throw new ArgumentException("The vertex does not exist");
+        CheckVertices(v1, v2);
 
         var distanceFound = new HashSet<int> {v1};
         var candidates = new MinHeap<int, double> {(v1, estimator(v1, v2))};
@@ -338,7 +333,7 @@ public abstract partial class Graph<TData>
                 return (minCandidate.Value, path);
             }
 
-            foreach (var connection in UnvisitedConnections(minCandidate.Key, distanceFound))
+            foreach (var connection in UnaccountedConnections(minCandidate.Key, distanceFound))
             {
                 var newDistance = minCandidate.Value - estimator(minCandidate.Key, v2) + connection.Weight + estimator(connection.To, v2);
 

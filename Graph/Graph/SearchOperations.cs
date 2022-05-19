@@ -25,7 +25,7 @@ public abstract partial class Graph<TData>
         {
             var current = queue.Dequeue();
 
-            foreach (var connection in UnvisitedConnections(current, visited))
+            foreach (var connection in UnaccountedConnections(current, visited))
             {
                 visited.Add(connection.To);
                 queue.Enqueue(connection.To);
@@ -57,7 +57,7 @@ public abstract partial class Graph<TData>
     /// </summary>
     private void DfsVertexTraversal(int v, HashSet<int> visited)
     {
-        foreach (var connection in UnvisitedConnections(v, visited))
+        foreach (var connection in UnaccountedConnections(v, visited))
         {
             visited.Add(connection.To);
             DfsVertexTraversal(connection.To, visited);
@@ -72,7 +72,7 @@ public abstract partial class Graph<TData>
     /// </summary>
     /// <param name="v">Start vertex</param>
     /// <returns>All visited vertices</returns>
-    public List<int> DfsTraversalIterative(int v)
+    public List<int> DfsVertexTraversalIterative(int v)
     {
         CheckVertex(v);
 
@@ -84,13 +84,13 @@ public abstract partial class Graph<TData>
             var current = stack.Pop();
             visited.Add(current);
 
-            UnvisitedConnections(current, visited).ToList().ForEachReversed(connection => { stack.Push(connection.To); });
+            UnaccountedConnections(current, visited).ToList().ForEachReversed(connection => { stack.Push(connection.To); });
         }
 
         return visited.ToList();
     }
-    
-    
+
+
     /// <summary>
     /// Iterative breath first search that traverses all vertices.
     ///
@@ -114,7 +114,7 @@ public abstract partial class Graph<TData>
             {
                 var current = queue.Dequeue();
 
-                foreach (var connection in UnvisitedConnections(current, visited))
+                foreach (var connection in UnaccountedConnections(current, visited))
                 {
                     visited.Add(connection.To);
                     queue.Enqueue(connection.To);
@@ -154,7 +154,7 @@ public abstract partial class Graph<TData>
     /// Space Complexity: O(V)
     /// </summary>
     /// <returns>All vertices</returns>
-    public List<int> DfsTraversalIterative()
+    public List<int> DfsVertexTraversalIterative()
     {
         var visited = new HashSet<int>();
 
@@ -171,7 +171,7 @@ public abstract partial class Graph<TData>
                 var current = stack.Pop();
                 visited.Add(current);
 
-                UnvisitedConnections(current, visited).ToList().ForEachReversed(connection => { stack.Push(connection.To); });
+                UnaccountedConnections(current, visited).ToList().ForEachReversed(connection => { stack.Push(connection.To); });
             }
         }
 
@@ -220,7 +220,7 @@ public abstract partial class Graph<TData>
     public abstract List<(int From, int To, bool Forward)> DfsEdgeTraversalIterative();
 }
 
-public partial class DirectedGraph<TVertexData>
+public partial class DirectedGraph<TData>
 {
     /// <summary>
     /// Iterative breath first search that traverses all vertices and all edges reachable from v.
@@ -378,8 +378,8 @@ public partial class DirectedGraph<TVertexData>
 
         return edgeList;
     }
-    
-    
+
+
     /// <summary>
     /// Iterative breath first search that traverses all vertices and all edges.
     ///
@@ -428,6 +428,8 @@ public partial class DirectedGraph<TVertexData>
                 var cur = backtrackStack.Pop();
                 edgeList.Add((cur.V, cur.P, false));
             }
+
+            backtrackStack.Pop();
         }
 
         return edgeList;
@@ -526,7 +528,7 @@ public partial class DirectedGraph<TVertexData>
     }
 }
 
-public partial class UndirectedGraph<TVertexData>
+public partial class UndirectedGraph<TData>
 {
     /// <summary>
     /// Iterative breath first search that traverses all vertices and all edges reachable from v.
@@ -706,8 +708,8 @@ public partial class UndirectedGraph<TVertexData>
         edgeList.RemoveAt(visitedEdges.Count - 1);
         return edgeList;
     }
-    
-    
+
+
     /// <summary>
     /// Iterative breath first search that traverses all vertices and all edges.
     ///

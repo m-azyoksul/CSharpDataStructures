@@ -79,7 +79,6 @@ public abstract partial class Graph<TData>
 
     protected List<Connection> AllConnections(int v)
     {
-        CheckVertex(v);
         return Vertices[v].Connections;
     }
 
@@ -115,14 +114,14 @@ public abstract partial class Graph<TData>
     }
 }
 
-public partial class DirectedGraph<TVertexData>
+public partial class DirectedGraph<TData>
 {
     public override void AddEdge(int v1, int v2)
     {
         if (!Vertices.ContainsKey(v1))
-            Vertices.Add(v1, Vertex<TVertexData>.Empty());
+            Vertices.Add(v1, Vertex<TData>.Empty());
         if (!Vertices.ContainsKey(v2))
-            Vertices.Add(v2, Vertex<TVertexData>.Empty());
+            Vertices.Add(v2, Vertex<TData>.Empty());
 
         Vertices[v1].Connections.Add(v2);
     }
@@ -130,9 +129,9 @@ public partial class DirectedGraph<TVertexData>
     public override void AddEdge(int v1, int v2, int weight)
     {
         if (!Vertices.ContainsKey(v1))
-            Vertices.Add(v1, Vertex<TVertexData>.Empty());
+            Vertices.Add(v1, Vertex<TData>.Empty());
         if (!Vertices.ContainsKey(v2))
-            Vertices.Add(v2, Vertex<TVertexData>.Empty());
+            Vertices.Add(v2, Vertex<TData>.Empty());
 
         Vertices[v1].Connections.Add(new Connection(v2, weight));
     }
@@ -151,7 +150,7 @@ public partial class DirectedGraph<TVertexData>
         if (!Vertices.ContainsKey(v))
             throw new ArgumentException("The vertex already exists");
 
-        Vertices.Add(v, new Vertex<TVertexData>(connections));
+        Vertices.Add(v, new Vertex<TData>(connections));
     }
 
     public override void RemoveVertex(int v)
@@ -176,14 +175,14 @@ public partial class DirectedGraph<TVertexData>
     }
 }
 
-public partial class UndirectedGraph<TVertexData>
+public partial class UndirectedGraph<TData>
 {
     public override void AddEdge(int v1, int v2)
     {
         if (!Vertices.ContainsKey(v1))
-            Vertices.Add(v1, Vertex<TVertexData>.Empty());
+            Vertices.Add(v1, Vertex<TData>.Empty());
         if (!Vertices.ContainsKey(v2))
-            Vertices.Add(v2, Vertex<TVertexData>.Empty());
+            Vertices.Add(v2, Vertex<TData>.Empty());
 
         Vertices[v1].Connections.Add(v2);
         Vertices[v2].Connections.Add(v1);
@@ -192,9 +191,9 @@ public partial class UndirectedGraph<TVertexData>
     public override void AddEdge(int v1, int v2, int weight)
     {
         if (!Vertices.ContainsKey(v1))
-            Vertices.Add(v1, Vertex<TVertexData>.Empty());
+            Vertices.Add(v1, Vertex<TData>.Empty());
         if (!Vertices.ContainsKey(v2))
-            Vertices.Add(v2, Vertex<TVertexData>.Empty());
+            Vertices.Add(v2, Vertex<TData>.Empty());
 
         Vertices[v1].Connections.Add(new Connection(v2, weight));
         Vertices[v2].Connections.Add(new Connection(v1, weight));
@@ -216,13 +215,13 @@ public partial class UndirectedGraph<TVertexData>
         if (!Vertices.ContainsKey(v))
             throw new ArgumentException("The vertex already exists");
 
-        Vertices.Add(v, new Vertex<TVertexData>(connections));
+        Vertices.Add(v, new Vertex<TData>(connections));
 
         // Add backwards connections
         foreach (var connection in connections)
         {
             if (!Vertices.ContainsKey(connection.To))
-                Vertices.Add(connection.To, Vertex<TVertexData>.Empty());
+                Vertices.Add(connection.To, Vertex<TData>.Empty());
 
             Vertices[connection.To].Connections.Add(v);
         }

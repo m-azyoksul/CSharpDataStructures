@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Graph;
 
-public partial class UndirectedGraph<TVertexData> : Graph<TVertexData>
+public partial class UndirectedGraph<TData> : Graph<TData>
 {
     #region Constructors
 
@@ -18,17 +18,17 @@ public partial class UndirectedGraph<TVertexData> : Graph<TVertexData>
         foreach (var edge in edges)
         {
             if (!Vertices.ContainsKey(edge.Item1))
-                Vertices.Add(edge.Item1, Vertex<TVertexData>.Empty());
+                Vertices.Add(edge.Item1, Vertex<TData>.Empty());
 
             if (!Vertices.ContainsKey(edge.Item2))
-                Vertices.Add(edge.Item2, Vertex<TVertexData>.Empty());
+                Vertices.Add(edge.Item2, Vertex<TData>.Empty());
 
             Vertices[edge.Item1].Connections.Add(edge.Item2);
             Vertices[edge.Item2].Connections.Add(edge.Item1);
         }
     }
 
-    public UndirectedGraph(Dictionary<int, Vertex<TVertexData>> vertices) : base(vertices)
+    public UndirectedGraph(Dictionary<int, Vertex<TData>> vertices) : base(vertices)
     {
         // TODO
         // Check if every vertex is the neighbour its neighbours
@@ -76,7 +76,7 @@ public partial class UndirectedGraph<TVertexData> : Graph<TVertexData>
             var v = queue.Dequeue();
 
             // Enqueue neighbors
-            foreach (var neighbor in UnvisitedConnections(v, visited))
+            foreach (var neighbor in UnaccountedConnections(v, visited))
             {
                 queue.Enqueue(neighbor.To);
                 visited.Add(neighbor.To);
@@ -157,7 +157,7 @@ public partial class UndirectedGraph<TVertexData> : Graph<TVertexData>
         low[v] = timeOfVisit[v] = time;
         time++;
 
-        foreach (var to in Vertices[v].Connections)
+        foreach (var to in AllConnections(v))
         {
             if (to.To == parent)
                 continue;
@@ -264,7 +264,7 @@ public partial class UndirectedGraph<TVertexData> : Graph<TVertexData>
             {
                 var v = queue.Dequeue();
 
-                foreach (var connection in UnvisitedConnections(v, components))
+                foreach (var connection in UnaccountedConnections(v, components))
                 {
                     queue.Enqueue(connection.To);
                     components[v] = componentIndex;
@@ -294,7 +294,7 @@ public partial class UndirectedGraph<TVertexData> : Graph<TVertexData>
             {
                 var v = queue.Dequeue();
 
-                foreach (var connection in UnvisitedConnections(v, visited))
+                foreach (var connection in UnaccountedConnections(v, visited))
                 {
                     queue.Enqueue(connection.To);
                     visited.Add(v);

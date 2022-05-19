@@ -28,9 +28,9 @@ namespace Graph;
 /// 2. Search
 /// Contains various implementations of breadth-first and depth-first search algorithms.
 /// Includes:
-/// - Breadth-first search
-/// - Depth-first search
-/// - Iterative depth-first search
+/// - Breadth-first search (4 variations)
+/// - Depth-first search (4 variations)
+/// - Iterative depth-first search (4 variations)
 /// 
 /// Variations of these searches include:
 /// - Vertex search (Record every visited vertex in order) / Edge search (record every crossed edge in order including backtracking)
@@ -39,14 +39,14 @@ namespace Graph;
 /// 3. ShortestPath
 /// Contains various implementations of finding the shortest path between two vertices or the shortest path between a vertex and all other vertices.
 /// Includes:
-/// - Dijkstra's algorithm
-/// - Bellman-Ford algorithm
+/// - Dijkstra's algorithm (2 variations)
+/// - Bellman-Ford algorithm (2 variations)
 /// - Floyd-Warshall algorithm
 /// - Johnson's algorithm
 /// - A* algorithm
 ///
 /// </summary>
-/// <typeparam name="TData"></typeparam>
+/// <typeparam name="TData">The type of data to be stored in the vertices.</typeparam>
 public abstract partial class Graph<TData>
 {
     public Dictionary<int, Vertex<TData>> Vertices { get; }
@@ -102,22 +102,22 @@ public abstract partial class Graph<TData>
         return nonKeyValue;
     }
 
-    protected IEnumerable<Connection> UnvisitedConnections(int vertex, HashSet<int> visitedSet)
+    protected IEnumerable<Connection> UnaccountedConnections(int vertex, HashSet<int> visitedSet)
     {
         return Vertices[vertex].Connections.Where(connection => !visitedSet.Contains(connection.To));
     }
 
-    protected IEnumerable<Connection> UnvisitedConnections<T>(int vertex, Dictionary<int, T> visitedDict)
+    protected IEnumerable<Connection> UnaccountedConnections<T>(int vertex, Dictionary<int, T> visitedDict)
     {
         return Vertices[vertex].Connections.Where(connection => !visitedDict.ContainsKey(connection.To));
     }
 
-    protected IEnumerable<Connection> VisitedConnections(int vertex, HashSet<int> visitedSet)
+    protected IEnumerable<Connection> AccountedConnections(int vertex, HashSet<int> visitedSet)
     {
         return Vertices[vertex].Connections.Where(connection => visitedSet.Contains(connection.To));
     }
 
-    protected IEnumerable<Connection> VisitedConnections<T>(int vertex, Dictionary<int, T> visitedDict)
+    protected IEnumerable<Connection> AccountedConnections<T>(int vertex, Dictionary<int, T> visitedDict)
     {
         return Vertices[vertex].Connections.Where(connection => visitedDict.ContainsKey(connection.To));
     }
@@ -226,7 +226,7 @@ public abstract partial class Graph<TData>
             visited.Add(v);
 
             // Enqueue connections
-            foreach (var connection in UnvisitedConnections(v, visited))
+            foreach (var connection in UnaccountedConnections(v, visited))
             {
                 queue.Enqueue(connection.To);
                 distance.Add(connection.To, distance[v] + 1);

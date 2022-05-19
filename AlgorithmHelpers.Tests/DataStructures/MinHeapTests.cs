@@ -17,7 +17,7 @@ public class MinHeapTests
             (3, 3)
         };
 
-        // Assert
+        // Act & Assert
         heap.Peek().Key.Should().Be(1);
         heap.Peek().Value.Should().Be(1);
         var item1 = heap.Pop();
@@ -30,7 +30,7 @@ public class MinHeapTests
         item3.Key.Should().Be(3);
         item3.Value.Should().Be(3);
     }
-    
+
     [Fact]
     public void Add_Pop_Many()
     {

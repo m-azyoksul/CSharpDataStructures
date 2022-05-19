@@ -7,7 +7,13 @@ public struct Vertex<T>
     public T? Data;
     public readonly List<Connection> Connections;
 
-    public Vertex(T? data, List<Connection> connections)
+    public Vertex()
+    {
+        Data = default;
+        Connections = new List<Connection>();
+    }
+
+    public Vertex(List<Connection> connections, T? data = default)
     {
         Data = data;
         Connections = connections;
@@ -19,11 +25,5 @@ public struct Vertex<T>
         Connections = new List<Connection>();
     }
 
-    public Vertex(List<Connection> connections)
-    {
-        Data = default;
-        Connections = connections;
-    }
-
-    public static Vertex<T> Empty() => new(default, new List<Connection>());
+    public static Vertex<T> Empty() => new();
 }

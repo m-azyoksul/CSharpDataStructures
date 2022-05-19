@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Graph;
 
-public partial class DirectedGraph<TVertexData> : Graph<TVertexData>
+public partial class DirectedGraph<TData> : Graph<TData>
 {
     #region Constructors
 
@@ -18,20 +18,43 @@ public partial class DirectedGraph<TVertexData> : Graph<TVertexData>
         foreach (var edge in edges)
         {
             if (!Vertices.ContainsKey(edge.From))
-                Vertices.Add(edge.From, Vertex<TVertexData>.Empty());
+                Vertices.Add(edge.From, Vertex<TData>.Empty());
 
             if (!Vertices.ContainsKey(edge.To))
-                Vertices.Add(edge.To, Vertex<TVertexData>.Empty());
+                Vertices.Add(edge.To, Vertex<TData>.Empty());
 
             Vertices[edge.From].Connections.Add(edge.To);
         }
     }
 
-    public DirectedGraph(Dictionary<int, Vertex<TVertexData>> vertices) : base(vertices)
+    public DirectedGraph(Dictionary<int, Vertex<TData>> vertices) : base(vertices)
     {
     }
 
     #endregion
+
+    /// <summary>
+    /// Takes the transpose of the graph. In other words, swaps the direction of all edges in the graph.
+    ///
+    /// Time Complexity: O(V + E)
+    /// Space Complexity: O(V + E)
+    /// </summary>
+    public DirectedGraph<TData> Transpose()
+    {
+        // Create a copy of the graph
+        var vertexDict = Vertices.ToDictionary(
+            vertex => vertex.Key,
+            vertex => new Vertex<TData>(vertex.Value.Data)
+        );
+        var transpose = new DirectedGraph<TData>(vertexDict);
+
+        // Add reversed edges from the copy to the original graph
+        foreach (var vertex in Vertices)
+        foreach (var connection in vertex.Value.Connections)
+            transpose.Vertices[connection.To].Connections.Add(vertex.Key);
+
+        return transpose;
+    }
 
     /// <summary>
     /// Time complexity: O(E)
@@ -69,10 +92,10 @@ public partial class DirectedGraph<TVertexData> : Graph<TVertexData>
         // Create an undirected vertex list from the directed vertex list
         var undirectedVertexDict = Vertices.ToDictionary(
             vertex => vertex.Key,
-            vertex => new Vertex<TVertexData>(vertex.Value.Data)
+            vertex => new Vertex<TData>(vertex.Value.Data)
         );
 
-        var undirectedGraph = new UndirectedGraph<TVertexData>(undirectedVertexDict);
+        var undirectedGraph = new UndirectedGraph<TData>(undirectedVertexDict);
         foreach (var vertex in Vertices)
         foreach (var connection in vertex.Value.Connections)
             undirectedGraph.AddEdge(vertex.Key, connection.To);
@@ -86,7 +109,7 @@ public partial class DirectedGraph<TVertexData> : Graph<TVertexData>
     /// TODO: This algorithm should have less complexity. Maybe investigate
     ///
     /// Time complexity: O((V + E)^2)
-    /// Space complexity: O((V + E) * v)
+    /// Space complexity: O((V + E) * V)
     /// </summary>
     public bool IsConnected2()
     {
@@ -102,7 +125,7 @@ public partial class DirectedGraph<TVertexData> : Graph<TVertexData>
         {
             var current = queue.Dequeue();
 
-            foreach (var connection in UnvisitedConnections(current, successors))
+            foreach (var connection in UnaccountedConnections(current, successors))
             {
                 queue.Enqueue(connection.To);
                 successors.Add(connection.To);
@@ -176,92 +199,5 @@ public partial class DirectedGraph<TVertexData> : Graph<TVertexData>
     {
         // TODO: Academic paper for the algorithm: https://stackoverflow.com/a/17107586/7279624
         throw new NotImplementedException();
-    }
-
-    /// <summary>
-    /// Find all strongly connected components using the Tarjan algorithm.
-    /// Implementation inspired by https://github.com/williamfiset/Algorithms
-    ///
-    /// Time complexity: O(V + E)
-    /// Space complexity: O(V)
-    /// </summary>
-    /// <returns>(The number of strongly connected components, for each vertex (id of vertex, index of scc))</returns>
-    public (int SccCount, Dictionary<int, int> SccDictionary) TarjanSccMap()
-    {
-        var id = Vertices.ToDictionary(v => v.Key, _ => -1);
-        var lowLink = Vertices.ToDictionary(v => v.Key, _ => 0);
-        var sccDict = Vertices.ToDictionary(v => v.Key, _ => 0);
-        var inStack = Vertices.ToDictionary(v => v.Key, _ => false);
-        var stack = new Stack<int>();
-        int newId = 0;
-        int sccCount = 0;
-
-        // Start DFS from each node
-        foreach (var vertex in Vertices.Keys)
-        {
-            if (id[vertex] == -1) // Unvisited
-            {
-                SccDfs(vertex, id, lowLink, sccDict, inStack, stack, ref newId, ref sccCount);
-            }
-        }
-
-        return (sccCount, sccDict);
-    }
-
-    private void SccDfs(int v,
-        Dictionary<int, int> id,
-        Dictionary<int, int> lowLink,
-        Dictionary<int, int> sccDict,
-        Dictionary<int, bool> inStack,
-        Stack<int> stack,
-        ref int newId,
-        ref int sccCount)
-    {
-        lowLink[v] = id[v] = newId++;
-        inStack[v] = true;
-        stack.Push(v);
-
-        foreach (var connection in AllConnections(v))
-        {
-            // If node has not been visited yet, visit it
-            if (id[connection.To] == -1) // Unvisited
-                SccDfs(connection.To, id, lowLink, sccDict, inStack, stack, ref newId, ref sccCount);
-
-            // If node is in stack, update lowest reachable value
-            if (inStack[connection.To])
-                lowLink[v] = Math.Min(lowLink[v], lowLink[connection.To]);
-        }
-
-        // If lowest reachable value has not changed we're at the root node
-        if (id[v] != lowLink[v])
-            return;
-
-        // Empty the seen stack until back to root node
-        for (int nodeToPop = stack.Pop();; nodeToPop = stack.Pop())
-        {
-            inStack[nodeToPop] = false;
-            sccDict[nodeToPop] = sccCount;
-            if (nodeToPop == v)
-                break;
-        }
-
-        sccCount++;
-    }
-
-    public List<List<int>> TarjanSccList()
-    {
-        // Call the SCC algorithm
-        (int count, Dictionary<int, int> sccDict) = TarjanSccMap();
-
-        // Initialize
-        var sccList = new List<List<int>>(count);
-        for (int i = 0; i < count; i++)
-            sccList.Add(new List<int>());
-
-        // Map the data
-        foreach (var v in Vertices.Keys)
-            sccList[sccDict[v]].Add(v);
-
-        return sccList;
     }
 }
