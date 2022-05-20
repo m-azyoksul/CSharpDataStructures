@@ -2,7 +2,7 @@
 
 namespace AlgorithmHelpers.DataStructures;
 
-public class MaxHeapKeyValue<TKey, TValue> : HeapKeyValue<TKey, TValue>
+public class IndexedMaxIndexedHeap<TKey, TValue> : IndexedHeap<TKey, TValue>
     where TKey : notnull
     where TValue : IComparable
 {

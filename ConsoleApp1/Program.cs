@@ -4,7 +4,7 @@ using System.Linq;
 using AlgorithmHelpers.DataStructures;
 
 Console.WriteLine("Hello World!");
-var heap = new MinHeap<int, int>();
+var heap = new IndexedMinHeap<int, int>();
 
 
 var stack = new Stack<int>();

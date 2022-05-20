@@ -12,12 +12,12 @@ namespace AlgorithmHelpers.DataStructures;
 ///     O(1) time key search
 ///     O(logn) time update and delete.
 /// </summary>
-public abstract class HeapKeyValue<TKey, TValue> : Heap<(TKey Key, TValue Value)>
+public abstract class IndexedHeap<TKey, TValue> : Heap<(TKey Key, TValue Value)>
     where TKey : notnull
 {
     protected readonly Dictionary<TKey, int> KeyIndex;
 
-    protected HeapKeyValue()
+    protected IndexedHeap()
     {
         KeyIndex = new Dictionary<TKey, int>();
     }
@@ -31,7 +31,7 @@ public abstract class HeapKeyValue<TKey, TValue> : Heap<(TKey Key, TValue Value)
         Items.Add(item);
         HeapifyUp(Items.Count - 1);
     }
-    
+
     public void Add(TKey key, TValue value)
     {
         Add((key, value));
@@ -43,17 +43,43 @@ public abstract class HeapKeyValue<TKey, TValue> : Heap<(TKey Key, TValue Value)
             throw new InvalidOperationException("Heap is empty");
 
         var min = Items[0];
-        KeyIndex.Remove(Items[0].Key);
+        KeyIndex.Remove(min.Key);
+        
+        if (Items.Count == 1)
+        {
+            Items.RemoveAt(0);
+        }
+        else
+        {
+            Items[0] = Items[^1];
+            KeyIndex[Items[0].Key] = 0;
+            Items.RemoveAt(Items.Count - 1);
 
-        Items[0] = Items[^1];
-        KeyIndex[Items[0].Key] = 0;
-        Items.RemoveAt(Items.Count - 1);
+            HeapifyDown(0);
+        }
 
-        HeapifyDown(0);
         return min;
     }
 
-    public void Update(TKey key, TValue value)
+    public int IndexOfKey(TKey key)
+    {
+        if (!KeyIndex.TryGetValue(key, out var index))
+            throw new ArgumentException("Key does not exist in heap");
+
+        return index;
+    }
+
+    public bool ContainsKey(TKey key)
+    {
+        return KeyIndex.ContainsKey(key);
+    }
+
+    public TValue ValueOfKey(TKey key)
+    {
+        return Items[IndexOfKey(key)].Value;
+    }
+
+    public void UpdateKey(TKey key, TValue value)
     {
         if (!KeyIndex.TryGetValue(key, out var index))
             throw new ArgumentException("Key does not exist in heap");
@@ -61,14 +87,6 @@ public abstract class HeapKeyValue<TKey, TValue> : Heap<(TKey Key, TValue Value)
         Items[index] = (key, value);
         HeapifyUp(index);
         HeapifyDown(index);
-    }
-
-    public new void Remove((TKey Key, TValue Value) item)
-    {
-        if (!KeyIndex.TryGetValue(item.Key, out var index))
-            throw new ArgumentException("Key does not exist in heap");
-
-        RemoveKey(item.Key);
     }
 
     public void RemoveKey(TKey key)
@@ -82,25 +100,5 @@ public abstract class HeapKeyValue<TKey, TValue> : Heap<(TKey Key, TValue Value)
         Items.RemoveAt(Items.Count - 1);
 
         HeapifyDown(index);
-    }
-
-
-    public int IndexOf(TKey key)
-    {
-        if (!KeyIndex.TryGetValue(key, out var index))
-            throw new ArgumentException("Key does not exist in heap");
-
-        return index;
-    }
-
-    public bool ContainsKey(TKey key)
-    {
-        return KeyIndex.ContainsKey(key);
-    }
-    
-    public TValue this[TKey key]
-    {
-        get => Items[IndexOf(key)].Value;
-        set => Update(key, value);
     }
 }

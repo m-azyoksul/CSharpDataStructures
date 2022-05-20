@@ -2,7 +2,7 @@
 
 namespace AlgorithmHelpers.DataStructures;
 
-public class MinHeap<TKey, TValue> : HeapKeyValue<TKey, TValue>
+public class IndexedMinHeap<TKey, TValue> : IndexedHeap<TKey, TValue>
     where TKey : notnull
     where TValue : IComparable
 {

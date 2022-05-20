@@ -295,7 +295,7 @@ public class GraphsToTest
         return new UndirectedGraph<string>(edges);
     }
 
-    public static DirectedGraph<string> UndirectedDoubleTick()
+    public static UndirectedGraph<string> UndirectedDoubleTick()
     {
         var edges = new List<(int, int)>
         {
@@ -307,6 +307,6 @@ public class GraphsToTest
             (4, 7),
         };
 
-        return new DirectedGraph<string>(edges);
+        return new UndirectedGraph<string>(edges);
     }
 }

@@ -100,7 +100,7 @@ public abstract partial class Graph<TData>
         CheckVertex(v1);
 
         var distance = new Dictionary<int, double>();
-        var candidates = new MinHeap<int, double> {{v1, 0}};
+        var candidates = new IndexedMinHeap<int, double> {{v1, 0}};
 
         while (candidates.Count > 0)
         {
@@ -116,8 +116,8 @@ public abstract partial class Graph<TData>
                     candidates.Add(connection.To, newDistance);
 
                 // Update candidate
-                else if (candidates[connection.To] > newDistance)
-                    candidates[connection.To] = newDistance;
+                else if (candidates.ValueOfKey(connection.To) > newDistance)
+                    candidates.UpdateKey(connection.To, newDistance);
             }
         }
 
@@ -141,7 +141,7 @@ public abstract partial class Graph<TData>
         CheckVertices(v1, v2);
 
         var distanceFound = new HashSet<int> {v1};
-        var candidates = new MinHeap<int, double> {(v1, 0)};
+        var candidates = new IndexedMinHeap<int, double> {(v1, 0)};
         var predecessor = new Dictionary<int, int> {{v1, v1}};
 
         while (candidates.Count > 0)
@@ -174,10 +174,10 @@ public abstract partial class Graph<TData>
                 }
 
                 // Update candidate
-                if (candidates[connection.To] > newDistance)
+                if (candidates.ValueOfKey(connection.To) > newDistance)
                 {
                     predecessor[connection.To] = minCandidate.Key;
-                    candidates[connection.To] = newDistance;
+                    candidates.UpdateKey(connection.To, newDistance);
                 }
             }
         }
@@ -313,7 +313,7 @@ public abstract partial class Graph<TData>
         CheckVertices(v1, v2);
 
         var distanceFound = new HashSet<int> {v1};
-        var candidates = new MinHeap<int, double> {(v1, estimator(v1, v2))};
+        var candidates = new IndexedMinHeap<int, double> {(v1, estimator(v1, v2))};
         var predecessor = new Dictionary<int, int> {{v1, v1}};
 
         while (candidates.Count > 0)
@@ -346,10 +346,10 @@ public abstract partial class Graph<TData>
                 }
 
                 // Update candidate
-                if (candidates[connection.To] > newDistance)
+                if (candidates.ValueOfKey(connection.To) > newDistance)
                 {
                     predecessor[connection.To] = minCandidate.Key;
-                    candidates[connection.To] = newDistance;
+                    candidates.UpdateKey(connection.To, newDistance);
                 }
             }
         }
