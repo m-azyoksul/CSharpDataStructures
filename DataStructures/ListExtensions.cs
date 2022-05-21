@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Graph;
+namespace DataStructures;
 
 public static class ListExtensions
 {

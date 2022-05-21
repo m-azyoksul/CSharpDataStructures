@@ -4,7 +4,7 @@ namespace Graph.Tests;
 
 public class GraphsToTest
 {
-    public static DirectedGraph<string> Directed5By5Matrix()
+    public static DataStructures.Graph.DirectedGraph<string> Directed5By5Matrix()
     {
         var edges = new List<(int, int)>();
 
@@ -28,10 +28,10 @@ public class GraphsToTest
             }
         }
 
-        return new DirectedGraph<string>(edges);
+        return new DataStructures.Graph.DirectedGraph<string>(edges);
     }
 
-    public static DirectedGraph<string> DirectedBalancedTree()
+    public static DataStructures.Graph.DirectedGraph<string> DirectedBalancedTree()
     {
         var edges = new List<(int, int)>();
 
@@ -41,12 +41,12 @@ public class GraphsToTest
             edges.Add((i, 2 * i + 2));
         }
 
-        return new DirectedGraph<string>(edges);
+        return new DataStructures.Graph.DirectedGraph<string>(edges);
     }
 
-    public static DirectedGraph<string> DirectedCollar()
+    public static DataStructures.Graph.DirectedGraph<string> DirectedCollar()
     {
-        var graph = new DirectedGraph<string>();
+        var graph = new DataStructures.Graph.DirectedGraph<string>();
         // Add 7 nodes
         for (int i = 0; i < 7; i++)
             graph.AddVertex(i);
@@ -68,10 +68,10 @@ public class GraphsToTest
             (6, 4),
         };
 
-        return new DirectedGraph<string>(edges);
+        return new DataStructures.Graph.DirectedGraph<string>(edges);
     }
 
-    public static DirectedGraph<string> DirectedConnected531()
+    public static DataStructures.Graph.DirectedGraph<string> DirectedConnected531()
     {
         var edges = new List<(int, int)>();
 
@@ -93,13 +93,13 @@ public class GraphsToTest
         edges.Add((7, 5));
         edges.Add((5, 7));
 
-        var graph = new DirectedGraph<string>(edges);
+        var graph = new DataStructures.Graph.DirectedGraph<string>(edges);
         graph.AddVertex(8);
 
         return graph;
     }
 
-    public static DirectedGraph<string> DirectedCycle10000()
+    public static DataStructures.Graph.DirectedGraph<string> DirectedCycle10000()
     {
         var edges = new List<(int, int)>();
 
@@ -107,10 +107,10 @@ public class GraphsToTest
             edges.Add((i, i + 1));
         edges.Add((9999, 0));
 
-        return new DirectedGraph<string>(edges);
+        return new DataStructures.Graph.DirectedGraph<string>(edges);
     }
 
-    public static DirectedGraph<string> DirectedWindow()
+    public static DataStructures.Graph.DirectedGraph<string> DirectedWindow()
     {
         var edges = new List<(int, int)>
         {
@@ -128,30 +128,30 @@ public class GraphsToTest
             (4, 5),
         };
 
-        return new DirectedGraph<string>(edges);
+        return new DataStructures.Graph.DirectedGraph<string>(edges);
     }
 
-    public static DirectedGraph<string> DirectedStar()
+    public static DataStructures.Graph.DirectedGraph<string> DirectedStar()
     {
         var edges = new List<(int, int)>();
 
         for (int i = 1; i <= 5; i++)
             edges.Add((0, i));
 
-        return new DirectedGraph<string>(edges);
+        return new DataStructures.Graph.DirectedGraph<string>(edges);
     }
 
-    public static DirectedGraph<string> DirectedInboundStar()
+    public static DataStructures.Graph.DirectedGraph<string> DirectedInboundStar()
     {
         var edges = new List<(int, int)>();
 
         for (int i = 1; i <= 5; i++)
             edges.Add((i, 0));
 
-        return new DirectedGraph<string>(edges);
+        return new DataStructures.Graph.DirectedGraph<string>(edges);
     }
 
-    public static DirectedGraph<string> DirectedDoubleTick()
+    public static DataStructures.Graph.DirectedGraph<string> DirectedDoubleTick()
     {
         var edges = new List<(int, int)>
         {
@@ -163,11 +163,11 @@ public class GraphsToTest
             (4, 7),
         };
 
-        return new DirectedGraph<string>(edges);
+        return new DataStructures.Graph.DirectedGraph<string>(edges);
     }
 
 
-    public static UndirectedGraph<string> Undirected5By5Matrix()
+    public static DataStructures.Graph.UndirectedGraph<string> Undirected5By5Matrix()
     {
         var edges = new List<(int, int)>();
 
@@ -191,10 +191,10 @@ public class GraphsToTest
             }
         }
 
-        return new UndirectedGraph<string>(edges);
+        return new DataStructures.Graph.UndirectedGraph<string>(edges);
     }
 
-    public static UndirectedGraph<string> UndirectedBalancedTree()
+    public static DataStructures.Graph.UndirectedGraph<string> UndirectedBalancedTree()
     {
         var edges = new List<(int, int)>();
 
@@ -204,10 +204,10 @@ public class GraphsToTest
             edges.Add((i, 2 * i + 2));
         }
 
-        return new UndirectedGraph<string>(edges);
+        return new DataStructures.Graph.UndirectedGraph<string>(edges);
     }
 
-    public static UndirectedGraph<string> UndirectedCollar()
+    public static DataStructures.Graph.UndirectedGraph<string> UndirectedCollar()
     {
         var edges = new List<(int, int)>
         {
@@ -226,10 +226,10 @@ public class GraphsToTest
             (6, 4),
         };
 
-        return new UndirectedGraph<string>(edges);
+        return new DataStructures.Graph.UndirectedGraph<string>(edges);
     }
 
-    public static UndirectedGraph<string> UndirectedConnected531()
+    public static DataStructures.Graph.UndirectedGraph<string> UndirectedConnected531()
     {
         var edges = new List<(int, int)>();
 
@@ -247,13 +247,13 @@ public class GraphsToTest
         edges.Add((6, 7));
         edges.Add((7, 5));
 
-        var graph = new UndirectedGraph<string>(edges);
+        var graph = new DataStructures.Graph.UndirectedGraph<string>(edges);
         graph.AddVertex(8);
 
         return graph;
     }
 
-    public static UndirectedGraph<string> UndirectedCycle10000()
+    public static DataStructures.Graph.UndirectedGraph<string> UndirectedCycle10000()
     {
         var edges = new List<(int, int)>();
 
@@ -261,10 +261,10 @@ public class GraphsToTest
             edges.Add((i, i + 1));
         edges.Add((9999, 0));
 
-        return new UndirectedGraph<string>(edges);
+        return new DataStructures.Graph.UndirectedGraph<string>(edges);
     }
 
-    public static UndirectedGraph<string> UndirectedWindow()
+    public static DataStructures.Graph.UndirectedGraph<string> UndirectedWindow()
     {
         var edges = new List<(int, int)>
         {
@@ -282,20 +282,20 @@ public class GraphsToTest
             (4, 5),
         };
 
-        return new UndirectedGraph<string>(edges);
+        return new DataStructures.Graph.UndirectedGraph<string>(edges);
     }
 
-    public static UndirectedGraph<string> UndirectedStar()
+    public static DataStructures.Graph.UndirectedGraph<string> UndirectedStar()
     {
         var edges = new List<(int, int)>();
 
         for (int i = 1; i <= 5; i++)
             edges.Add((0, i));
 
-        return new UndirectedGraph<string>(edges);
+        return new DataStructures.Graph.UndirectedGraph<string>(edges);
     }
 
-    public static UndirectedGraph<string> UndirectedDoubleTick()
+    public static DataStructures.Graph.UndirectedGraph<string> UndirectedDoubleTick()
     {
         var edges = new List<(int, int)>
         {
@@ -307,6 +307,6 @@ public class GraphsToTest
             (4, 7),
         };
 
-        return new UndirectedGraph<string>(edges);
+        return new DataStructures.Graph.UndirectedGraph<string>(edges);
     }
 }

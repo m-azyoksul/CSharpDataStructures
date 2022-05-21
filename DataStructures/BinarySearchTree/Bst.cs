@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DataStructures.BinarySearchTree;
 
@@ -32,6 +33,8 @@ public abstract class Bst<T, TNode>
     }
 
     public abstract void Add(T value);
+
+    public abstract bool Remove(T value);
 
     public T Min()
     {
@@ -75,8 +78,6 @@ public abstract class Bst<T, TNode>
 
     public abstract T PopMax();
 
-    public abstract bool Remove(T value);
-
     public bool Contains(T value)
     {
         if (Root == null)
@@ -110,23 +111,45 @@ public abstract class Bst<T, TNode>
         }
     }
 
+    public int Height()
+    {
+        return Height(Root);
+    }
+
+    private static int Height(BstNode<T, TNode>? node)
+    {
+        if (node == null)
+            return 0;
+
+        return 1 + Math.Max(Height(node.Left), Height(node.Right));
+    }
+
+    public bool IsEmpty()
+    {
+        return Root == null;
+    }
+
     public void Clear()
     {
         Root = null;
     }
 
-    public void PrintInOrder()
+    public List<T> ToSortedList()
     {
-        PrintInOrder(Root);
+        var list = new List<T>();
+        ToSortedList(Root, list);
+        return list;
     }
 
-    private static void PrintInOrder(BstNode<T, TNode>? node)
+    private static void ToSortedList(BstNode<T, TNode>? node, List<T> list)
     {
-        if (node == null)
-            return;
+        while (true)
+        {
+            if (node == null) return;
 
-        PrintInOrder(node.Left);
-        Console.Write(node.Value + " ");
-        PrintInOrder(node.Right);
+            ToSortedList(node.Left, list);
+            list.Add(node.Value);
+            node = node.Right;
+        }
     }
 }

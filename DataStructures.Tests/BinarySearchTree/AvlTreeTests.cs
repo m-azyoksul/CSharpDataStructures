@@ -23,7 +23,7 @@ public class AvlTreeTests
         tree.Root!.Value.Should().Be(1);
         tree.Root.Left.Should().BeNull();
         tree.Root.Right.Should().BeNull();
-        tree.Root.Height.Should().Be(1);
+        tree.Height().Should().Be(1);
         min1.Should().Be(1);
         max1.Should().Be(1);
 
@@ -40,7 +40,7 @@ public class AvlTreeTests
         tree.Root.Right.Left.Should().BeNull();
         tree.Root.Right.Right.Should().BeNull();
         tree.Root.Right.Height.Should().Be(1);
-        tree.Root.Height.Should().Be(2);
+        tree.Height().Should().Be(2);
         min2.Should().Be(1);
         max2.Should().Be(2);
 
@@ -61,7 +61,7 @@ public class AvlTreeTests
         tree.Root.Right.Left.Should().BeNull();
         tree.Root.Right.Right.Should().BeNull();
         tree.Root.Right.Height.Should().Be(1);
-        tree.Root.Height.Should().Be(2);
+        tree.Height().Should().Be(2);
         min3.Should().Be(1);
         max3.Should().Be(3);
     }
@@ -82,7 +82,7 @@ public class AvlTreeTests
         tree.Root!.Value.Should().Be(3);
         tree.Root.Left.Should().BeNull();
         tree.Root.Right.Should().BeNull();
-        tree.Root.Height.Should().Be(1);
+        tree.Height().Should().Be(1);
         min1.Should().Be(3);
         max1.Should().Be(3);
 
@@ -99,7 +99,7 @@ public class AvlTreeTests
         tree.Root.Left.Right.Should().BeNull();
         tree.Root.Left.Height.Should().Be(1);
         tree.Root.Right.Should().BeNull();
-        tree.Root.Height.Should().Be(2);
+        tree.Height().Should().Be(2);
         min2.Should().Be(2);
         max2.Should().Be(3);
 
@@ -120,7 +120,7 @@ public class AvlTreeTests
         tree.Root.Right.Left.Should().BeNull();
         tree.Root.Right.Right.Should().BeNull();
         tree.Root.Right.Height.Should().Be(1);
-        tree.Root.Height.Should().Be(2);
+        tree.Height().Should().Be(2);
         min3.Should().Be(1);
         max3.Should().Be(3);
     }
@@ -155,7 +155,7 @@ public class AvlTreeTests
         tree.Root.Right!.Value.Should().Be(5);
         tree.Root.Right.Left.Should().BeNull();
         tree.Root.Right.Right.Should().BeNull();
-        tree.Root.Height.Should().Be(3);
+        tree.Height().Should().Be(3);
 
         // Act
         tree.Add(3);
@@ -180,7 +180,7 @@ public class AvlTreeTests
         tree.Root.Right.Right!.Value.Should().Be(5);
         tree.Root.Right.Right.Left.Should().BeNull();
         tree.Root.Right.Right.Right.Should().BeNull();
-        tree.Root.Height.Should().Be(3);
+        tree.Height().Should().Be(3);
     }
 
     [Fact]
@@ -213,7 +213,7 @@ public class AvlTreeTests
         tree.Root.Right.Right!.Value.Should().Be(5);
         tree.Root.Right.Right.Left.Should().BeNull();
         tree.Root.Right.Right.Right.Should().BeNull();
-        tree.Root.Height.Should().Be(3);
+        tree.Height().Should().Be(3);
 
         // Act
         tree.Add(3);
@@ -282,7 +282,7 @@ public class AvlTreeTests
         tree.Root.Right.Right!.Value.Should().Be(7);
         tree.Root.Right.Right.Left.Should().BeNull();
         tree.Root.Right.Right.Right.Should().BeNull();
-        tree.Root.Height.Should().Be(4);
+        tree.Height().Should().Be(4);
 
         // Act
         var min1 = tree.PopMin();
@@ -311,7 +311,7 @@ public class AvlTreeTests
         tree.Root.Right.Right!.Value.Should().Be(7);
         tree.Root.Right.Right.Left.Should().BeNull();
         tree.Root.Right.Right.Right.Should().BeNull();
-        tree.Root.Height.Should().Be(4);
+        tree.Height().Should().Be(4);
 
         // Act
         var min2 = tree.PopMin();
@@ -337,7 +337,7 @@ public class AvlTreeTests
         tree.Root.Right.Right!.Value.Should().Be(7);
         tree.Root.Right.Right.Left.Should().BeNull();
         tree.Root.Right.Right.Right.Should().BeNull();
-        tree.Root.Height.Should().Be(3);
+        tree.Height().Should().Be(3);
     }
 
     [Fact]
@@ -382,7 +382,7 @@ public class AvlTreeTests
         tree.Root.Right.Right.Left.Left.Should().BeNull();
         tree.Root.Right.Right.Left.Right.Should().BeNull();
         tree.Root.Right.Right.Right.Should().BeNull();
-        tree.Root.Height.Should().Be(4);
+        tree.Height().Should().Be(4);
 
         // Act
         var max1 = tree.PopMax();
@@ -411,7 +411,7 @@ public class AvlTreeTests
         tree.Root.Right.Right!.Value.Should().Be(6);
         tree.Root.Right.Right.Left.Should().BeNull();
         tree.Root.Right.Right.Right.Should().BeNull();
-        tree.Root.Height.Should().Be(4);
+        tree.Height().Should().Be(4);
 
         // Act
         var max2 = tree.PopMax();
@@ -437,7 +437,7 @@ public class AvlTreeTests
         tree.Root.Right.Right!.Value.Should().Be(5);
         tree.Root.Right.Right.Left.Should().BeNull();
         tree.Root.Right.Right.Right.Should().BeNull();
-        tree.Root.Height.Should().Be(3);
+        tree.Height().Should().Be(3);
     }
 
     [Fact]

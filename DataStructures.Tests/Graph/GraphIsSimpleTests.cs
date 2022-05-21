@@ -8,7 +8,7 @@ public class GraphIsSimpleTests
     public void Directed_IsSimple_EmptyGraph_ReturnsTrue()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
 
         // Act
         var result = graph.IsSimple();
@@ -21,7 +21,7 @@ public class GraphIsSimpleTests
     public void Directed_IsSimple_SingleNodeGraph_ReturnsTrue()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddVertex(0);
 
         // Act
@@ -35,7 +35,7 @@ public class GraphIsSimpleTests
     public void Directed_IsSimple_SingleEdgeGraph_ReturnsTrue()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddVertex(0);
         graph.AddVertex(1);
         graph.AddEdge(0, 1);
@@ -51,7 +51,7 @@ public class GraphIsSimpleTests
     public void Directed_IsSimple_DoubleEdgeGraph_ReturnsTrue()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddVertex(0);
         graph.AddVertex(1);
         graph.AddEdge(0, 1);
@@ -68,7 +68,7 @@ public class GraphIsSimpleTests
     public void Directed_IsSimple_SelfLoop_ReturnsFalse()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddVertex(0);
         graph.AddEdge(0, 0);
 
@@ -83,7 +83,7 @@ public class GraphIsSimpleTests
     public void Directed_IsSimple_MultipleSelfLoops_ReturnsFalse()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddVertex(0);
         graph.AddEdge(0, 0);
         graph.AddEdge(0, 0);
@@ -99,7 +99,7 @@ public class GraphIsSimpleTests
     public void Directed_IsSimple_SelfLoopWithOtherEdges_ReturnsFalse()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddVertex(0);
         graph.AddVertex(1);
         graph.AddVertex(2);
@@ -224,7 +224,7 @@ public class GraphIsSimpleTests
     public void Undirected_IsSimple_EmptyGraph_ReturnsTrue()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
 
         // Act
         var result = graph.IsSimple();
@@ -237,7 +237,7 @@ public class GraphIsSimpleTests
     public void Undirected_IsSimple_SingleNodeGraph_ReturnsTrue()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
         graph.AddVertex(0);
 
         // Act
@@ -251,7 +251,7 @@ public class GraphIsSimpleTests
     public void Undirected_IsSimple_SingleEdgeGraph_ReturnsTrue()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
         graph.AddVertex(0);
         graph.AddVertex(1);
         graph.AddEdge(0, 1);
@@ -267,7 +267,7 @@ public class GraphIsSimpleTests
     public void Undirected_IsSimple_DoubleEdgeGraph_ReturnsFalse()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
         graph.AddVertex(0);
         graph.AddVertex(1);
         graph.AddEdge(0, 1);
@@ -284,7 +284,7 @@ public class GraphIsSimpleTests
     public void Undirected_IsSimple_SelfLoop_ReturnsFalse()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
         graph.AddVertex(0);
         graph.AddEdge(0, 0);
 
@@ -299,7 +299,7 @@ public class GraphIsSimpleTests
     public void Undirected_IsSimple_MultipleSelfLoops_ReturnsFalse()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
         graph.AddVertex(0);
         graph.AddEdge(0, 0);
         graph.AddEdge(0, 0);
@@ -315,7 +315,7 @@ public class GraphIsSimpleTests
     public void Undirected_IsSimple_SelfLoopWithOtherEdges_ReturnsFalse()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
         graph.AddVertex(0);
         graph.AddVertex(1);
         graph.AddVertex(2);

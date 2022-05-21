@@ -10,7 +10,7 @@ public class GraphAStarTests
     public void Directed_AStar_Square()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddEdge(0, 1, 1);
         graph.AddEdge(0, 4, 3);
         graph.AddEdge(1, 5, 4);

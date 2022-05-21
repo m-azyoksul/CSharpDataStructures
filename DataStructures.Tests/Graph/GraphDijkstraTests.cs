@@ -10,7 +10,7 @@ public class GraphDijkstraTests
     public void Directed_Dijkstra_Path_EquilateralTriangle()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 1, 1);
@@ -27,7 +27,7 @@ public class GraphDijkstraTests
     public void Directed_Dijkstra_Full_EquilateralTriangle()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 1, 1);
@@ -49,7 +49,7 @@ public class GraphDijkstraTests
     public void Directed_Dijkstra_Path_DegradedTriangle()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 3);
         graph.AddEdge(3, 1, 1);
@@ -66,7 +66,7 @@ public class GraphDijkstraTests
     public void Directed_Dijkstra_Full_DegradedTriangle()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 3);
         graph.AddEdge(3, 1, 1);
@@ -88,7 +88,7 @@ public class GraphDijkstraTests
     public void Directed_Dijkstra_Path_Square()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 4, 1);
@@ -106,7 +106,7 @@ public class GraphDijkstraTests
     public void Directed_Dijkstra_Full_Square()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 4, 1);
@@ -130,7 +130,7 @@ public class GraphDijkstraTests
     public void Directed_Dijkstra_Path_NonConnected()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 1, 1);
@@ -148,7 +148,7 @@ public class GraphDijkstraTests
     public void Directed_Dijkstra_Full_NonConnected()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 1, 1);
@@ -171,7 +171,7 @@ public class GraphDijkstraTests
     public void Directed_Dijkstra_Path_NegativeWeight()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, -5);
         graph.AddEdge(3, 4, 2);
@@ -190,7 +190,7 @@ public class GraphDijkstraTests
     public void Directed_Dijkstra_Full_NegativeWeight()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, -5);
         graph.AddEdge(3, 4, 2);
@@ -215,7 +215,7 @@ public class GraphDijkstraTests
     public void Directed_Dijkstra_Path_PentagonWithCenter()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddEdge(1, 2, 10);
         graph.AddEdge(2, 3, 9);
         graph.AddEdge(3, 4, 4);
@@ -239,7 +239,7 @@ public class GraphDijkstraTests
     public void Directed_Dijkstra_Full_PentagonWithCenter()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddEdge(1, 2, 10);
         graph.AddEdge(2, 3, 9);
         graph.AddEdge(3, 4, 4);
@@ -360,7 +360,7 @@ public class GraphDijkstraTests
     public void Undirected_Dijkstra_Path_EquilateralTriangle()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 1, 1);
@@ -377,7 +377,7 @@ public class GraphDijkstraTests
     public void Undirected_Dijkstra_Full_EquilateralTriangle()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 1, 1);
@@ -399,7 +399,7 @@ public class GraphDijkstraTests
     public void Undirected_Dijkstra_Path_DegradedTriangle()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 1, 3);
@@ -416,7 +416,7 @@ public class GraphDijkstraTests
     public void Undirected_Dijkstra_Full_DegradedTriangle()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 1, 3);
@@ -438,7 +438,7 @@ public class GraphDijkstraTests
     public void Undirected_Dijkstra_Path_Square()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 4, 1);
@@ -456,7 +456,7 @@ public class GraphDijkstraTests
     public void Undirected_Dijkstra_Full_Square()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 4, 1);
@@ -480,7 +480,7 @@ public class GraphDijkstraTests
     public void Undirected_Dijkstra_Path_NonConnected()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 1, 1);
@@ -498,7 +498,7 @@ public class GraphDijkstraTests
     public void Undirected_Dijkstra_Full_NonConnected()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, 1);
         graph.AddEdge(3, 1, 1);
@@ -521,7 +521,7 @@ public class GraphDijkstraTests
     public void Undirected_Dijkstra_Path_NegativeWeight()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, -5);
         graph.AddEdge(3, 4, 2);
@@ -540,7 +540,7 @@ public class GraphDijkstraTests
     public void Undirected_Dijkstra_Full_NegativeWeight()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
         graph.AddEdge(1, 2, 1);
         graph.AddEdge(2, 3, -5);
         graph.AddEdge(3, 4, 2);
@@ -565,7 +565,7 @@ public class GraphDijkstraTests
     public void Undirected_Dijkstra_Path_PentagonWithCenter()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
         graph.AddEdge(1, 2, 10);
         graph.AddEdge(2, 3, 9);
         graph.AddEdge(3, 4, 4);
@@ -589,7 +589,7 @@ public class GraphDijkstraTests
     public void Undirected_Dijkstra_Full_PentagonWithCenter()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
         graph.AddEdge(1, 2, 10);
         graph.AddEdge(2, 3, 9);
         graph.AddEdge(3, 4, 4);

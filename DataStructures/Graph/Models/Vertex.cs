@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Graph;
+namespace DataStructures.Graph;
 
 public struct Vertex<T>
 {

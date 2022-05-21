@@ -11,7 +11,7 @@ public class GraphElementaryTests
     public void DirectedGraph_AddEdge_Success()
     {
         // Arrange
-        var graph = new DirectedGraph<string>();
+        var graph = new DataStructures.Graph.DirectedGraph<string>();
 
         // Act
         graph.AddEdge(0, 1);
@@ -27,7 +27,7 @@ public class GraphElementaryTests
     public void UndirectedGraph_AddEdge_Success()
     {
         // Arrange
-        var graph = new UndirectedGraph<string>();
+        var graph = new DataStructures.Graph.UndirectedGraph<string>();
 
         // Act
         graph.AddEdge(0, 1);
@@ -44,7 +44,7 @@ public class GraphElementaryTests
     public void DirectedGraph_AddEdgePair_Success()
     {
         // Arrange
-        var graph = new DirectedGraph<string>();
+        var graph = new DataStructures.Graph.DirectedGraph<string>();
 
         // Act
         graph.AddEdge((0, 1));
@@ -60,7 +60,7 @@ public class GraphElementaryTests
     public void UndirectedGraph_AddEdgePair_Success()
     {
         // Arrange
-        var graph = new UndirectedGraph<string>();
+        var graph = new DataStructures.Graph.UndirectedGraph<string>();
 
         // Act
         graph.AddEdge((0, 1));
@@ -77,7 +77,7 @@ public class GraphElementaryTests
     public void DirectedGraph_AddEdgeList_Success()
     {
         // Arrange
-        var graph = new DirectedGraph<string>();
+        var graph = new DataStructures.Graph.DirectedGraph<string>();
 
         // Act
         graph.AddEdges(new List<(int, int)> {(0, 1), (1, 2)});
@@ -95,7 +95,7 @@ public class GraphElementaryTests
     public void UndirectedGraph_AddEdgeList_Success()
     {
         // Arrange
-        var graph = new UndirectedGraph<string>();
+        var graph = new DataStructures.Graph.UndirectedGraph<string>();
 
         // Act
         graph.AddEdges(new List<(int, int)> {(0, 1), (1, 2)});
@@ -115,7 +115,7 @@ public class GraphElementaryTests
     public void DirectedGraph_RemoveEdge_Success()
     {
         // Arrange
-        var graph = new DirectedGraph<string>();
+        var graph = new DataStructures.Graph.DirectedGraph<string>();
         graph.AddEdge(0, 1);
 
         // Act
@@ -131,7 +131,7 @@ public class GraphElementaryTests
     public void UndirectedGraph_RemoveEdge_Success()
     {
         // Arrange
-        var graph = new UndirectedGraph<string>();
+        var graph = new DataStructures.Graph.UndirectedGraph<string>();
         graph.AddEdge(0, 1);
 
         // Act
@@ -147,7 +147,7 @@ public class GraphElementaryTests
     public void DirectedGraph_RemoveEdge_Fail()
     {
         // Arrange
-        var graph = new DirectedGraph<string>();
+        var graph = new DataStructures.Graph.DirectedGraph<string>();
         graph.AddEdge(0, 1);
 
         // Act
@@ -161,7 +161,7 @@ public class GraphElementaryTests
     public void UndirectedGraph_RemoveEdge_Fail()
     {
         // Arrange
-        var graph = new UndirectedGraph<string>();
+        var graph = new DataStructures.Graph.UndirectedGraph<string>();
         graph.AddEdge(0, 1);
 
         // Act
@@ -175,7 +175,7 @@ public class GraphElementaryTests
     public void DirectedGraph_RemoveEdgePair_Success()
     {
         // Arrange
-        var graph = new DirectedGraph<string>();
+        var graph = new DataStructures.Graph.DirectedGraph<string>();
         graph.AddEdge(0, 1);
 
         // Act
@@ -191,7 +191,7 @@ public class GraphElementaryTests
     public void UndirectedGraph_RemoveEdgePair_Success()
     {
         // Arrange
-        var graph = new UndirectedGraph<string>();
+        var graph = new DataStructures.Graph.UndirectedGraph<string>();
         graph.AddEdge(0, 1);
 
         // Act
@@ -207,7 +207,7 @@ public class GraphElementaryTests
     public void DirectedGraph_RemoveEdgeList_Success()
     {
         // Arrange
-        var graph = new DirectedGraph<string>();
+        var graph = new DataStructures.Graph.DirectedGraph<string>();
         graph.AddEdges(new List<(int, int)> {(0, 1), (1, 2)});
 
         // Act
@@ -224,7 +224,7 @@ public class GraphElementaryTests
     public void UndirectedGraph_RemoveEdgeList_Success()
     {
         // Arrange
-        var graph = new UndirectedGraph<string>();
+        var graph = new DataStructures.Graph.UndirectedGraph<string>();
         graph.AddEdges(new List<(int, int)> {(0, 1), (1, 2)});
 
         // Act
@@ -241,7 +241,7 @@ public class GraphElementaryTests
     public void DirectedGraph_AddVertex_Success()
     {
         // Arrange
-        var graph = new DirectedGraph<string>();
+        var graph = new DataStructures.Graph.DirectedGraph<string>();
 
         // Act
         graph.AddVertex(0);
@@ -254,7 +254,7 @@ public class GraphElementaryTests
     public void UndirectedGraph_AddVertex_Success()
     {
         // Arrange
-        var graph = new UndirectedGraph<string>();
+        var graph = new DataStructures.Graph.UndirectedGraph<string>();
 
         // Act
         graph.AddVertex(0);
@@ -267,7 +267,7 @@ public class GraphElementaryTests
     public void DirectedGraph_AddVertex_Fail()
     {
         // Arrange
-        var graph = new DirectedGraph<string>();
+        var graph = new DataStructures.Graph.DirectedGraph<string>();
         graph.AddVertex(0);
 
         // Act
@@ -281,7 +281,7 @@ public class GraphElementaryTests
     public void UndirectedGraph_AddVertex_Fail()
     {
         // Arrange
-        var graph = new UndirectedGraph<string>();
+        var graph = new DataStructures.Graph.UndirectedGraph<string>();
         graph.AddVertex(0);
 
         // Act
@@ -295,7 +295,7 @@ public class GraphElementaryTests
     public void DirectedGraph_RemoveVertex_Success()
     {
         // Arrange
-        var graph = new DirectedGraph<string>();
+        var graph = new DataStructures.Graph.DirectedGraph<string>();
         graph.AddVertex(0);
 
         // Act
@@ -309,7 +309,7 @@ public class GraphElementaryTests
     public void UndirectedGraph_RemoveVertex_Success()
     {
         // Arrange
-        var graph = new UndirectedGraph<string>();
+        var graph = new DataStructures.Graph.UndirectedGraph<string>();
         graph.AddVertex(0);
 
         // Act
@@ -323,7 +323,7 @@ public class GraphElementaryTests
     public void DirectedGraph_RemoveVertex_Fail()
     {
         // Arrange
-        var graph = new DirectedGraph<string>();
+        var graph = new DataStructures.Graph.DirectedGraph<string>();
 
         // Act
         var action = () => graph.RemoveVertex(0);
@@ -336,7 +336,7 @@ public class GraphElementaryTests
     public void UndirectedGraph_RemoveVertex_Fail()
     {
         // Arrange
-        var graph = new UndirectedGraph<string>();
+        var graph = new DataStructures.Graph.UndirectedGraph<string>();
 
         // Act
         var action = () => graph.RemoveVertex(0);

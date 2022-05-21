@@ -102,7 +102,7 @@ public class GraphSearchTests
     public void Directed_BfsVertexTraversal_FromNode_InvalidVertex()
     {
         // Arrange
-        var graph = new DirectedGraph<string>();
+        var graph = new DataStructures.Graph.DirectedGraph<string>();
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => graph.BfsVertexTraversal(0));
@@ -204,7 +204,7 @@ public class GraphSearchTests
     public void Undirected_BfsVertexTraversal_FromNode_InvalidVertex()
     {
         // Arrange
-        var graph = new UndirectedGraph<string>();
+        var graph = new DataStructures.Graph.UndirectedGraph<string>();
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => graph.BfsVertexTraversal(0));
@@ -306,7 +306,7 @@ public class GraphSearchTests
     public void Directed_DfsVertexTraversal_FromNode_Collar_InvalidVertex()
     {
         // Arrange
-        var graph = new DirectedGraph<string>();
+        var graph = new DataStructures.Graph.DirectedGraph<string>();
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => graph.DfsVertexTraversal(0));
@@ -408,7 +408,7 @@ public class GraphSearchTests
     public void Undirected_DfsVertexTraversal_FromNode_InvalidVertex()
     {
         // Arrange
-        var graph = new UndirectedGraph<string>();
+        var graph = new DataStructures.Graph.UndirectedGraph<string>();
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => graph.DfsVertexTraversal(0));
@@ -510,7 +510,7 @@ public class GraphSearchTests
     public void Directed_DfsVertexTraversalIterative_FromNode_InvalidVertex()
     {
         // Arrange
-        var graph = new DirectedGraph<string>();
+        var graph = new DataStructures.Graph.DirectedGraph<string>();
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => graph.DfsVertexTraversalIterative(0));
@@ -612,7 +612,7 @@ public class GraphSearchTests
     public void Undirected_DfsVertexTraversalIterative_FromNode_InvalidVertex()
     {
         // Arrange
-        var graph = new UndirectedGraph<string>();
+        var graph = new DataStructures.Graph.UndirectedGraph<string>();
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => graph.DfsVertexTraversalIterative(0));
@@ -864,7 +864,7 @@ public class GraphSearchTests
     public void Directed_BfsEdgeTraversal_FromNode_InvalidVertex()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => graph.BfsEdgeTraversal(0));
@@ -1142,7 +1142,7 @@ public class GraphSearchTests
     public void Undirected_BfsEdgeTraversal_FromNode_InvalidVertex()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => graph.BfsEdgeTraversal(0));
@@ -1298,7 +1298,7 @@ public class GraphSearchTests
     public void Directed_DfsEdgeTraversal_FromNode_InvalidVertex()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => graph.DfsEdgeTraversal(0));
@@ -1455,7 +1455,7 @@ public class GraphSearchTests
     public void Undirected_DfsEdgeTraversal_FromNode_InvalidVertex()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => graph.DfsEdgeTraversal(0));
@@ -1626,7 +1626,7 @@ public class GraphSearchTests
     public void Directed_DfsEdgeTraversalIterative_FromNode_InvalidVertex()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => graph.DfsEdgeTraversalIterative(0));
@@ -1783,7 +1783,7 @@ public class GraphSearchTests
     public void Undirected_DfsEdgeTraversalIterative_FromNode_InvalidVertex()
     {
         // Arrange
-        var graph = new UndirectedGraph<int>();
+        var graph = new DataStructures.Graph.UndirectedGraph<int>();
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => graph.DfsEdgeTraversalIterative(0));

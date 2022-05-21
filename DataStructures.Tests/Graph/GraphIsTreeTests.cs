@@ -8,7 +8,7 @@ public class GraphIsTreeTests
     public void Directed_GraphIsTree_EmptyGraph_ReturnsTrue()
     {
         // Arrange
-        var graph = new DirectedGraph<string>();
+        var graph = new DataStructures.Graph.DirectedGraph<string>();
 
         // Act
         var isTree = graph.IsTree();
@@ -21,7 +21,7 @@ public class GraphIsTreeTests
     public void Directed_GraphIsTree_GraphWithOneVertex_ReturnsTrue()
     {
         // Arrange
-        var graph = new DirectedGraph<string>();
+        var graph = new DataStructures.Graph.DirectedGraph<string>();
         graph.AddVertex(0);
 
         // Act
@@ -35,7 +35,7 @@ public class GraphIsTreeTests
     public void Directed_GraphIsTree_TreeWithTwoVertices_ReturnsTrue()
     {
         // Arrange
-        var graph = new DirectedGraph<string>();
+        var graph = new DataStructures.Graph.DirectedGraph<string>();
         graph.AddVertex(0);
         graph.AddVertex(1);
         graph.AddEdge(0, 1);
@@ -51,7 +51,7 @@ public class GraphIsTreeTests
     public void Directed_GraphIsTree_DoubleConnectedTwoVertices_ReturnsFalse()
     {
         // Arrange
-        var graph = new DirectedGraph<string>();
+        var graph = new DataStructures.Graph.DirectedGraph<string>();
         graph.AddVertex(0);
         graph.AddVertex(1);
         graph.AddEdge(0, 1);
@@ -108,7 +108,7 @@ public class GraphIsTreeTests
     public void Undirected_GraphIsTree_EmptyGraph_ReturnsTrue()
     {
         // Arrange
-        var graph = new UndirectedGraph<string>();
+        var graph = new DataStructures.Graph.UndirectedGraph<string>();
 
         // Act
         var isTree = graph.IsTree();
@@ -121,7 +121,7 @@ public class GraphIsTreeTests
     public void Undirected_GraphIsTree_GraphWithOneVertex_ReturnsTrue()
     {
         // Arrange
-        var graph = new UndirectedGraph<string>();
+        var graph = new DataStructures.Graph.UndirectedGraph<string>();
         graph.AddVertex(0);
 
         // Act
@@ -135,7 +135,7 @@ public class GraphIsTreeTests
     public void Undirected_GraphIsTree_TreeWithTwoVertices_ReturnsTrue()
     {
         // Arrange
-        var graph = new UndirectedGraph<string>();
+        var graph = new DataStructures.Graph.UndirectedGraph<string>();
         graph.AddVertex(0);
         graph.AddVertex(1);
         graph.AddEdge(0, 1);
@@ -151,7 +151,7 @@ public class GraphIsTreeTests
     public void Undirected_GraphIsTree_DoubleConnectedTwoVertices_ReturnsFalse()
     {
         // Arrange
-        var graph = new UndirectedGraph<string>();
+        var graph = new DataStructures.Graph.UndirectedGraph<string>();
         graph.AddVertex(0);
         graph.AddVertex(1);
         graph.AddEdge(0, 1);

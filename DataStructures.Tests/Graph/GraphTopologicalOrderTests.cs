@@ -10,7 +10,7 @@ public class GraphTopologicalOrderTests
     public void TopologicalOrder_EmptyGraph_ReturnsEmptyList()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
 
         // Act
         var topologicalOrder = graph.TopologicalOrder();
@@ -23,7 +23,7 @@ public class GraphTopologicalOrderTests
     public void TopologicalOrder_GraphWithOneNode_ReturnsListWithOneNode()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddVertex(1);
 
         // Act

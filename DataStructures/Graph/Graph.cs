@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Graph;
+namespace DataStructures.Graph;
 
 /// <summary>
 /// This class represents a graph.

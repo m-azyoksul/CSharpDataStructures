@@ -9,7 +9,7 @@ public class GraphSimpleOperationTests
     public void Transpose_Success()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddEdge(0, 1);
         
         // Act
@@ -25,7 +25,7 @@ public class GraphSimpleOperationTests
     public void Transpose_Success_With_Multiple_Edges()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddEdge(0, 1);
         graph.AddEdge(0, 2);
         graph.AddEdge(1, 2);

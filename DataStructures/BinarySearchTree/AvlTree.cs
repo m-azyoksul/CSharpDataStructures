@@ -42,40 +42,6 @@ public class AvlTree<T> : Bst<T, AvlNode<T>>
         return BalanceLeft(node);
     }
 
-    public override T PopMin()
-    {
-        if (Root == null)
-            throw new InvalidOperationException("Tree is empty");
-
-        return PopMin(Root).Value;
-    }
-
-    private static (T Value, AvlNode<T>?) PopMin(AvlNode<T> node)
-    {
-        if (node.Left == null)
-            return (node.Value, node.Right);
-
-        (var minValue, node.Left) = PopMin(node.Left);
-        return (minValue, BalanceLeft(node));
-    }
-
-    public override T PopMax()
-    {
-        if (Root == null)
-            throw new InvalidOperationException("Tree is empty");
-
-        return PopMax(Root).Value;
-    }
-
-    private static (T Value, AvlNode<T>?) PopMax(AvlNode<T> node)
-    {
-        if (node.Right == null)
-            return (node.Value, node.Left);
-
-        (var maxValue, node.Right) = PopMax(node.Right);
-        return (maxValue, BalanceRight(node));
-    }
-
     public override bool Remove(T value)
     {
         (var removed, Root) = Remove(Root, value);
@@ -113,6 +79,45 @@ public class AvlTree<T> : Bst<T, AvlNode<T>>
         (var minRight, node.Right) = PopMin(node.Right);
         node.Value = minRight;
         return (true, BalanceRight(node));
+    }
+
+    public override T PopMin()
+    {
+        if (Root == null)
+            throw new InvalidOperationException("Tree is empty");
+
+        return PopMin(Root).Value;
+    }
+
+    private static (T Value, AvlNode<T>?) PopMin(AvlNode<T> node)
+    {
+        if (node.Left == null)
+            return (node.Value, node.Right);
+
+        (var minValue, node.Left) = PopMin(node.Left);
+        return (minValue, BalanceLeft(node));
+    }
+
+    public override T PopMax()
+    {
+        if (Root == null)
+            throw new InvalidOperationException("Tree is empty");
+
+        return PopMax(Root).Value;
+    }
+
+    private static (T Value, AvlNode<T>?) PopMax(AvlNode<T> node)
+    {
+        if (node.Right == null)
+            return (node.Value, node.Left);
+
+        (var maxValue, node.Right) = PopMax(node.Right);
+        return (maxValue, BalanceRight(node));
+    }
+
+    public new int Height()
+    {
+        return Root?.Height ?? 0;
     }
 
     private static AvlNode<T> BalanceRight(AvlNode<T> node)

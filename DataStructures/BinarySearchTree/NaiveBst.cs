@@ -50,20 +50,26 @@ public class NaiveBst<T> : Bst<T, BinaryNode<T>>
     {
         if (Root == null)
             throw new InvalidOperationException("Bst is empty");
-        if (Root.Left == null)
+
+        (var min, Root) = PopMin(Root);
+        return min;
+    }
+
+    private static (T, BinaryNode<T>?) PopMin(BinaryNode<T> node)
+    {
+        if (node.Left == null)
         {
-            var result = Root.Value;
-            Root = Root.Right;
-            return result;
+            var result = node.Value;
+            return (result, node.Right);
         }
 
-        var current = Root;
+        var current = node;
         while (current.Left!.Left != null)
             current = current.Left;
 
         var min = current.Left.Value;
-        current.Left = null;
-        return min;
+        current.Left = current.Left.Right;
+        return (min, node);
     }
 
     public override T PopMax()
@@ -82,12 +88,70 @@ public class NaiveBst<T> : Bst<T, BinaryNode<T>>
             current = current.Right;
 
         var max = current.Right.Value;
-        current.Right = null;
+        current.Right = current.Right.Left;
         return max;
     }
 
     public override bool Remove(T value)
     {
-        throw new NotImplementedException();
+        if (Root == null)
+            return false;
+
+        if (Root.Value.CompareTo(value) == 0)
+        {
+            Root = RemoveNode(Root);
+            return true;
+        }
+
+        return RemoveFromBranches(Root, value);
+    }
+
+    private static bool RemoveFromBranches(BinaryNode<T> node, T value)
+    {
+        while (true)
+        {
+            // If the value is on the left side of the tree
+            if (value.CompareTo(node.Value) < 0)
+            {
+                if (node.Left == null)
+                    return false;
+
+                if (node.Left.Value.CompareTo(value) == 0)
+                {
+                    node.Left = RemoveNode(node.Left);
+                    return true;
+                }
+
+                node = node.Left;
+            }
+
+            // If the value is on the right side of the tree
+            else
+            {
+                if (node.Right == null)
+                    return false;
+
+                if (node.Right.Value.CompareTo(value) == 0)
+                {
+                    node.Right = RemoveNode(node.Right);
+                    return true;
+                }
+
+                node = node.Right;
+            }
+        }
+    }
+
+    private static BinaryNode<T>? RemoveNode(BinaryNode<T> node)
+    {
+        if (node.Left == null)
+            return node.Right;
+
+        if (node.Right == null)
+            return node.Left;
+
+        (var min, node.Right) = PopMin(node.Right);
+        node.Value = min;
+        return node;
     }
 }

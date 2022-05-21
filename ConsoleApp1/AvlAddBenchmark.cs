@@ -1,5 +1,4 @@
-﻿using AlgorithmHelpers.DataStructures;
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Order;
 using DataStructures.BinarySearchTree;
 

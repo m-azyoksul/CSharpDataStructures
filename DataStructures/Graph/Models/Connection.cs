@@ -1,4 +1,4 @@
-﻿namespace Graph;
+﻿namespace DataStructures.Graph;
 
 public struct Connection
 {

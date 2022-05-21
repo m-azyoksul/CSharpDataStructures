@@ -10,7 +10,7 @@ public class GraphSccTests
     public void Directed_TarjanMap_Success()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddEdge(6, 0);
         graph.AddEdge(6, 2);
         graph.AddEdge(3, 4);
@@ -48,7 +48,7 @@ public class GraphSccTests
     public void Directed_TarjanList_Success()
     {
         // Arrange
-        var graph = new DirectedGraph<int>();
+        var graph = new DataStructures.Graph.DirectedGraph<int>();
         graph.AddEdge(6, 0);
         graph.AddEdge(6, 2);
         graph.AddEdge(3, 4);

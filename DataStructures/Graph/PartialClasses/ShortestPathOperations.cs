@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AlgorithmHelpers.DataStructures;
 using DataStructures.Heap;
 
-namespace Graph;
+namespace DataStructures.Graph;
 
 public abstract partial class Graph<TData>
 {
