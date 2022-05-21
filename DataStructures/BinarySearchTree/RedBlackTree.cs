@@ -1,4 +1,6 @@
-﻿namespace AlgorithmHelpers.DataStructures;
+﻿using System;
+
+namespace AlgorithmHelpers.DataStructures;
 
 public class RedBlackTreeNode<T> : BstNode<T, RedBlackTreeNode<T>>
 {
@@ -11,6 +13,7 @@ public class RedBlackTreeNode<T> : BstNode<T, RedBlackTreeNode<T>>
 }
 
 public class RedBlackTree<T> : Bst<T, RedBlackTreeNode<T>>
+    where T : IComparable<T>
 {
     public override void Add(T value)
     {
@@ -27,7 +30,7 @@ public class RedBlackTree<T> : Bst<T, RedBlackTreeNode<T>>
         throw new System.NotImplementedException();
     }
 
-    public override void Remove(T value)
+    public override bool Remove(T value)
     {
         throw new System.NotImplementedException();
     }

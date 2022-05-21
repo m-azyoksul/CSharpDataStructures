@@ -10,7 +10,7 @@ public class BinaryNode<T> : BstNode<T, BinaryNode<T>>
 }
 
 public class NaiveBst<T> : Bst<T, BinaryNode<T>>
-    where T : IComparable
+    where T : IComparable<T>
 {
     public override void Add(T value)
     {
@@ -86,7 +86,7 @@ public class NaiveBst<T> : Bst<T, BinaryNode<T>>
         return max;
     }
 
-    public override void Remove(T value)
+    public override bool Remove(T value)
     {
         throw new NotImplementedException();
     }

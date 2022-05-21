@@ -1,8 +1,9 @@
-﻿using AlgorithmHelpers.DataStructures;
+﻿using System;
+using AlgorithmHelpers.DataStructures;
 using FluentAssertions;
 using Xunit;
 
-namespace Graph.Tests.DataStructures.BinarySearchTree;
+namespace DataStructures.Tests.DataStructures.BinarySearchTree;
 
 public class AvlTreeTests
 {
@@ -437,5 +438,276 @@ public class AvlTreeTests
         tree.Root.Right.Right.Left.Should().BeNull();
         tree.Root.Right.Right.Right.Should().BeNull();
         tree.Root.Height.Should().Be(3);
+    }
+
+    [Fact]
+    public void Should_Remove()
+    {
+        // Arrange
+        var tree = new AvlTree<int>();
+
+        // Act
+        tree.Add(4);
+        tree.Add(2);
+        tree.Add(5);
+        tree.Add(1);
+        tree.Add(3);
+        tree.Add(6);
+        tree.Add(0);
+
+        // Assert
+        tree.Root.Should().NotBeNull();
+        tree.Root!.Value.Should().Be(4);
+        tree.Root.Left.Should().NotBeNull();
+        tree.Root.Left!.Value.Should().Be(2);
+        tree.Root.Left.Left.Should().NotBeNull();
+        tree.Root.Left.Left!.Value.Should().Be(1);
+        tree.Root.Left.Left.Left.Should().NotBeNull();
+        tree.Root.Left.Left.Left!.Value.Should().Be(0);
+        tree.Root.Left.Left.Left.Left.Should().BeNull();
+        tree.Root.Left.Left.Left.Right.Should().BeNull();
+        tree.Root.Left.Left.Right.Should().BeNull();
+        tree.Root.Left.Right.Should().NotBeNull();
+        tree.Root.Left.Right!.Value.Should().Be(3);
+        tree.Root.Left.Right.Left.Should().BeNull();
+        tree.Root.Left.Right.Right.Should().BeNull();
+        tree.Root.Right.Should().NotBeNull();
+        tree.Root.Right!.Value.Should().Be(5);
+        tree.Root.Right.Left.Should().BeNull();
+        tree.Root.Right.Right.Should().NotBeNull();
+        tree.Root.Right.Right!.Value.Should().Be(6);
+        tree.Root.Right.Right.Left.Should().BeNull();
+        tree.Root.Right.Right.Right.Should().BeNull();
+
+        // Act
+        tree.Remove(5);
+
+        // Assert
+        tree.Root.Should().NotBeNull();
+        tree.Root!.Value.Should().Be(2);
+        tree.Root.Left.Should().NotBeNull();
+        tree.Root.Left!.Value.Should().Be(1);
+        tree.Root.Left.Left.Should().NotBeNull();
+        tree.Root.Left.Left!.Value.Should().Be(0);
+        tree.Root.Left.Left.Left.Should().BeNull();
+        tree.Root.Left.Left.Right.Should().BeNull();
+        tree.Root.Left.Right.Should().BeNull();
+        tree.Root.Right.Should().NotBeNull();
+        tree.Root.Right!.Value.Should().Be(4);
+        tree.Root.Right.Left.Should().NotBeNull();
+        tree.Root.Right.Left!.Value.Should().Be(3);
+        tree.Root.Right.Left.Left.Should().BeNull();
+        tree.Root.Right.Left.Right.Should().BeNull();
+        tree.Root.Right.Right.Should().NotBeNull();
+        tree.Root.Right.Right!.Value.Should().Be(6);
+        tree.Root.Right.Right.Left.Should().BeNull();
+        tree.Root.Right.Right.Right.Should().BeNull();
+
+        // Act
+        tree.Remove(1);
+
+        // Assert
+        tree.Root.Should().NotBeNull();
+        tree.Root!.Value.Should().Be(2);
+        tree.Root.Left.Should().NotBeNull();
+        tree.Root.Left!.Value.Should().Be(0);
+        tree.Root.Right.Should().NotBeNull();
+        tree.Root.Right!.Value.Should().Be(4);
+        tree.Root.Right.Left.Should().NotBeNull();
+        tree.Root.Right.Left!.Value.Should().Be(3);
+        tree.Root.Right.Left.Left.Should().BeNull();
+        tree.Root.Right.Left.Right.Should().BeNull();
+        tree.Root.Right.Right.Should().NotBeNull();
+        tree.Root.Right.Right!.Value.Should().Be(6);
+        tree.Root.Right.Right.Left.Should().BeNull();
+        tree.Root.Right.Right.Right.Should().BeNull();
+
+        // Act
+        tree.Remove(0);
+
+        // Assert
+        tree.Root.Should().NotBeNull();
+        tree.Root!.Value.Should().Be(4);
+        tree.Root.Left.Should().NotBeNull();
+        tree.Root.Left!.Value.Should().Be(2);
+        tree.Root.Left.Left.Should().BeNull();
+        tree.Root.Left.Right.Should().NotBeNull();
+        tree.Root.Left.Right!.Value.Should().Be(3);
+        tree.Root.Left.Right.Left.Should().BeNull();
+        tree.Root.Left.Right.Right.Should().BeNull();
+        tree.Root.Right.Should().NotBeNull();
+        tree.Root.Right!.Value.Should().Be(6);
+        tree.Root.Right.Left.Should().BeNull();
+        tree.Root.Right.Right.Should().BeNull();
+    }
+
+    [Fact]
+    public void Should_Remove2()
+    {
+        // Arrange
+        var tree = new AvlTree<int>();
+
+        // Act
+        tree.Add(3);
+        tree.Add(1);
+        tree.Add(4);
+        tree.Add(0);
+        tree.Add(2);
+
+        // Assert
+        tree.Root.Should().NotBeNull();
+        tree.Root!.Value.Should().Be(3);
+        tree.Root.Left.Should().NotBeNull();
+        tree.Root.Left!.Value.Should().Be(1);
+        tree.Root.Left.Left.Should().NotBeNull();
+        tree.Root.Left.Left!.Value.Should().Be(0);
+        tree.Root.Left.Left.Left.Should().BeNull();
+        tree.Root.Left.Left.Right.Should().BeNull();
+        tree.Root.Left.Right.Should().NotBeNull();
+        tree.Root.Left.Right!.Value.Should().Be(2);
+        tree.Root.Left.Right.Left.Should().BeNull();
+        tree.Root.Left.Right.Right.Should().BeNull();
+        tree.Root.Right.Should().NotBeNull();
+        tree.Root.Right!.Value.Should().Be(4);
+        tree.Root.Right.Left.Should().BeNull();
+        tree.Root.Right.Right.Should().BeNull();
+
+        // Act
+        tree.Remove(4);
+
+        // Assert
+        tree.Root.Should().NotBeNull();
+        tree.Root!.Value.Should().Be(1);
+        tree.Root.Left.Should().NotBeNull();
+        tree.Root.Left!.Value.Should().Be(0);
+        tree.Root.Left.Left.Should().BeNull();
+        tree.Root.Left.Right.Should().BeNull();
+        tree.Root.Right.Should().NotBeNull();
+        tree.Root.Right!.Value.Should().Be(3);
+        tree.Root.Right.Left.Should().NotBeNull();
+        tree.Root.Right.Left!.Value.Should().Be(2);
+        tree.Root.Right.Left.Left.Should().BeNull();
+        tree.Root.Right.Left.Right.Should().BeNull();
+        tree.Root.Right.Right.Should().BeNull();
+
+        // Act
+        tree.Remove(1);
+
+        // Assert
+        tree.Root.Should().NotBeNull();
+        tree.Root!.Value.Should().Be(2);
+        tree.Root.Left.Should().NotBeNull();
+        tree.Root.Left!.Value.Should().Be(0);
+        tree.Root.Left.Left.Should().BeNull();
+        tree.Root.Left.Right.Should().BeNull();
+        tree.Root.Right.Should().NotBeNull();
+        tree.Root.Right!.Value.Should().Be(3);
+        tree.Root.Right.Left.Should().BeNull();
+        tree.Root.Right.Right.Should().BeNull();
+
+        // Act
+        tree.Remove(2);
+
+        // Assert
+        tree.Root.Should().NotBeNull();
+        tree.Root!.Value.Should().Be(3);
+        tree.Root.Left.Should().NotBeNull();
+        tree.Root.Left!.Value.Should().Be(0);
+        tree.Root.Left.Left.Should().BeNull();
+        tree.Root.Left.Right.Should().BeNull();
+        tree.Root.Right.Should().BeNull();
+
+        // Act
+        tree.Remove(0);
+
+        // Assert
+        tree.Root.Should().NotBeNull();
+        tree.Root!.Value.Should().Be(3);
+        tree.Root.Left.Should().BeNull();
+        tree.Root.Right.Should().BeNull();
+
+        // Act
+        tree.Remove(3);
+
+        // Assert
+        tree.Root.Should().BeNull();
+    }
+
+    [Fact]
+    public void Should_Remove_Fail()
+    {
+        // Arrange
+        var tree = new AvlTree<int>();
+
+        // Act
+        var removed1 = tree.Remove(0);
+
+        // Assert
+        removed1.Should().BeFalse();
+
+        // Arrange
+        tree.Add(0);
+        tree.Add(1);
+        tree.Add(2);
+
+        // Act
+        var removed2 = tree.Remove(3);
+        var removed3 = tree.Remove(-1);
+
+        // Assert
+        removed2.Should().BeFalse();
+        removed3.Should().BeFalse();
+    }
+
+    [Fact]
+    public void PopMin_Should_Throw_On_Empty_Tree()
+    {
+        // Arrange
+        var tree = new AvlTree<int>();
+
+        // Act
+        Action action = () => tree.PopMin();
+
+        // Assert
+        action.Should().Throw<InvalidOperationException>();
+    }
+
+    [Fact]
+    public void PopMax_Should_Throw_On_Empty_Tree()
+    {
+        // Arrange
+        var tree = new AvlTree<int>();
+
+        // Act
+        Action action = () => tree.PopMax();
+
+        // Assert
+        action.Should().Throw<InvalidOperationException>();
+    }
+
+    [Fact]
+    public void Min_Should_Throw_On_Empty_Tree()
+    {
+        // Arrange
+        var tree = new AvlTree<int>();
+
+        // Act
+        Action action = () => tree.Min();
+
+        // Assert
+        action.Should().Throw<InvalidOperationException>();
+    }
+
+    [Fact]
+    public void Max_Should_Throw_On_Empty_Tree()
+    {
+        // Arrange
+        var tree = new AvlTree<int>();
+
+        // Act
+        Action action = () => tree.Max();
+
+        // Assert
+        action.Should().Throw<InvalidOperationException>();
     }
 }

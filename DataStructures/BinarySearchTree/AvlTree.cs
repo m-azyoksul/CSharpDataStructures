@@ -13,7 +13,7 @@ public class AvlNode<T> : BstNode<T, AvlNode<T>>
 }
 
 public class AvlTree<T> : Bst<T, AvlNode<T>>
-    where T : IComparable
+    where T : IComparable<T>
 {
     public AvlTree(AvlNode<T>? root = null)
     {
@@ -76,38 +76,43 @@ public class AvlTree<T> : Bst<T, AvlNode<T>>
         return (maxValue, BalanceRight(node));
     }
 
-    public override void Remove(T value)
+    public override bool Remove(T value)
     {
-        Root = Remove(Root, value);
+        (var removed, Root) = Remove(Root, value);
+        return removed;
     }
 
-    private static AvlNode<T>? Remove(AvlNode<T>? node, T value)
+    private static (bool Removed, AvlNode<T>?) Remove(AvlNode<T>? node, T value)
     {
         if (node == null)
-            return null;
+            return (false, null);
 
         if (value.CompareTo(node.Value) < 0)
         {
-            node.Left = Remove(node.Left, value);
-            return BalanceLeft(node);
+            (var removed, node.Left) = Remove(node.Left, value);
+            if (!removed)
+                return (false, node);
+            return (true, BalanceLeft(node));
         }
 
         if (value.CompareTo(node.Value) > 0)
         {
-            node.Right = Remove(node.Right, value);
-            return BalanceRight(node);
+            (var removed, node.Right) = Remove(node.Right, value);
+            if (!removed)
+                return (false, node);
+            return (true, BalanceRight(node));
         }
 
         // Found the node to remove
         if (node.Left == null)
-            return node.Right;
+            return (true, node.Right);
         if (node.Right == null)
-            return node.Left;
+            return (true, node.Left);
 
         // Node has two children
-        var minRight = PopMin(node.Right);
-        node.Value = minRight.Value;
-        return BalanceRight(node);
+        (var minRight, node.Right) = PopMin(node.Right);
+        node.Value = minRight;
+        return (true, BalanceRight(node));
     }
 
     private static AvlNode<T> BalanceRight(AvlNode<T> node)
@@ -118,9 +123,10 @@ public class AvlTree<T> : Bst<T, AvlNode<T>>
             return node;
         }
 
-        return GetBalance(node.Left) > 0
-            ? RotateRight(node)
-            : RotateLeftRight(node);
+        if (GetBalance(node.Left!) >= 0)
+            return RotateRight(node);
+
+        return RotateLeftRight(node);
     }
 
     private static AvlNode<T> BalanceLeft(AvlNode<T> node)
@@ -131,9 +137,10 @@ public class AvlTree<T> : Bst<T, AvlNode<T>>
             return node;
         }
 
-        return GetBalance(node.Right) < 0
-            ? RotateLeft(node)
-            : RotateRightLeft(node);
+        if (GetBalance(node.Right!) <= 0)
+            return RotateLeft(node);
+
+        return RotateRightLeft(node);
     }
 
     private static AvlNode<T> RotateRight(AvlNode<T> node)
@@ -195,11 +202,8 @@ public class AvlTree<T> : Bst<T, AvlNode<T>>
         return node?.Height ?? 0;
     }
 
-    private static int GetBalance(AvlNode<T>? node)
+    private static int GetBalance(AvlNode<T> node)
     {
-        if (node == null)
-            return 0;
-
         return GetHeight(node.Left) - GetHeight(node.Right);
     }
 }

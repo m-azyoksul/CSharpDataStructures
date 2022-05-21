@@ -16,6 +16,7 @@ public abstract class BstNode<T, TNode>
 }
 
 public abstract class Bst<T, TNode>
+    where T : IComparable<T>
     where TNode : BstNode<T, TNode>
 {
     public TNode? Root { get; set; }
@@ -74,7 +75,45 @@ public abstract class Bst<T, TNode>
 
     public abstract T PopMax();
 
-    public abstract void Remove(T value);
+    public abstract bool Remove(T value);
+
+    public bool Contains(T value)
+    {
+        if (Root == null)
+            return false;
+
+        return Contains(value, Root);
+    }
+
+    private static bool Contains(T value, BstNode<T, TNode> node)
+    {
+        while (true)
+        {
+            if (node.Value.CompareTo(value) == 0)
+                return true;
+
+            // If value is less than node's value, go left
+            if (node.Value.CompareTo(value) > 0)
+            {
+                if (node.Left == null)
+                    return false;
+
+                node = node.Left;
+                continue;
+            }
+
+            // If value is greater than node's value, go right
+            if (node.Right == null)
+                return false;
+
+            node = node.Right;
+        }
+    }
+
+    public void Clear()
+    {
+        Root = null;
+    }
 
     public void PrintInOrder()
     {
