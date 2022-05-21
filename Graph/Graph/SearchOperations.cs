@@ -763,6 +763,8 @@ public partial class UndirectedGraph<TData>
                 var cur = backtrackStack.Pop();
                 visitedEdges.Add((cur.V, cur.P, false));
             }
+
+            backtrackStack.Pop();
         }
 
         return visitedEdges.ToList();

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AlgorithmHelpers.DataStructures;
-
-Console.WriteLine("Hello World!");
-var heap = new IndexedMinHeap<int, int>();
+﻿using AlgorithmHelpers.DataStructures;
+using BenchmarkDotNet.Running;
+using ConsoleApp1;
 
 
-var stack = new Stack<int>();
-stack.Push(1);
-stack.Push(2);
+var tree = new AvlTree<int>();
 
-var list = stack.ToList();
-Console.WriteLine(string.Join(",", list));
+for (int i = 0; i < 1000; i++)
+    tree.Add(i);
+
+//BenchmarkRunner.Run<AvlAddBenchmark>();

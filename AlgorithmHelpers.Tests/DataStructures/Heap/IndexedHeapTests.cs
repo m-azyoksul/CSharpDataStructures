@@ -112,14 +112,12 @@ public class IndexedHeapTests
 
         var item4 = heap.Pop();
         item4.Should().Be((7, 0));
-        
+
         heap.RemoveKey(5);
 
-        heap.IndexOfKey(5).Should().Be(0);
-        heap.IndexOfKey(6).Should().Be(1);
-        heap.IndexOfKey(3).Should().Be(2);
+        heap.IndexOfKey(6).Should().Be(0);
+        heap.IndexOfKey(3).Should().Be(1);
 
-        heap.ValueOfKey(5).Should().Be(5);
         heap.ValueOfKey(6).Should().Be(6);
         heap.ValueOfKey(3).Should().Be(10);
     }

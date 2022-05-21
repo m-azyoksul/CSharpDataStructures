@@ -1,0 +1,274 @@
+﻿using System;
+
+namespace AlgorithmHelpers.DataStructures;
+
+public class AvlNode<T>
+{
+    public AvlNode(T value)
+    {
+        Value = value;
+        Height = 1;
+    }
+
+    public T Value { get; set; }
+    public AvlNode<T>? Left { get; set; }
+    public AvlNode<T>? Right { get; set; }
+    public int Height { get; set; }
+}
+
+public class AvlTree<T>
+    where T : IComparable
+{
+    public AvlNode<T>? Root { get; set; }
+
+    public AvlTree(AvlNode<T>? root = null)
+    {
+        Root = root;
+    }
+    
+    public void Insert(T value)
+    {
+        Add(value);
+    }
+    
+    public void Push(T value)
+    {
+        Add(value);
+    }
+
+    public void Add(T value)
+    {
+        Root = Add(Root, value);
+    }
+
+    private AvlNode<T> Add(AvlNode<T>? node, T value)
+    {
+        if (node == null)
+            return new AvlNode<T>(value);
+
+        // Insert left
+        if (value.CompareTo(node.Value) <= 0)
+        {
+            node.Left = Add(node.Left, value);
+            return BalanceRight(node);
+        }
+
+        // Insert right
+        node.Right = Add(node.Right, value);
+        return BalanceLeft(node);
+    }
+
+    public T Min()
+    {
+        if (Root == null)
+            throw new InvalidOperationException("Tree is empty");
+
+        return Min(Root).Value;
+    }
+
+    private static AvlNode<T> Min(AvlNode<T> node)
+    {
+        while (true)
+        {
+            if (node.Left == null)
+                return node;
+
+            node = node.Left;
+        }
+    }
+
+    public T Max()
+    {
+        if (Root == null)
+            throw new InvalidOperationException("Tree is empty");
+
+        return Max(Root).Value;
+    }
+
+    private static AvlNode<T> Max(AvlNode<T> node)
+    {
+        while (true)
+        {
+            if (node.Right == null)
+                return node;
+
+            node = node.Right;
+        }
+    }
+
+    public T PopMin()
+    {
+        if (Root == null)
+            throw new InvalidOperationException("Tree is empty");
+
+        return PopMin(Root).Value;
+    }
+
+    private static (T Value, AvlNode<T>?) PopMin(AvlNode<T> node)
+    {
+        if (node.Left == null)
+            return (node.Value, node.Right);
+
+        (var minValue, node.Left) = PopMin(node.Left);
+        return (minValue, BalanceLeft(node));
+    }
+    
+    public T PopMax()
+    {
+        if (Root == null)
+            throw new InvalidOperationException("Tree is empty");
+
+        return PopMax(Root).Value;
+    }
+    
+    private static (T Value, AvlNode<T>?) PopMax(AvlNode<T> node)
+    {
+        if (node.Right == null)
+            return (node.Value, node.Left);
+
+        (var maxValue, node.Right) = PopMax(node.Right);
+        return (maxValue, BalanceRight(node));
+    }
+
+    public void Remove(T value)
+    {
+        Root = Remove(Root, value);
+    }
+
+    private static AvlNode<T>? Remove(AvlNode<T>? node, T value)
+    {
+        if (node == null)
+            return null;
+
+        if (value.CompareTo(node.Value) < 0)
+        {
+            node.Left = Remove(node.Left, value);
+            return BalanceLeft(node);
+        }
+
+        if (value.CompareTo(node.Value) > 0)
+        {
+            node.Right = Remove(node.Right, value);
+            return BalanceRight(node);
+        }
+
+        // Found the node to remove
+        if (node.Left == null)
+            return node.Right;
+        if (node.Right == null)
+            return node.Left;
+
+        // Node has two children
+        var minRight = PopMin(node.Right);
+        node.Value = minRight.Value;
+        return BalanceRight(node);
+    }
+
+    private static AvlNode<T> BalanceRight(AvlNode<T> node)
+    {
+        if (GetBalance(node) <= 1)
+        {
+            node.Height = 1 + Math.Max(GetHeight(node.Left), GetHeight(node.Right));
+            return node;
+        }
+
+        return GetBalance(node.Left) > 0
+            ? RotateRight(node)
+            : RotateLeftRight(node);
+    }
+
+    private static AvlNode<T> BalanceLeft(AvlNode<T> node)
+    {
+        if (GetBalance(node) >= -1)
+        {
+            node.Height = 1 + Math.Max(GetHeight(node.Left), GetHeight(node.Right));
+            return node;
+        }
+
+        return GetBalance(node.Right) < 0
+            ? RotateLeft(node)
+            : RotateRightLeft(node);
+    }
+
+    private static AvlNode<T> RotateRight(AvlNode<T> node)
+    {
+        var left = node.Left!;
+        node.Left = left.Right;
+        left.Right = node;
+
+        node.Height = 1 + Math.Max(GetHeight(node.Left), GetHeight(node.Right));
+        left.Height = 1 + Math.Max(GetHeight(left.Left), node.Height);
+
+        return left;
+    }
+
+    private static AvlNode<T> RotateLeftRight(AvlNode<T> node)
+    {
+        var newRoot = node.Left!.Right!;
+        node.Left!.Right = newRoot.Left;
+        newRoot.Left = node.Left;
+        node.Left = newRoot.Right;
+        newRoot.Right = node;
+
+        node.Height = 1 + Math.Max(GetHeight(node.Left), GetHeight(node.Right));
+        newRoot.Left.Height = 1 + Math.Max(GetHeight(newRoot.Left.Left), GetHeight(newRoot.Left.Right));
+        newRoot.Height = 1 + Math.Max(newRoot.Left.Height, node.Height);
+
+        return newRoot;
+    }
+
+    private static AvlNode<T> RotateLeft(AvlNode<T> node)
+    {
+        var right = node.Right!;
+        node.Right = right.Left;
+        right.Left = node;
+
+        node.Height = 1 + Math.Max(node.Left?.Height ?? 0, node.Right?.Height ?? 0);
+        right.Height = 1 + Math.Max(right.Left?.Height ?? 0, node.Height);
+
+        return right;
+    }
+
+    private static AvlNode<T> RotateRightLeft(AvlNode<T> node)
+    {
+        var newRoot = node.Right!.Left!;
+        node.Right!.Left = newRoot.Right;
+        newRoot.Right = node.Right;
+        node.Right = newRoot.Left;
+        newRoot.Left = node;
+
+        node.Height = 1 + Math.Max(GetHeight(node.Left), GetHeight(node.Right));
+        newRoot.Right.Height = 1 + Math.Max(GetHeight(newRoot.Right.Left), GetHeight(newRoot.Right.Right));
+        newRoot.Height = 1 + Math.Max(node.Height, newRoot.Right.Height);
+
+        return newRoot;
+    }
+
+    private static int GetHeight(AvlNode<T>? node)
+    {
+        return node?.Height ?? 0;
+    }
+
+    private static int GetBalance(AvlNode<T>? node)
+    {
+        if (node == null)
+            return 0;
+
+        return GetHeight(node.Left) - GetHeight(node.Right);
+    }
+
+    public void PrintInOrder()
+    {
+        PrintInOrder(Root);
+    }
+
+    private static void PrintInOrder(AvlNode<T>? node)
+    {
+        if (node == null)
+            return;
+
+        PrintInOrder(node.Left);
+        Console.Write(node.Value + " ");
+        PrintInOrder(node.Right);
+    }
+}
