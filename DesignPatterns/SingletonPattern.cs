@@ -1,4 +1,6 @@
-﻿namespace DesignPatterns;
+﻿using System;
+
+namespace DesignPatterns;
 
 public sealed class SingletonClass
 {

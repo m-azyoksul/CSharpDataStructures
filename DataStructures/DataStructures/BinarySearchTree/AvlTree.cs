@@ -2,46 +2,30 @@
 
 namespace AlgorithmHelpers.DataStructures;
 
-public class AvlNode<T>
+public class AvlNode<T> : BstNode<T, AvlNode<T>>
 {
-    public AvlNode(T value)
+    public AvlNode(T value) : base(value)
     {
-        Value = value;
         Height = 1;
     }
 
-    public T Value { get; set; }
-    public AvlNode<T>? Left { get; set; }
-    public AvlNode<T>? Right { get; set; }
     public int Height { get; set; }
 }
 
-public class AvlTree<T>
+public class AvlTree<T> : Bst<T, AvlNode<T>>
     where T : IComparable
 {
-    public AvlNode<T>? Root { get; set; }
-
     public AvlTree(AvlNode<T>? root = null)
     {
         Root = root;
     }
-    
-    public void Insert(T value)
-    {
-        Add(value);
-    }
-    
-    public void Push(T value)
-    {
-        Add(value);
-    }
 
-    public void Add(T value)
+    public override void Add(T value)
     {
         Root = Add(Root, value);
     }
 
-    private AvlNode<T> Add(AvlNode<T>? node, T value)
+    private static AvlNode<T> Add(AvlNode<T>? node, T value)
     {
         if (node == null)
             return new AvlNode<T>(value);
@@ -58,45 +42,7 @@ public class AvlTree<T>
         return BalanceLeft(node);
     }
 
-    public T Min()
-    {
-        if (Root == null)
-            throw new InvalidOperationException("Tree is empty");
-
-        return Min(Root).Value;
-    }
-
-    private static AvlNode<T> Min(AvlNode<T> node)
-    {
-        while (true)
-        {
-            if (node.Left == null)
-                return node;
-
-            node = node.Left;
-        }
-    }
-
-    public T Max()
-    {
-        if (Root == null)
-            throw new InvalidOperationException("Tree is empty");
-
-        return Max(Root).Value;
-    }
-
-    private static AvlNode<T> Max(AvlNode<T> node)
-    {
-        while (true)
-        {
-            if (node.Right == null)
-                return node;
-
-            node = node.Right;
-        }
-    }
-
-    public T PopMin()
+    public override T PopMin()
     {
         if (Root == null)
             throw new InvalidOperationException("Tree is empty");
@@ -112,15 +58,15 @@ public class AvlTree<T>
         (var minValue, node.Left) = PopMin(node.Left);
         return (minValue, BalanceLeft(node));
     }
-    
-    public T PopMax()
+
+    public override T PopMax()
     {
         if (Root == null)
             throw new InvalidOperationException("Tree is empty");
 
         return PopMax(Root).Value;
     }
-    
+
     private static (T Value, AvlNode<T>?) PopMax(AvlNode<T> node)
     {
         if (node.Right == null)
@@ -130,7 +76,7 @@ public class AvlTree<T>
         return (maxValue, BalanceRight(node));
     }
 
-    public void Remove(T value)
+    public override void Remove(T value)
     {
         Root = Remove(Root, value);
     }
@@ -255,20 +201,5 @@ public class AvlTree<T>
             return 0;
 
         return GetHeight(node.Left) - GetHeight(node.Right);
-    }
-
-    public void PrintInOrder()
-    {
-        PrintInOrder(Root);
-    }
-
-    private static void PrintInOrder(AvlNode<T>? node)
-    {
-        if (node == null)
-            return;
-
-        PrintInOrder(node.Left);
-        Console.Write(node.Value + " ");
-        PrintInOrder(node.Right);
     }
 }

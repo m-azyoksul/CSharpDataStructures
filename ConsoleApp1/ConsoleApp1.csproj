@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\DataStructures\DataStructures.csproj" />
       <ProjectReference Include="..\Qc.Result\Qc.Result.csproj" />
       <ProjectReference Include="..\AlgorithmHelpers\AlgorithmHelpers.csproj" />
     </ItemGroup>
