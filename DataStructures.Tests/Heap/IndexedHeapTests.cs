@@ -1,8 +1,8 @@
-﻿using AlgorithmHelpers.DataStructures;
+﻿using DataStructures.Heap;
 using FluentAssertions;
 using Xunit;
 
-namespace AlgorithmHelpers.Tests.DataStructures;
+namespace DataStructures.Tests.Heap;
 
 public class IndexedHeapTests
 {

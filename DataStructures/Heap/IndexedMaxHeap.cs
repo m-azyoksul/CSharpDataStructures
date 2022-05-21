@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AlgorithmHelpers.DataStructures;
+namespace DataStructures.Heap;
 
 public class IndexedMaxIndexedHeap<TKey, TValue> : IndexedHeap<TKey, TValue>
     where TKey : notnull

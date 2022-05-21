@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace AlgorithmHelpers.DataStructures;
+namespace DataStructures.Heap;
 
 /// <summary>
 /// Heap data implementation with dynamic array.

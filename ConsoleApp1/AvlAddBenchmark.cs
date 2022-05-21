@@ -1,6 +1,7 @@
 ﻿using AlgorithmHelpers.DataStructures;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Order;
+using DataStructures.BinarySearchTree;
 
 namespace ConsoleApp1;
 

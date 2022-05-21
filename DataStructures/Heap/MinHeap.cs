@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AlgorithmHelpers.DataStructures;
+namespace DataStructures.Heap;
 
 public class MinHeap<T> : Heap<T>
     where T : IComparable<T>

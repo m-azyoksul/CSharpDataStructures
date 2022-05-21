@@ -1,9 +1,9 @@
 ﻿using System;
-using AlgorithmHelpers.DataStructures;
+using DataStructures.BinarySearchTree;
 using FluentAssertions;
 using Xunit;
 
-namespace DataStructures.Tests.DataStructures.BinarySearchTree;
+namespace DataStructures.Tests.BinarySearchTree;
 
 public class AvlTreeTests
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AlgorithmHelpers.DataStructures;
+namespace DataStructures.Heap;
 
 /// <summary>
 /// Special heap implementation with dynamic array and key-index dictionary.

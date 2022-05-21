@@ -1,4 +1,4 @@
-﻿namespace AlgorithmHelpers.DataStructures;
+﻿namespace DataStructures.BinarySearchTree;
 
 public class IntervalTree
 {

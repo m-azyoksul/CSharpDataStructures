@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AlgorithmHelpers.DataStructures;
+namespace DataStructures.BinarySearchTree;
 
 public class RedBlackTreeNode<T> : BstNode<T, RedBlackTreeNode<T>>
 {
