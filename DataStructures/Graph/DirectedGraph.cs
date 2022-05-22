@@ -194,10 +194,4 @@ public partial class DirectedGraph<TData> : Graph<TData>
 
         return true;
     }
-
-    public override List<(int V1, int V2)> Bridges()
-    {
-        // TODO: Academic paper for the algorithm: https://stackoverflow.com/a/17107586/7279624
-        throw new NotImplementedException();
-    }
 }
