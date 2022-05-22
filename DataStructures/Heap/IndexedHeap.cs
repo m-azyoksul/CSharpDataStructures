@@ -25,7 +25,7 @@ public abstract class IndexedHeap<TKey, TValue> : Heap<(TKey Key, TValue Value)>
     public new void Add((TKey Key, TValue Value) item)
     {
         if (KeyIndex.ContainsKey(item.Key))
-            throw new ArgumentException("Key already exists in heap");
+            throw new InvalidOperationException("Key already exists in heap");
 
         KeyIndex.Add(item.Key, Items.Count);
         Items.Add(item);
@@ -64,7 +64,7 @@ public abstract class IndexedHeap<TKey, TValue> : Heap<(TKey Key, TValue Value)>
     public int IndexOfKey(TKey key)
     {
         if (!KeyIndex.TryGetValue(key, out var index))
-            throw new ArgumentException("Key does not exist in heap");
+            throw new InvalidOperationException("Key does not exist in heap");
 
         return index;
     }
@@ -82,7 +82,7 @@ public abstract class IndexedHeap<TKey, TValue> : Heap<(TKey Key, TValue Value)>
     public void UpdateKey(TKey key, TValue value)
     {
         if (!KeyIndex.TryGetValue(key, out var index))
-            throw new ArgumentException("Key does not exist in heap");
+            throw new InvalidOperationException("Key does not exist in heap");
 
         Items[index] = (key, value);
         HeapifyUp(index);
@@ -92,7 +92,14 @@ public abstract class IndexedHeap<TKey, TValue> : Heap<(TKey Key, TValue Value)>
     public void RemoveKey(TKey key)
     {
         if (!KeyIndex.TryGetValue(key, out var index))
-            throw new ArgumentException("Key does not exist in heap");
+            throw new InvalidOperationException("Key does not exist in heap");
+
+        if (index == Items.Count - 1)
+        {
+            KeyIndex.Remove(key);
+            Items.RemoveAt(Items.Count - 1);
+            return;
+        }
 
         KeyIndex.Remove(key);
         Items[index] = Items[^1];

@@ -2,7 +2,7 @@
 
 namespace DataStructures.Heap;
 
-public class IndexedMaxIndexedHeap<TKey, TValue> : IndexedHeap<TKey, TValue>
+public class IndexedMaxHeap<TKey, TValue> : IndexedHeap<TKey, TValue>
     where TKey : notnull
     where TValue : IComparable
 {

@@ -22,16 +22,6 @@ public abstract class Bst<T, TNode>
 {
     public TNode? Root { get; set; }
 
-    public void Insert(T value)
-    {
-        Add(value);
-    }
-
-    public void Push(T value)
-    {
-        Add(value);
-    }
-
     public abstract void Add(T value);
 
     public abstract bool Remove(T value);

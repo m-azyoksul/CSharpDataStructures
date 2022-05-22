@@ -5,9 +5,10 @@ using System.Collections.Generic;
 namespace DataStructures.Heap;
 
 /// <summary>
-/// Heap data implementation with dynamic array.
-///     O(1) time peek
-///     O(logn) time pop and insert
+/// Heap is a type of complete binary tree.
+/// It is usually used as a priority queue.
+/// Each node's value is either greater than/equal or less than/equal to the value of its children.
+/// Parent node contains the most extreme value.
 /// </summary>
 public abstract class Heap<T> : IEnumerable<T>
 {
@@ -51,6 +52,12 @@ public abstract class Heap<T> : IEnumerable<T>
         if (index == -1)
             throw new InvalidOperationException("Item not found");
 
+        if (index == Items.Count - 1)
+        {
+            Items.RemoveAt(index);
+            return;
+        }
+
         Items[index] = Items[^1];
         Items.RemoveAt(Items.Count - 1);
         HeapifyDown(index);
@@ -59,9 +66,6 @@ public abstract class Heap<T> : IEnumerable<T>
 
     protected int Parent(int index)
     {
-        if (index == 0)
-            throw new InvalidOperationException("Root has no parent");
-
         return (index - 1) / 2;
     }
 

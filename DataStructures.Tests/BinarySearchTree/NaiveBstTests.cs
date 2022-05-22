@@ -32,8 +32,8 @@ public class NaiveBstTests
         naiveBst.Add(8);
         naiveBst.Add(7);
         naiveBst.Add(6);
-        naiveBst.Insert(2);
-        naiveBst.Push(1);
+        naiveBst.Add(2);
+        naiveBst.Add(1);
 
         naiveBst.Min().Should().Be(1);
         naiveBst.Max().Should().Be(8);

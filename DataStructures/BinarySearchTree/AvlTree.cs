@@ -124,7 +124,7 @@ public class AvlTree<T> : Bst<T, AvlNode<T>>
     {
         if (GetBalance(node) <= 1)
         {
-            node.Height = 1 + Math.Max(GetHeight(node.Left), GetHeight(node.Right));
+            node.Height = 1 + Math.Max(Height(node.Left), Height(node.Right));
             return node;
         }
 
@@ -138,7 +138,7 @@ public class AvlTree<T> : Bst<T, AvlNode<T>>
     {
         if (GetBalance(node) >= -1)
         {
-            node.Height = 1 + Math.Max(GetHeight(node.Left), GetHeight(node.Right));
+            node.Height = 1 + Math.Max(Height(node.Left), Height(node.Right));
             return node;
         }
 
@@ -154,8 +154,8 @@ public class AvlTree<T> : Bst<T, AvlNode<T>>
         node.Left = left.Right;
         left.Right = node;
 
-        node.Height = 1 + Math.Max(GetHeight(node.Left), GetHeight(node.Right));
-        left.Height = 1 + Math.Max(GetHeight(left.Left), node.Height);
+        node.Height = 1 + Math.Max(Height(node.Left), Height(node.Right));
+        left.Height = 1 + Math.Max(Height(left.Left), node.Height);
 
         return left;
     }
@@ -168,8 +168,8 @@ public class AvlTree<T> : Bst<T, AvlNode<T>>
         node.Left = newRoot.Right;
         newRoot.Right = node;
 
-        node.Height = 1 + Math.Max(GetHeight(node.Left), GetHeight(node.Right));
-        newRoot.Left.Height = 1 + Math.Max(GetHeight(newRoot.Left.Left), GetHeight(newRoot.Left.Right));
+        node.Height = 1 + Math.Max(Height(node.Left), Height(node.Right));
+        newRoot.Left.Height = 1 + Math.Max(Height(newRoot.Left.Left), Height(newRoot.Left.Right));
         newRoot.Height = 1 + Math.Max(newRoot.Left.Height, node.Height);
 
         return newRoot;
@@ -195,20 +195,20 @@ public class AvlTree<T> : Bst<T, AvlNode<T>>
         node.Right = newRoot.Left;
         newRoot.Left = node;
 
-        node.Height = 1 + Math.Max(GetHeight(node.Left), GetHeight(node.Right));
-        newRoot.Right.Height = 1 + Math.Max(GetHeight(newRoot.Right.Left), GetHeight(newRoot.Right.Right));
+        node.Height = 1 + Math.Max(Height(node.Left), Height(node.Right));
+        newRoot.Right.Height = 1 + Math.Max(Height(newRoot.Right.Left), Height(newRoot.Right.Right));
         newRoot.Height = 1 + Math.Max(node.Height, newRoot.Right.Height);
 
         return newRoot;
     }
 
-    private static int GetHeight(AvlNode<T>? node)
+    private static int Height(AvlNode<T>? node)
     {
         return node?.Height ?? 0;
     }
 
     private static int GetBalance(AvlNode<T> node)
     {
-        return GetHeight(node.Left) - GetHeight(node.Right);
+        return Height(node.Left) - Height(node.Right);
     }
 }
