@@ -4,7 +4,7 @@ namespace DataStructures.Graph;
 
 public struct Vertex<T>
 {
-    public T? Data;
+    public readonly T? Data;
     public readonly List<Connection> Connections;
 
     public Vertex()

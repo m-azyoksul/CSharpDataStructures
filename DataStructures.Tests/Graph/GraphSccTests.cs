@@ -37,7 +37,7 @@ public class GraphSccTests
         };
 
         // Act
-        var (sccCount, sccArray) = graph.TarjanSccMap();
+        var (sccCount, sccArray) = graph.SccMap();
 
         // Assert
         sccCount.Should().Be(3);
@@ -70,7 +70,7 @@ public class GraphSccTests
         };
 
         // Act
-        var sccList = graph.TarjanSccList();
+        var sccList = graph.SccList();
 
         // Assert
         sccList.Should().BeEquivalentTo(expectedList);
@@ -99,7 +99,7 @@ public class GraphSccTests
         };
 
         // Act
-        var (sccCount, sccMap) = graph.TarjanSccMap();
+        var (sccCount, sccMap) = graph.SccMap();
 
         // Assert
         sccCount.Should().Be(13);
@@ -129,7 +129,7 @@ public class GraphSccTests
         };
 
         // Act
-        var sccList = graph.TarjanSccList();
+        var sccList = graph.SccList();
 
         // Assert
         sccList.Should().BeEquivalentTo(expectedList);
@@ -153,7 +153,7 @@ public class GraphSccTests
         };
 
         // Act
-        var (sccCount, sccMap) = graph.TarjanSccMap();
+        var (sccCount, sccMap) = graph.SccMap();
 
         // Assert
         sccCount.Should().Be(8);
@@ -178,7 +178,7 @@ public class GraphSccTests
         };
 
         // Act
-        var sccList = graph.TarjanSccList();
+        var sccList = graph.SccList();
 
         // Assert
         sccList.Should().BeEquivalentTo(expectedList);
