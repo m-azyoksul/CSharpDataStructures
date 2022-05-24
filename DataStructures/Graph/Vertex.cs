@@ -19,10 +19,10 @@ public struct Vertex<T>
         Connections = connections;
     }
 
-    public Vertex(T? data)
+    public Vertex(T? data, params Connection[] connections)
     {
         Data = data;
-        Connections = new List<Connection>();
+        Connections = new List<Connection>(connections);
     }
 
     public static Vertex<T> Empty() => new();

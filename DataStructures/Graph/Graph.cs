@@ -901,15 +901,18 @@ public abstract class Graph<TData>
 
     #endregion
 
+    // Done
     #region Bridges and Articulation Points
 
     public abstract List<(int V1, int V2)> Bridges();
 
-    public abstract List<int> ArticulationPoints();
+    public abstract HashSet<int> ArticulationPoints();
 
     #endregion
 
     #region Minimum Spanning Tree
+    
+    public abstract (double Weight, List<(int V1, int V2)> Edges) MinimumSpanningTree();
 
     #endregion
 

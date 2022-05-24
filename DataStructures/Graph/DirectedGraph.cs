@@ -619,6 +619,14 @@ public class DirectedGraph<TData> : Graph<TData>
 
     #endregion
 
+    // Done
+
+    #region Shortest Path
+
+    #endregion
+
+    // Done
+
     #region Strongly Connected Components
 
     /// <summary>
@@ -631,20 +639,20 @@ public class DirectedGraph<TData> : Graph<TData>
     /// <returns>(The number of strongly connected components, for each vertex (id of vertex, index of scc))</returns>
     public override (int SccCount, Dictionary<int, int> SccDictionary) SccMap()
     {
-        var id = Vertices.ToDictionary(v => v.Key, _ => -1);
-        var lowLink = Vertices.ToDictionary(v => v.Key, _ => 0);
+        var discoveryTime = Vertices.ToDictionary(v => v.Key, _ => -1);
+        var low = Vertices.ToDictionary(v => v.Key, _ => 0);
         var sccDict = Vertices.ToDictionary(v => v.Key, _ => 0);
-        var inStack = Vertices.ToDictionary(v => v.Key, _ => false);
+        var inStack = new HashSet<int>();
         var stack = new Stack<int>();
-        int newId = 0;
+        int time = 0;
         int sccCount = 0;
 
         // Start DFS from each node
         foreach (var vertex in Vertices.Keys)
         {
-            if (id[vertex] == -1) // Unvisited
+            if (discoveryTime[vertex] == -1) // Unvisited
             {
-                SccDfs(vertex, id, lowLink, sccDict, inStack, stack, ref newId, ref sccCount);
+                SccDfs(vertex, discoveryTime, low, sccDict, inStack, stack, ref time, ref sccCount);
             }
         }
 
@@ -652,40 +660,40 @@ public class DirectedGraph<TData> : Graph<TData>
     }
 
     /// <summary>
-    /// Recursive call for Tarjan's algorithm.
+    /// Recursive call for <see cref="SccMap"/> that performs the Tarjan algorithm.
     /// </summary>
     private void SccDfs(int v,
-        Dictionary<int, int> id,
-        Dictionary<int, int> lowLink,
+        Dictionary<int, int> discoveryTime,
+        Dictionary<int, int> low,
         Dictionary<int, int> sccDict,
-        Dictionary<int, bool> inStack,
+        HashSet<int> inStack,
         Stack<int> stack,
-        ref int newId,
+        ref int time,
         ref int sccCount)
     {
-        lowLink[v] = id[v] = newId++;
-        inStack[v] = true;
+        low[v] = discoveryTime[v] = time++;
+        inStack.Add(v);
         stack.Push(v);
 
         foreach (var connection in AllConnections(v))
         {
             // If node has not been visited yet, visit it
-            if (id[connection.To] == -1) // Unvisited
-                SccDfs(connection.To, id, lowLink, sccDict, inStack, stack, ref newId, ref sccCount);
+            if (discoveryTime[connection.To] == -1) // Unvisited
+                SccDfs(connection.To, discoveryTime, low, sccDict, inStack, stack, ref time, ref sccCount);
 
             // If node is in stack, update lowest reachable value
-            if (inStack[connection.To])
-                lowLink[v] = Math.Min(lowLink[v], lowLink[connection.To]);
+            if (inStack.Contains(connection.To))
+                low[v] = Math.Min(low[v], low[connection.To]);
         }
 
         // If lowest reachable value has not changed we're at the root node
-        if (id[v] != lowLink[v])
+        if (discoveryTime[v] != low[v])
             return;
 
         // Empty the seen stack until back to root node
         for (int nodeToPop = stack.Pop();; nodeToPop = stack.Pop())
         {
-            inStack[nodeToPop] = false;
+            inStack.Remove(nodeToPop);
             sccDict[nodeToPop] = sccCount;
             if (nodeToPop == v)
                 break;
@@ -727,7 +735,7 @@ public class DirectedGraph<TData> : Graph<TData>
         throw new NotImplementedException();
     }
 
-    public override List<int> ArticulationPoints()
+    public override HashSet<int> ArticulationPoints()
     {
         throw new NotImplementedException();
     }
@@ -833,6 +841,11 @@ public class DirectedGraph<TData> : Graph<TData>
     #endregion
 
     #region Minimum Spanning Tree
+
+    public override (double Weight, List<(int V1, int V2)> Edges) MinimumSpanningTree()
+    {
+        throw new NotImplementedException();
+    }
 
     #endregion
 

@@ -5,7 +5,7 @@ public struct Connection
     public readonly int To;
     public readonly double Weight;
 
-    public Connection(int to, double weight)
+    public Connection(int to, double weight = 1)
     {
         To = to;
         Weight = weight;

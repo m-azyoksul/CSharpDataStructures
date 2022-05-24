@@ -555,6 +555,14 @@ public class UndirectedGraph<TData> : Graph<TData>
 
     #endregion
 
+    // Done
+
+    #region Shortest Path
+
+    #endregion
+
+    // Done
+
     #region Strongly Connected Components
 
     /// <summary>
@@ -636,19 +644,19 @@ public class UndirectedGraph<TData> : Graph<TData>
 
     /// <summary>
     /// Finds all bridges (critical edges) in the graph.
-    /// Uses recursive DFS to find bridges.
+    /// Uses recursive DFS.
     ///
-    /// Time complexity: O(V + E)
+    /// Time complexity: O(V+E)
     /// Space complexity: O(V)
     /// </summary>
-    /// <returns></returns>
+    /// <returns>The list of bridges</returns>
     public override List<(int V1, int V2)> Bridges()
     {
         var bridges = new List<(int V1, int V2)>();
 
         var visited = new HashSet<int>();
         var low = new Dictionary<int, int>();
-        var timeOfVisit = new Dictionary<int, int>();
+        var discoveryTime = new Dictionary<int, int>();
         var time = 0;
 
         foreach (var vertex in UnvisitedVertices(visited))
@@ -656,17 +664,19 @@ public class UndirectedGraph<TData> : Graph<TData>
             if (visited.Contains(vertex))
                 continue;
 
-            BridgesDfs(vertex, visited, low, timeOfVisit, bridges, ref time, -1);
+            BridgesDfs(vertex, visited, low, discoveryTime, bridges, ref time, -1);
         }
 
         return bridges;
     }
 
-    private void BridgesDfs(int v, HashSet<int> visited, Dictionary<int, int> low, Dictionary<int, int> timeOfVisit, List<(int V1, int V2)> bridges, ref int time, int parent)
+    /// <summary>
+    /// Recursive call for <see cref="Bridges"/> that finds all bridges.
+    /// </summary>
+    private void BridgesDfs(int v, HashSet<int> visited, Dictionary<int, int> low, Dictionary<int, int> discoveryTime, List<(int V1, int V2)> bridges, ref int time, int parent)
     {
         visited.Add(v);
-        low[v] = timeOfVisit[v] = time;
-        time++;
+        low[v] = discoveryTime[v] = time++;
 
         foreach (var to in AllConnections(v))
         {
@@ -674,11 +684,11 @@ public class UndirectedGraph<TData> : Graph<TData>
                 continue;
 
             if (visited.Contains(to.To))
-                low[v] = Math.Min(low[v], timeOfVisit[to.To]);
+                low[v] = Math.Min(low[v], discoveryTime[to.To]);
             else
             {
-                BridgesDfs(to.To, visited, low, timeOfVisit, bridges, ref time, v);
-                if (low[to.To] > timeOfVisit[v])
+                BridgesDfs(to.To, visited, low, discoveryTime, bridges, ref time, v);
+                if (low[to.To] > discoveryTime[v])
                     bridges.Add((v, to.To));
                 low[v] = Math.Min(low[v], low[to.To]);
             }
@@ -690,9 +700,10 @@ public class UndirectedGraph<TData> : Graph<TData>
     /// Uses iterative dfs using stack frame to avoid recursion.
     /// Implementation is based on the following SO answer: https://stackoverflow.com/a/61645529/7279624
     ///
-    /// Time complexity: O(V + E)
+    /// Time complexity: O(V+E)
     /// Space complexity: O(V)
     /// </summary>
+    /// <returns>The list of bridges</returns>
     public List<(int V1, int V2)> BridgesIterative()
     {
         var bridges = new List<(int V1, int V2)>();
@@ -759,14 +770,61 @@ public class UndirectedGraph<TData> : Graph<TData>
         return bridges;
     }
 
-    public override List<int> ArticulationPoints()
+    public override HashSet<int> ArticulationPoints()
     {
-        throw new NotImplementedException();
+        var articulationPoints = new HashSet<int>();
+
+        var visited = new HashSet<int>();
+        var low = new Dictionary<int, int>();
+        var discoveryTime = new Dictionary<int, int>();
+        var time = 0;
+
+        foreach (var vertex in UnvisitedVertices(visited))
+        {
+            if (visited.Contains(vertex))
+                continue;
+
+            ArticulationPointsDfs(vertex, visited, low, discoveryTime, articulationPoints, ref time, -1);
+        }
+
+        return articulationPoints;
+    }
+
+    /// <summary>
+    /// Recursive call for <see cref="ArticulationPoints"/> that finds all articulation points.
+    /// </summary>
+    private void ArticulationPointsDfs(int v, HashSet<int> visited, Dictionary<int, int> low, Dictionary<int, int> discoveryTime, HashSet<int> articulationPoints, ref int time, int parent)
+    {
+        visited.Add(v);
+        low[v] = discoveryTime[v] = time++;
+        var components = 0;
+
+        foreach (var to in AllConnections(v))
+        {
+            if (to.To == parent)
+                continue;
+
+            if (visited.Contains(to.To))
+                low[v] = Math.Min(low[v], discoveryTime[to.To]);
+            else
+            {
+                components++;
+                ArticulationPointsDfs(to.To, visited, low, discoveryTime, articulationPoints, ref time, v);
+                if (parent == -1 && components > 1 || parent != -1 && discoveryTime[v] <= low[to.To])
+                    articulationPoints.Add(v);
+                low[v] = Math.Min(low[v], low[to.To]);
+            }
+        }
     }
 
     #endregion
 
     #region Minimum Spanning Tree
+
+    public override (double Weight, List<(int V1, int V2)> Edges) MinimumSpanningTree()
+    {
+        throw new NotImplementedException();
+    }
 
     #endregion
 
