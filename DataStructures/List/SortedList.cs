@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DataStructures;
+namespace DataStructures.List;
 
 /// <typeparam name="T">Needs to be IComparable otherwise the sorting is meaningless</typeparam>
 public class SortedList<T> : List<T>

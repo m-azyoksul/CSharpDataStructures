@@ -1079,65 +1079,6 @@ public class GraphSearchTests
         Assert.Equal(expectedEdgeList, traverseList);
     }
 
-    [Fact(Skip = "Class is not built to handle non-simple graphs")]
-    public void Undirected_BfsEdgeTraversal_FromNode_Collar_From2()
-    {
-        // Arrange
-        var graph = GraphsToTest.UndirectedCollar();
-        var expectedEdgeList = new List<(int From, int To, bool Forward)>
-        {
-            (0, 0, true),
-        };
-
-        // Act
-        var traverseList = graph.BfsEdgeTraversal(2);
-
-        // Assert
-        Assert.Equal(expectedEdgeList, traverseList);
-    }
-
-    [Fact(Skip = "Class is not built to handle non-simple graphs")]
-    public void Undirected_BfsEdgeTraversal_FromNode_Collar_From5()
-    {
-        // Arrange
-        var graph = GraphsToTest.UndirectedCollar();
-        var expectedEdgeList = new List<(int From, int To, bool Forward)>
-        {
-            (5, 0, true),
-            (5, 2, true),
-            (5, 3, true),
-            (0, 1, true),
-            (0, 2, true),
-            (2, 0, false),
-            (0, 3, true),
-            (3, 0, false),
-            (2, 5, true),
-            (5, 2, false),
-            (3, 6, true),
-            (1, 3, true),
-            (3, 1, false),
-            (1, 4, true),
-            (1, 6, true),
-            (6, 1, false),
-            (6, 1, true),
-            (1, 6, false),
-            (6, 4, true),
-            (4, 6, false),
-            (4, 1, false),
-            (6, 3, false),
-            (1, 0, false),
-            (3, 5, false),
-            (2, 5, false),
-            (0, 5, false),
-        };
-
-        // Act
-        var traverseList = graph.BfsEdgeTraversal(5);
-
-        // Assert
-        Assert.Equal(expectedEdgeList, traverseList);
-    }
-
     [Fact]
     public void Undirected_BfsEdgeTraversal_FromNode_InvalidVertex()
     {
@@ -1365,90 +1306,6 @@ public class GraphSearchTests
 
         // Assert
         Assert.Equal(expectedEdgeList, traverseList);
-    }
-
-    [Fact(Skip = "Class is not built to handle non-simple graphs")]
-    public void Undirected_DfsEdgeTraversal_FromNode_Collar_From2()
-    {
-        // Arrange
-        var graph = GraphsToTest.UndirectedCollar();
-        var expectedEdgeList = new List<(int From, int To, bool Forwards)>
-        {
-            (2, 5, true),
-            (5, 0, true),
-            (0, 1, true),
-            (1, 3, true),
-            (3, 6, true),
-            (6, 1, true),
-            (1, 6, false),
-            (6, 4, true),
-            (4, 6, false),
-            (6, 3, false),
-            (3, 1, false),
-            (1, 4, true),
-            (4, 1, false),
-            (1, 6, true),
-            (6, 1, false),
-            (1, 0, false),
-            (0, 2, true),
-            (2, 0, false),
-            (0, 3, true),
-            (3, 0, false),
-            (0, 5, false),
-            (5, 2, true),
-            (2, 5, false),
-            (5, 3, true),
-            (3, 5, false),
-            (5, 2, false),
-        };
-
-        // Act
-        var traverseList = graph.DfsEdgeTraversal(2);
-
-        // Assert
-        traverseList.Should().Equal(expectedEdgeList);
-    }
-
-    [Fact(Skip = "Class is not built to handle non-simple graphs")]
-    public void Undirected_DfsEdgeTraversal_FromNode_Collar_From5()
-    {
-        // Arrange
-        var graph = GraphsToTest.UndirectedCollar();
-        var expectedEdgeList = new List<(int From, int To, bool Forwards)>
-        {
-            (5, 0, true),
-            (0, 1, true),
-            (1, 3, true),
-            (3, 6, true),
-            (6, 1, true),
-            (1, 6, false),
-            (6, 4, true),
-            (4, 6, false),
-            (6, 3, false),
-            (3, 1, false),
-            (1, 4, true),
-            (4, 1, false),
-            (1, 6, true),
-            (6, 1, false),
-            (1, 0, false),
-            (0, 2, true),
-            (2, 5, true),
-            (5, 2, false),
-            (2, 0, false),
-            (0, 3, true),
-            (3, 0, false),
-            (0, 5, false),
-            (5, 2, true),
-            (2, 5, false),
-            (5, 3, true),
-            (3, 5, false),
-        };
-
-        // Act
-        var traverseList = graph.DfsEdgeTraversal(5);
-
-        // Assert
-        traverseList.Should().Equal(expectedEdgeList);
     }
 
     [Fact]
@@ -1690,90 +1547,6 @@ public class GraphSearchTests
 
         // Act
         var traverseList = graph.DfsEdgeTraversalIterative(4);
-
-        // Assert
-        Assert.Equal(expectedEdgeList, traverseList);
-    }
-
-    [Fact(Skip = "Class is not built to handle non-simple graphs")]
-    public void Undirected_DfsEdgeTraversalIterative_FromNode_Collar_From2()
-    {
-        // Arrange
-        var graph = GraphsToTest.UndirectedCollar();
-        var expectedEdgeList = new List<(int From, int To, bool Forwards)>
-        {
-            (2, 5, true),
-            (5, 0, true),
-            (0, 1, true),
-            (1, 3, true),
-            (3, 6, true),
-            (6, 1, true),
-            (1, 6, false),
-            (6, 4, true),
-            (4, 6, false),
-            (6, 3, false),
-            (3, 1, false),
-            (1, 4, true),
-            (4, 1, false),
-            (1, 6, true),
-            (6, 1, false),
-            (1, 0, false),
-            (0, 2, true),
-            (2, 0, false),
-            (0, 3, true),
-            (3, 0, false),
-            (0, 5, false),
-            (5, 2, true),
-            (2, 5, false),
-            (5, 3, true),
-            (3, 5, false),
-            (5, 2, false),
-        };
-
-        // Act
-        var traverseList = graph.DfsEdgeTraversalIterative(2);
-
-        // Assert
-        traverseList.Should().Equal(expectedEdgeList);
-    }
-
-    [Fact(Skip = "Class is not built to handle non-simple graphs")]
-    public void Undirected_DfsEdgeTraversalIterative_FromNode_Collar_From5()
-    {
-        // Arrange
-        var graph = GraphsToTest.UndirectedCollar();
-        var expectedEdgeList = new List<(int From, int To, bool Forwards)>
-        {
-            (5, 0, true),
-            (0, 1, true),
-            (1, 3, true),
-            (3, 6, true),
-            (6, 1, true),
-            (1, 6, false),
-            (6, 4, true),
-            (4, 6, false),
-            (6, 3, false),
-            (3, 1, false),
-            (1, 4, true),
-            (4, 1, false),
-            (1, 6, true),
-            (6, 1, false),
-            (1, 0, false),
-            (0, 2, true),
-            (2, 5, true),
-            (5, 2, false),
-            (2, 0, false),
-            (0, 3, true),
-            (3, 0, false),
-            (0, 5, false),
-            (5, 2, true),
-            (2, 5, false),
-            (5, 3, true),
-            (3, 5, false),
-        };
-
-        // Act
-        var traverseList = graph.DfsEdgeTraversalIterative(5);
 
         // Assert
         Assert.Equal(expectedEdgeList, traverseList);
@@ -2393,23 +2166,6 @@ public class GraphSearchTests
         Assert.Equal(expectedEdgeList, edgeList);
     }
 
-    [Fact(Skip = "Class is not built to handle non-simple graphs")]
-    public void Undirected_BfsEdgeTraversal_AllGraph_Collar()
-    {
-        // Arrange
-        var graph = GraphsToTest.UndirectedCollar();
-        var expectedEdgeList = new List<(int From, int To, bool Forward)>
-        {
-            (0, 0, true),
-        };
-
-        // Act
-        var traverseList = graph.BfsEdgeTraversal();
-
-        // Assert
-        Assert.Equal(expectedEdgeList, traverseList);
-    }
-
     [Fact]
     public void Undirected_BfsEdgeTraversal_AllGraph_DoubleTick()
     {
@@ -2570,48 +2326,6 @@ public class GraphSearchTests
 
         // Assert
         Assert.Equal(expectedEdgeList, edgeList);
-    }
-
-    [Fact(Skip = "Class is not built to handle non-simple graphs")]
-    public void Undirected_DfsEdgeTraversal_AllGraph_Collar()
-    {
-        // Arrange
-        var graph = GraphsToTest.UndirectedCollar();
-        var expectedEdgeList = new List<(int From, int To, bool Forwards)>
-        {
-            (2, 5, true),
-            (5, 0, true),
-            (0, 1, true),
-            (1, 3, true),
-            (3, 6, true),
-            (6, 1, true),
-            (1, 6, false),
-            (6, 4, true),
-            (4, 6, false),
-            (6, 3, false),
-            (3, 1, false),
-            (1, 4, true),
-            (4, 1, false),
-            (1, 6, true),
-            (6, 1, false),
-            (1, 0, false),
-            (0, 2, true),
-            (2, 0, false),
-            (0, 3, true),
-            (3, 0, false),
-            (0, 5, false),
-            (5, 2, true),
-            (2, 5, false),
-            (5, 3, true),
-            (3, 5, false),
-            (5, 2, false),
-        };
-
-        // Act
-        var traverseList = graph.DfsEdgeTraversal();
-
-        // Assert
-        traverseList.Should().Equal(expectedEdgeList);
     }
 
     [Fact]
@@ -2789,48 +2503,6 @@ public class GraphSearchTests
 
         // Assert
         Assert.Equal(expectedEdgeList, edgeList);
-    }
-
-    [Fact(Skip = "Class is not built to handle non-simple graphs")]
-    public void Undirected_DfsEdgeTraversalIterative_AllGraph_Collar()
-    {
-        // Arrange
-        var graph = GraphsToTest.UndirectedCollar();
-        var expectedEdgeList = new List<(int From, int To, bool Forwards)>
-        {
-            (2, 5, true),
-            (5, 0, true),
-            (0, 1, true),
-            (1, 3, true),
-            (3, 6, true),
-            (6, 1, true),
-            (1, 6, false),
-            (6, 4, true),
-            (4, 6, false),
-            (6, 3, false),
-            (3, 1, false),
-            (1, 4, true),
-            (4, 1, false),
-            (1, 6, true),
-            (6, 1, false),
-            (1, 0, false),
-            (0, 2, true),
-            (2, 0, false),
-            (0, 3, true),
-            (3, 0, false),
-            (0, 5, false),
-            (5, 2, true),
-            (2, 5, false),
-            (5, 3, true),
-            (3, 5, false),
-            (5, 2, false),
-        };
-
-        // Act
-        var traverseList = graph.DfsEdgeTraversalIterative();
-
-        // Assert
-        traverseList.Should().Equal(expectedEdgeList);
     }
 
     [Fact]
