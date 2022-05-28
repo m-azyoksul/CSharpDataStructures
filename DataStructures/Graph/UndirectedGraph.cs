@@ -205,6 +205,8 @@ public class UndirectedGraph<TData> : Graph<TData>
 
     #endregion
 
+    // Done
+
     #region Search
 
     /// <summary>
@@ -282,7 +284,7 @@ public class UndirectedGraph<TData> : Graph<TData>
     }
 
     /// <summary>
-    /// Recursive call for recursive depth first search that traverses all vertices and all edges reachable from v.
+    /// Recursive call for DfsEdgeTraversal that traverses all vertices and all edges reachable from v.
     /// </summary>
     private void DfsEdgeTraversal(int v, HashSet<int> visited, HashSet<(int From, int To, bool Forwards)> edgeList)
     {
@@ -640,6 +642,8 @@ public class UndirectedGraph<TData> : Graph<TData>
 
     #endregion
 
+    // Done
+
     #region Bridges and Articulation Points
 
     /// <summary>
@@ -770,6 +774,14 @@ public class UndirectedGraph<TData> : Graph<TData>
         return bridges;
     }
 
+    /// <summary>
+    /// Finds all articulation points (critical vertices) in the graph.
+    /// Uses recursive DFS.
+    ///
+    /// Time complexity: O(V+E)
+    /// Space complexity: O(V)
+    /// </summary>
+    /// <returns>The list of articulation points</returns>
     public override HashSet<int> ArticulationPoints()
     {
         var articulationPoints = new HashSet<int>();

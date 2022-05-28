@@ -261,6 +261,8 @@ public class DirectedGraph<TData> : Graph<TData>
 
     #endregion
 
+    // Done
+
     #region Search
 
     /// <summary>
@@ -333,7 +335,7 @@ public class DirectedGraph<TData> : Graph<TData>
     }
 
     /// <summary>
-    /// Recursive call for recursive depth first search that traverses all vertices and all edges reachable from v.
+    /// Recursive call for DfsEdgeTraversal that traverses all vertices and all edges reachable from v.
     /// </summary>
     private void DfsEdgeTraversal(int v, HashSet<int> visited, List<(int, int, bool)> edgeList, int parent)
     {

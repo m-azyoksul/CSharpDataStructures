@@ -322,6 +322,8 @@ public abstract class Graph<TData>
 
     #endregion
 
+    // Done
+    
     #region Search
 
     /// <summary>
@@ -371,7 +373,7 @@ public abstract class Graph<TData>
     }
 
     /// <summary>
-    /// Recursive call for recursive depth first search that traverses all vertices reachable from v.
+    /// Recursive call for DfsVertexTraversal that traverses all vertices reachable from v.
     /// </summary>
     private void DfsVertexTraversal(int v, HashSet<int> visited)
     {

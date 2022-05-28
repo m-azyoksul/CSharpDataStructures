@@ -5,8 +5,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\AlgorithmHelpers\AlgorithmHelpers.csproj" />
-    </ItemGroup>
-
 </Project>
