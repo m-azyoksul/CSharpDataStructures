@@ -13,10 +13,9 @@ namespace DataStructures.Graph;
 /// Primary purpose of this class is to include all operations and algorithms related to graph for later reference.
 /// Instead of taking a graph as parameter or using global variables, this class uses an object oriented approach.
 /// It includes all operations inside the Graph class and its subclasses.
+/// The members are grouped in regions.
 /// 
-/// The class is structures to make use of partial classes to semantically separate the graph operations.
-/// 
-/// --- The list of partial classes ---
+/// --- The list of regions ---
 /// 
 /// 1. ElementaryOperations
 /// Contains the elementary operations of the graph.
@@ -672,7 +671,7 @@ public abstract class Graph<TData>
     /// <param name="v1">Start vertex</param>
     /// <param name="v2">Destination vertex</param>
     /// <returns>Shortest distance and path to the destination</returns>
-    public (double, List<int>) Dijkstra(int v1, int v2)
+    public (double Distance, List<int> Path) Dijkstra(int v1, int v2)
     {
         CheckVertices(v1, v2);
 
@@ -783,7 +782,7 @@ public abstract class Graph<TData>
     /// <param name="v1">Start vertex</param>
     /// <param name="v2">Destination vertex</param>
     /// <returns>Shortest distance and path to the destination</returns>
-    public (double, List<int>) BellmanFord(int v1, int v2)
+    public (double Distance, List<int> Path) BellmanFord(int v1, int v2)
     {
         CheckVertices(v1, v2);
 
@@ -830,6 +829,8 @@ public abstract class Graph<TData>
 
         return (distance[v2], path);
     }
+    
+    // TODO: Floyd-Warshall algorithm
 
     /// <summary>
     /// Implementation of the A* algorithm.
@@ -844,7 +845,7 @@ public abstract class Graph<TData>
     /// <param name="v2">Destination vertex</param>
     /// <param name="estimator">The function that estimates distance between two vertices</param>
     /// <returns>Shortest distance and path to the destination</returns>
-    public (double, List<int>) AStar(int v1, int v2, Func<int, int, int> estimator)
+    public (double Distance, List<int> Path) AStar(int v1, int v2, Func<int, int, int> estimator)
     {
         CheckVertices(v1, v2);
 
